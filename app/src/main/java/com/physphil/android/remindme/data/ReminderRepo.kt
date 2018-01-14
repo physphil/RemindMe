@@ -3,7 +3,6 @@ package com.physphil.android.remindme.data
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.physphil.android.remindme.room.ReminderDao
-import com.physphil.android.remindme.room.entities.NEW_REMINDER_ID
 import com.physphil.android.remindme.room.entities.Reminder
 
 /**
@@ -13,8 +12,13 @@ import com.physphil.android.remindme.room.entities.Reminder
  */
 class ReminderRepo(private val dao: ReminderDao) {
 
-    fun getReminderById(id: Int): LiveData<Reminder> {
-        return if (id == NEW_REMINDER_ID) {
+    /**
+     * Return a Reminder with the given id, wrapped in a LiveData object to observe
+     * @param id of the reminder to return
+     * @return the Reminder wrapped in a LiveData, or a new empty Reminder if the supplied id is NULL
+     */
+    fun getReminderById(id: String?): LiveData<Reminder> {
+        return if (id == null) {
             val data = MutableLiveData<Reminder>()
             data.value = Reminder()
             data
@@ -36,9 +40,9 @@ class ReminderRepo(private val dao: ReminderDao) {
         }).start()
     }
 
-    fun updateRecurringReminder(id: Int, newExternalId: Int, newTime: Long) {
-//        Thread(Runnable {
+    fun updateRecurringReminder(id: String, newExternalId: Int, newTime: Long) {
+        Thread(Runnable {
             dao.updateRecurringReminder(id, newExternalId, newTime)
-//        }).start()
+        }).start()
     }
 }

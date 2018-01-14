@@ -10,7 +10,6 @@ import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.AppDatabase
-import com.physphil.android.remindme.room.entities.NEW_REMINDER_ID
 import java.util.*
 
 /**
@@ -38,19 +37,18 @@ class ShowNotificationJob : Job() {
         val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))
         if (recurrence != Recurrence.NONE) {
             scheduleNextNotification(params.extras.getLong(EXTRA_TIME, System.currentTimeMillis()),
-                    params.extras.getInt(EXTRA_ID, NEW_REMINDER_ID),
+                    params.extras.getString(EXTRA_ID, "should never happen"),
                     title, text, recurrence)
         }
 
         return Result.SUCCESS
     }
 
-    private fun scheduleNextNotification(time: Long, id: Int, title: String, text: String, recurrence: Recurrence) {
+    private fun scheduleNextNotification(time: Long, id: String, title: String, text: String, recurrence: Recurrence) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time
         when (recurrence) {
-            Recurrence.HOURLY -> calendar.add(Calendar.MINUTE, 2)  // TODO - REMOVE!!
-//            Recurrence.HOURLY -> calendar.add(Calendar.HOUR_OF_DAY, 1)
+            Recurrence.HOURLY -> calendar.add(Calendar.HOUR_OF_DAY, 1)
             Recurrence.DAILY -> calendar.add(Calendar.DATE, 1)
             Recurrence.WEEKLY -> calendar.add(Calendar.WEEK_OF_YEAR, 1)
             Recurrence.MONTHLY -> calendar.add(Calendar.MONTH, 1)

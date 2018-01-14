@@ -1,6 +1,5 @@
 package com.physphil.android.remindme.job
 
-import android.util.Log
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import com.physphil.android.remindme.TAG_SHOW_NOTIFICATION_JOB
@@ -25,10 +24,9 @@ object JobRequestScheduler {
      * @param recurrence the id of the notification's recurrence
      * @return the id of the newly scheduled job
      */
-    fun scheduleShowNotificationJob(time: Long, id: Int, title: String = "", text: String = "", recurrence: Int = Recurrence.NONE.id): Int {
+    fun scheduleShowNotificationJob(time: Long, id: String, title: String = "", text: String = "", recurrence: Int = Recurrence.NONE.id): Int {
         val extras = PersistableBundleCompat()
-        Log.d("phil", "scheduling notification $id at $time")
-        extras.putInt(EXTRA_ID, id)
+        extras.putString(EXTRA_ID, id)
         extras.putLong(EXTRA_TIME, time)
         extras.putString(EXTRA_TITLE, title)
         extras.putString(EXTRA_TEXT, text)

@@ -7,21 +7,23 @@ import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
-import com.physphil.android.remindme.room.entities.NEW_REMINDER_ID
 import com.physphil.android.remindme.room.entities.Reminder
 import java.util.*
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
-class ReminderViewModel(id: Int, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+
+    private val isNewReminder = (id == null)
 
     private val reminder = repo.getReminderById(id)
     private val reminderTime = MutableLiveData<String>()
     private val reminderDate = MutableLiveData<String>()
     private val reminderRecurrence = MutableLiveData<Int>()
 
-    val toolbarTitle = if (id == NEW_REMINDER_ID) R.string.title_add_reminder else R.string.title_edit_reminder
+    // Convert to LD using Transformations.map()?  Don't need to update it's value manually, just depends on Reminder
+    val toolbarTitle = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
 
 
     fun getReminderValue() = reminder.value!!
@@ -58,7 +60,7 @@ class ReminderViewModel(id: Int, private val repo: ReminderRepo, private val sch
 
     fun saveReminder() {
         val reminder = getReminderValue()
-        if (reminder.isNewReminder()) {
+        if (isNewReminder) {
             getReminderValue().externalId = scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                     reminder.id,
                     reminder.title,

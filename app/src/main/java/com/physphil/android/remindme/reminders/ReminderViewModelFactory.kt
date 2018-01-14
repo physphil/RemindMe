@@ -10,7 +10,7 @@ import com.physphil.android.remindme.job.JobRequestScheduler
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderViewModelFactory(private val id: Int, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModelProvider.Factory {
+class ReminderViewModelFactory(private val id: String?, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
             return ReminderViewModel(id, repo, scheduler) as T

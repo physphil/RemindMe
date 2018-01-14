@@ -26,10 +26,10 @@ interface ReminderDao {
     fun getAllReminders(): LiveData<Array<Reminder>>
 
     @Query("SELECT * FROM $TABLE_REMINDERS WHERE id = :id")
-    fun getReminderById(id: Int): LiveData<Reminder>
+    fun getReminderById(id: String): LiveData<Reminder>
 
     @Query("UPDATE $TABLE_REMINDERS " +
             "SET $REMINDER_COLUMN_EXTERNAL_ID = :newExternalId, $REMINDER_COLUMN_TIME = :newTime " +
             "WHERE $REMINDER_COLUMN_ID = :id")
-    fun updateRecurringReminder(id: Int, newExternalId: Int, newTime: Long)
+    fun updateRecurringReminder(id: String, newExternalId: Int, newTime: Long)
 }

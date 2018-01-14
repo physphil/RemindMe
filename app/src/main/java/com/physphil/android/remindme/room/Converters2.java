@@ -3,12 +3,10 @@ package com.physphil.android.remindme.room;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.Transformations;
 import android.arch.persistence.room.TypeConverter;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
 import com.physphil.android.remindme.R;
@@ -45,15 +43,7 @@ public class Converters2 {
         });
 
 
-        AppDatabase.Companion.getInstance((Context) context)
-                .reminderDao()
-                .getReminderById(4)
-                .observeForever(new Observer<Reminder>() {
-                    @Override
-                    public void onChanged(@Nullable Reminder reminder) {
 
-                    }
-                });
 
 
 

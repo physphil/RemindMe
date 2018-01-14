@@ -23,7 +23,6 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.AppDatabase
-import com.physphil.android.remindme.room.entities.NEW_REMINDER_ID
 import com.physphil.android.remindme.room.entities.Reminder
 import java.util.*
 
@@ -51,7 +50,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     lateinit var repeatText: EditText
 
     private val viewModel: ReminderViewModel by lazy {
-        val id = intent.getIntExtra(EXTRA_REMINDER_ID, NEW_REMINDER_ID)
+        val id = intent.getStringExtra(EXTRA_REMINDER_ID)
         ViewModelProviders.of(this, ReminderViewModelFactory(id, ReminderRepo(AppDatabase.getInstance(this).reminderDao()), JobRequestScheduler))
                 .get(ReminderViewModel::class.java)
     }
@@ -156,7 +155,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     companion object {
         private const val EXTRA_REMINDER_ID = "com.physphil.android.remindme.EXTRA_REMINDER_ID"
 
-        fun intent(context: Context, reminderId: Int = NEW_REMINDER_ID): Intent {
+        fun intent(context: Context, reminderId: String? = null): Intent {
             val intent = Intent(context, ReminderActivity::class.java)
             intent.putExtra(EXTRA_REMINDER_ID, reminderId)
             return intent
