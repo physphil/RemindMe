@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="recurrence_options">
+        <item>@string/recurrence_none</item>
+        <item>@string/recurrence_hourly</item>
+        <item>@string/recurrence_daily</item>
+        <item>@string/recurrence_weekly</item>
+        <item>@string/recurrence_monthly</item>
+        <item>@string/recurrence_yearly</item>
+    </string-array>
+</resources>

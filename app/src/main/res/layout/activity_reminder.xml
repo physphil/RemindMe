@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/reminder_title_title"
+            style="@style/Reminder.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/global_margin_large"
+            android:layout_marginStart="@dimen/reminder_input_margin_start"
+            android:layout_marginTop="@dimen/global_margin_xlarge"
+            android:text="@string/reminder_title_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/reminder_title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:inputType="textCapSentences"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminder_title_title"/>
+
+        <ImageView
+            android:id="@+id/reminder_title_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/global_margin_large"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminder_title_title"
+            app:srcCompat="@drawable/ic_notifications_24dp"/>
+
+        <TextView
+            android:id="@+id/reminder_body_title"
+            style="@style/Reminder.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_body_title"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
+            app:layout_constraintTop_toBottomOf="@id/reminder_title_text"/>
+
+        <EditText
+            android:id="@+id/reminder_body_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:inputType="textMultiLine|textCapSentences"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_body_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminder_body_title"/>
+
+        <ImageView
+            android:id="@+id/reminder_body_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/global_margin_large"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminder_body_title"
+            app:srcCompat="@drawable/ic_view_headline_24dp"/>
+
+        <TextView
+            android:id="@+id/reminder_time_title"
+            style="@style/Reminder.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_time_title"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
+            app:layout_constraintTop_toBottomOf="@id/reminder_body_text"/>
+
+        <EditText
+            android:id="@+id/reminder_time_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:focusable="false"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_time_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminder_time_title"/>
+
+        <ImageView
+            android:id="@+id/reminder_time_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/global_margin_large"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminder_time_title"
+            app:srcCompat="@drawable/ic_time_24dp"/>
+
+        <TextView
+            android:id="@+id/reminder_date_title"
+            style="@style/Reminder.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_date_title"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
+            app:layout_constraintTop_toBottomOf="@id/reminder_time_text"/>
+
+        <EditText
+            android:id="@+id/reminder_date_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:focusable="false"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_date_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminder_date_title"/>
+
+        <ImageView
+            android:id="@+id/reminder_date_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/global_margin_large"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminder_date_title"
+            app:srcCompat="@drawable/ic_date_range_24dp"/>
+
+        <TextView
+            android:id="@+id/reminder_repeat_title"
+            style="@style/Reminder.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_repeat_title"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
+            app:layout_constraintTop_toBottomOf="@id/reminder_date_text"/>
+
+        <EditText
+            android:id="@+id/reminder_repeat_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:focusable="false"
+            app:layout_constraintLeft_toLeftOf="@id/reminder_repeat_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminder_repeat_title"/>
+
+        <ImageView
+            android:id="@+id/reminder_repeat_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/global_margin_large"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reminder_repeat_title"
+            app:srcCompat="@drawable/ic_repeat_24dp"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

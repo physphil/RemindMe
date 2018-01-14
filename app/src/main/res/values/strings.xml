@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Remind Me</string>
+
+    <string name="channel_notifications">Notifications</string>
+
+    <string name="reminder_title_title">Title</string>
+    <string name="reminder_body_title">Content</string>
+    <string name="reminder_time_title">Time</string>
+    <string name="reminder_date_title">Date</string>
+    <string name="reminder_repeat_title">Repeat</string>
+
+    <string name="title_add_reminder">New Reminder</string>
+    <string name="title_edit_reminder">Edit Reminder</string>
+    <string name="title_select_recurrence">Select Recurrence</string>
+
+    <string name="menu_save_reminder">Save</string>
+
+    <string name="recurrence_none">None</string>
+    <string name="recurrence_hourly">Hourly</string>
+    <string name="recurrence_daily">Daily</string>
+    <string name="recurrence_weekly">Weekly</string>
+    <string name="recurrence_monthly">Monthly</string>
+    <string name="recurrence_yearly">Yearly</string>
+</resources>

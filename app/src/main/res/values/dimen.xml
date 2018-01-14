@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="global_margin_small">4dp</dimen>
+    <dimen name="global_margin_typical">8dp</dimen>
+    <dimen name="global_margin_large">16dp</dimen>
+    <dimen name="global_margin_xlarge">24dp</dimen>
+    <dimen name="global_margin_xxlarge">32dp</dimen>
+
+    <dimen name="reminder_input_margin_start">64dp</dimen>
+</resources>
