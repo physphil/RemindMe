@@ -24,7 +24,7 @@ class ShowNotificationJob : Job() {
         val title = params.extras.getString(EXTRA_TITLE, "")
         val text = params.extras.getString(EXTRA_TEXT, "")
         val notification = NotificationCompat.Builder(context, CHANNEL_NOTIFICATIONS)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
