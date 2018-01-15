@@ -71,7 +71,7 @@
 
         <Button
             android:id="@+id/reminder_time_btn"
-            style="@style/Button.Primary"
+            style="@style/Button.Large.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/global_margin_xxxlarge"
@@ -91,7 +91,7 @@
 
         <Button
             android:id="@+id/reminder_date_btn"
-            style="@style/Button.Primary"
+            style="@style/Button.Large.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/global_margin_xxxlarge"
@@ -111,7 +111,7 @@
 
         <Button
             android:id="@+id/reminder_repeat_btn"
-            style="@style/Button.Primary"
+            style="@style/Button.Large.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/global_margin_typical"

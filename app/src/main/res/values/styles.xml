@@ -32,10 +32,13 @@
     <style name="Button">
         <item name="android:paddingStart">@dimen/global_margin_xxlarge</item>
         <item name="android:paddingEnd">@dimen/global_margin_xxlarge</item>
+    </style>
+
+    <style name="Button.Large">
         <item name="android:textSize">@dimen/text_size_button_primary</item>
     </style>
 
-    <style name="Button.Primary">
+    <style name="Button.Large.Primary">
         <item name="android:background">@drawable/bg_button_primary</item>
     </style>
 
