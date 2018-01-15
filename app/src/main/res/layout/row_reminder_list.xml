@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/reminder_list_edit"
+        style="@style/Button.Small.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/global_margin_large"
+        android:layout_marginTop="@dimen/global_margin_large"
+        android:text="@string/reminder_list_edit_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/reminder_list_date"
+        style="@style/ReminderListTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/global_margin_large"
+        android:layout_marginStart="@dimen/global_margin_large"
+        android:layout_marginTop="@dimen/global_margin_large"
+        android:drawablePadding="@dimen/global_margin_typical"
+        android:drawableStart="@drawable/ic_date_range_24dp"
+        app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Tuesday January 16, 2018"/>
+
+    <TextView
+        android:id="@+id/reminder_list_time"
+        style="@style/ReminderListTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/global_margin_large"
+        android:layout_marginStart="@dimen/global_margin_large"
+        android:layout_marginTop="@dimen/global_margin_typical"
+        android:drawablePadding="@dimen/global_margin_typical"
+        android:drawableStart="@drawable/ic_time_24dp"
+        app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminder_list_date"
+        tools:text="9:30 AM"/>
+
+    <TextView
+        android:id="@+id/reminder_list_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/global_margin_large"
+        android:layout_marginStart="@dimen/global_margin_large"
+        android:layout_marginTop="@dimen/global_margin_large"
+        android:textColor="@color/material_white"
+        android:textSize="@dimen/text_size_reminder_list_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminder_list_time"
+        tools:text="Remind me to do this!!"/>
+
+    <TextView
+        android:id="@+id/reminder_list_body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/global_margin_large"
+        android:layout_marginEnd="@dimen/global_margin_large"
+        android:layout_marginStart="@dimen/global_margin_large"
+        android:layout_marginTop="@dimen/global_margin_typical"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminder_list_title"
+        tools:text="blah blah asl;dkfj eihf ojfk fuiew fs asdlj eijf iejfk jhfuehfhf"/>
+
+</android.support.constraint.ConstraintLayout>

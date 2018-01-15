@@ -22,10 +22,13 @@ interface ReminderDao {
     @Delete
     fun deleteReminder(reminder: Reminder)
 
-    @Query("SELECT * FROM $TABLE_REMINDERS")
-    fun getAllReminders(): LiveData<Array<Reminder>>
+    @Query("SELECT * FROM $TABLE_REMINDERS " +
+            "WHERE $REMINDER_COLUMN_TIME > :time " +
+            "ORDER BY $REMINDER_COLUMN_TIME ASC")
+    fun getAllReminders(time: Long): LiveData<List<Reminder>>
 
-    @Query("SELECT * FROM $TABLE_REMINDERS WHERE id = :id")
+    @Query("SELECT * FROM $TABLE_REMINDERS " +
+            "WHERE $REMINDER_COLUMN_ID = :id")
     fun getReminderById(id: String): LiveData<Reminder>
 
     @Query("UPDATE $TABLE_REMINDERS " +

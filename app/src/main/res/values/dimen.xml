@@ -9,8 +9,13 @@
 
     <dimen name="radius_button_primary">24dp</dimen>
 
-    <dimen name="text_size_button_primary">16sp</dimen>
-    <dimen name="text_size_progress_message">16sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_button_primary">@dimen/text_size_large</dimen>
+    <dimen name="text_size_progress_message">@dimen/text_size_large</dimen>
+    <dimen name="text_size_reminder_list_time">12sp</dimen>
+    <dimen name="text_size_reminder_list_title">@dimen/text_size_large</dimen>
+
+    <dimen name="line_spacing_large">4dp</dimen>
 
     <dimen name="reminder_input_margin_start">64dp</dimen>
 </resources>

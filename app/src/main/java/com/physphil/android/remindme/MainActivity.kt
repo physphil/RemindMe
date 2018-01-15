@@ -2,24 +2,54 @@ package com.physphil.android.remindme
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.reminders.ReminderActivity
+import com.physphil.android.remindme.reminders.list.ReminderListAdapter
+import com.physphil.android.remindme.reminders.list.ReminderListViewModel
+import com.physphil.android.remindme.reminders.list.ReminderListViewModelFactory
+import com.physphil.android.remindme.room.AppDatabase
+import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener {
 
-    @BindView(R.id.spinner)
+    @BindView(R.id.reminder_list_recyclerview)
+    lateinit var recyclerView: RecyclerView
+
+    @BindView(R.id.reminder_list_spinner)
     lateinit var spinner: ProgressSpinner
+
+    @BindView(R.id.reminder_list_empty)
+    lateinit var empty: TextView
+
+    private val adapter = ReminderListAdapter()
+    private val viewModel: ReminderListViewModel by lazy {
+        ViewModelProviders.of(this, ReminderListViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao())))
+                .get(ReminderListViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
+
+        adapter.setOnClickListener(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         // Create required notification channel on Android 8.0+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -29,11 +59,24 @@ class MainActivity : BaseActivity() {
             nm.createNotificationChannel(channel)
         }
 
-        spinner.setMessage(R.string.spinner_loading_reminders)
+        viewModel.getReminderList().observe(this, reminderListObserver)
     }
 
-    @OnClick(R.id.text)
-    fun onTextClicked() {
+    private val reminderListObserver = Observer<List<Reminder>> {
+        it?.let {
+            adapter.setReminderList(it)
+            recyclerView.visibility = View.VISIBLE
+            spinner.visibility = View.GONE
+            empty.visibility = View.GONE
+        }
+    }
+
+    @OnClick(R.id.reminder_list_fab)
+    fun onAddReminderClick() {
         startActivity(ReminderActivity.intent(this))
+    }
+
+    override fun onReminderClicked(reminder: Reminder) {
+        startActivity(ReminderActivity.intent(this, reminder.id))
     }
 }

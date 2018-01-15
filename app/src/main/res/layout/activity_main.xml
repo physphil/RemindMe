@@ -7,21 +7,39 @@
     android:layout_height="match_parent"
     tools:context="com.physphil.android.remindme.MainActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/reminder_list_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.physphil.android.remindme.ui.ProgressSpinner
+        android:id="@+id/reminder_list_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
+        android:id="@+id/reminder_list_empty"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:textSize="40sp"
+        android:layout_margin="@dimen/global_margin_xlarge"
+        android:drawablePadding="@dimen/global_margin_large"
+        android:drawableTop="@drawable/ic_alarm_clock"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/line_spacing_large"
+        android:text="@string/reminder_list_empty"
+        android:textSize="@dimen/text_size_large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16000003"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.physphil.android.remindme.ui.ProgressSpinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/reminder_list_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/global_margin_large"
+        android:src="@drawable/ic_add_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

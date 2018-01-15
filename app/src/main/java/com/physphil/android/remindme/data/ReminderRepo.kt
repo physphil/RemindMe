@@ -28,6 +28,8 @@ class ReminderRepo(private val dao: ReminderDao) {
         }
     }
 
+    fun getActiveReminders() = dao.getAllReminders(System.currentTimeMillis())
+
     fun insertReminder(reminder: Reminder) {
         Thread(Runnable {
             dao.insertReminder(reminder)

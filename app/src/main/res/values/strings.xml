@@ -9,6 +9,9 @@
     <string name="reminder_date_title">Date</string>
     <string name="reminder_repeat_title">Repeat</string>
 
+    <string name="reminder_list_edit_text">Edit</string>
+    <string name="reminder_list_empty">Hmmm, looks like you haven\'t added any reminders yet. Click the + to get started.</string>
+
     <string name="title_add_reminder">New Reminder</string>
     <string name="title_edit_reminder">Edit Reminder</string>
     <string name="title_select_recurrence">Select Recurrence</string>
