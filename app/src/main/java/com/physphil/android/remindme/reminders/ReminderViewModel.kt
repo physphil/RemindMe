@@ -21,16 +21,18 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     private val reminderTime = MutableLiveData<String>()
     private val reminderDate = MutableLiveData<String>()
     private val reminderRecurrence = MutableLiveData<Int>()
+    private val toolbarTitle = MutableLiveData<Int>()
 
-    // Convert to LD using Transformations.map()?  Don't need to update it's value manually, just depends on Reminder
-    val toolbarTitle = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
-
+    init {
+        toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
+    }
 
     fun getReminderValue() = reminder.value!!
     fun getReminder(): LiveData<Reminder> = reminder
     fun getReminderTime(): LiveData<String> = reminderTime
     fun getReminderDate(): LiveData<String> = reminderDate
     fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
+    fun getToolbarTitle(): LiveData<Int> = toolbarTitle
 
     fun updateTitle(title: String) {
         getReminderValue().title = title

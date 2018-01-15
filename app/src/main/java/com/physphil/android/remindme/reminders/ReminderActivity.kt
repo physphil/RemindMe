@@ -9,10 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.TimePicker
+import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -40,14 +37,14 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     @BindView(R.id.reminder_body_text)
     lateinit var bodyText: EditText
 
-    @BindView(R.id.reminder_time_text)
-    lateinit var timeText: EditText
+    @BindView(R.id.reminder_time_btn)
+    lateinit var timeText: Button
 
-    @BindView(R.id.reminder_date_text)
-    lateinit var dateText: EditText
+    @BindView(R.id.reminder_date_btn)
+    lateinit var dateText: Button
 
-    @BindView(R.id.reminder_repeat_text)
-    lateinit var repeatText: EditText
+    @BindView(R.id.reminder_repeat_btn)
+    lateinit var repeatText: Button
 
     private val viewModel: ReminderViewModel by lazy {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID)
@@ -66,29 +63,33 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.getReminderTime().observe(this, timeObserver)
         viewModel.getReminderDate().observe(this, dateObserver)
         viewModel.getReminderRecurrence().observe(this, recurrenceObserver)
-        setToolbarTitle(viewModel.toolbarTitle)
+        viewModel.getToolbarTitle().observe(this, toolbarTitleObserver)
     }
 
     private val reminderObserver = Observer<Reminder> {
         it?.let {
             titleText.setText(it.title, TextView.BufferType.EDITABLE)
             bodyText.setText(it.body, TextView.BufferType.EDITABLE)
-            timeText.setText(it.getDisplayTime(), TextView.BufferType.EDITABLE)
-            dateText.setText(it.getDisplayDate(), TextView.BufferType.EDITABLE)
-            repeatText.setText(it.recurrence.getDisplayString(), TextView.BufferType.EDITABLE)
+            timeText.text = it.getDisplayTime()
+            dateText.text = it.getDisplayDate()
+            repeatText.setText(it.recurrence.getDisplayString())
         }
     }
 
     private val timeObserver = Observer<String> {
-        it?.let { timeText.setText(it, TextView.BufferType.EDITABLE)}
+        it?.let { timeText.text = it }
     }
 
     private val dateObserver = Observer<String> {
-        it?.let { dateText.setText(it, TextView.BufferType.EDITABLE)}
+        it?.let { dateText.text = it }
     }
 
     private val recurrenceObserver = Observer<Int> {
-        it?.let { repeatText.setText(it, TextView.BufferType.EDITABLE)}
+        it?.let { repeatText.setText(it) }
+    }
+
+    private val toolbarTitleObserver = Observer<Int> {
+        it?.let { setToolbarTitle(it) }
     }
 
     @OnTextChanged(R.id.reminder_title_text)
@@ -101,7 +102,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.updateBody(text.toString())
     }
 
-    @OnClick(R.id.reminder_time_text, R.id.reminder_time_icon, R.id.reminder_time_title)
+    @OnClick(R.id.reminder_time_btn, R.id.reminder_time_icon)
     fun onTimeClicked() {
         val calendar = viewModel.getReminderValue().time
         TimePickerDialog(this, R.style.Pickers, this,
@@ -109,7 +110,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
                 calendar.get(Calendar.MINUTE), false).show()
     }
 
-    @OnClick(R.id.reminder_date_text, R.id.reminder_date_icon, R.id.reminder_date_title)
+    @OnClick(R.id.reminder_date_btn, R.id.reminder_date_icon)
     fun onDateClicked() {
         val calendar = viewModel.getReminderValue().time
         DatePickerDialog(this, R.style.Pickers, this,
@@ -118,7 +119,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
                 calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 
-    @OnClick(R.id.reminder_repeat_text, R.id.reminder_repeat_icon, R.id.reminder_repeat_title)
+    @OnClick(R.id.reminder_repeat_btn, R.id.reminder_repeat_icon)
     fun onRecurrenceClicked() {
         RecurrencePickerDialog.newInstance(viewModel.getReminderValue().recurrence)
                 .show(supportFragmentManager, RecurrencePickerDialog.TAG)

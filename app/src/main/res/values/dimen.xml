@@ -5,6 +5,11 @@
     <dimen name="global_margin_large">16dp</dimen>
     <dimen name="global_margin_xlarge">24dp</dimen>
     <dimen name="global_margin_xxlarge">32dp</dimen>
+    <dimen name="global_margin_xxxlarge">40dp</dimen>
+
+    <dimen name="radius_button_primary">24dp</dimen>
+
+    <dimen name="text_size_button_primary">16sp</dimen>
 
     <dimen name="reminder_input_margin_start">64dp</dimen>
 </resources>

@@ -22,4 +22,14 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="Button">
+        <item name="android:paddingStart">@dimen/global_margin_xxlarge</item>
+        <item name="android:paddingEnd">@dimen/global_margin_xxlarge</item>
+        <item name="android:textSize">@dimen/text_size_button_primary</item>
+    </style>
+
+    <style name="Button.Primary">
+        <item name="android:background">@drawable/bg_button_primary</item>
+    </style>
+
 </resources>
