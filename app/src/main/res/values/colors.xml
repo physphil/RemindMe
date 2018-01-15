@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#324090</color>
     <color name="colorAccent">#555555</color>
+
+    <color name="bg_progress_spinner">#55000000</color>
 </resources>

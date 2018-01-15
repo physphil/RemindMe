@@ -5,11 +5,16 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.physphil.android.remindme.reminders.ReminderActivity
+import com.physphil.android.remindme.ui.ProgressSpinner
 
 class MainActivity : BaseActivity() {
+
+    @BindView(R.id.spinner)
+    lateinit var spinner: ProgressSpinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +28,8 @@ class MainActivity : BaseActivity() {
             val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nm.createNotificationChannel(channel)
         }
+
+        spinner.setMessage(R.string.spinner_loading_reminders)
     }
 
     @OnClick(R.id.text)

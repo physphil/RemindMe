@@ -10,6 +10,7 @@
     <dimen name="radius_button_primary">24dp</dimen>
 
     <dimen name="text_size_button_primary">16sp</dimen>
+    <dimen name="text_size_progress_message">16sp</dimen>
 
     <dimen name="reminder_input_margin_start">64dp</dimen>
 </resources>

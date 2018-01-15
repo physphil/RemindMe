@@ -21,4 +21,7 @@
     <string name="recurrence_weekly">Weekly</string>
     <string name="recurrence_monthly">Monthly</string>
     <string name="recurrence_yearly">Yearly</string>
+
+    <string name="spinner_loading_generic">Loading…</string>
+    <string name="spinner_loading_reminders">Grabbing Your Reminders…</string>
 </resources>
