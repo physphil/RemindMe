@@ -74,6 +74,11 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
         }
     }
 
+    fun deleteReminder() {
+        scheduler.cancelJob(getReminderValue().externalId)
+        repo.deleteReminder(getReminderValue())
+    }
+
     private fun scheduleNotification(reminder: Reminder): Int {
         return scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id,

@@ -47,4 +47,10 @@ class ReminderRepo(private val dao: ReminderDao) {
             dao.updateRecurringReminder(id, newExternalId, newTime)
         }).start()
     }
+
+    fun deleteReminder(reminder: Reminder) {
+        Thread(Runnable {
+            dao.deleteReminder(reminder)
+        }).start()
+    }
 }

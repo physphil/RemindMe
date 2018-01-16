@@ -19,6 +19,7 @@
     <string name="title_select_recurrence">Select Recurrence</string>
 
     <string name="menu_save_reminder">Save</string>
+    <string name="menu_delete_reminder">Delete</string>
 
     <string name="recurrence_none">Once</string>
     <string name="recurrence_hourly">Hourly</string>

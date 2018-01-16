@@ -137,6 +137,11 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
                 finish()
                 true
             }
+            R.id.menu_delete -> {
+                viewModel.deleteReminder()
+                finish()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

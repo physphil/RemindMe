@@ -7,4 +7,10 @@
         android:id="@+id/menu_save"
         android:title="@string/menu_save_reminder"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/menu_delete_reminder"
+        app:showAsAction="never"/>
+
 </menu>
