@@ -69,6 +69,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     private val reminderObserver = Observer<Reminder> {
         it?.let {
             titleText.setText(it.title, TextView.BufferType.EDITABLE)
+            titleText.setSelection(it.title.length)
             bodyText.setText(it.body, TextView.BufferType.EDITABLE)
             timeText.text = it.getDisplayTime()
             dateText.text = it.getDisplayDate(this)

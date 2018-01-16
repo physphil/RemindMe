@@ -17,7 +17,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".reminders.ReminderActivity"/>
+        <activity
+            android:name=".reminders.ReminderActivity"
+            android:parentActivityName=".MainActivity"/>
 
     </application>
 

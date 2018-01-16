@@ -1,14 +1,17 @@
 package com.physphil.android.remindme.job
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
 import com.evernote.android.job.Job
 import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.room.AppDatabase
 import java.util.*
 
@@ -20,28 +23,43 @@ import java.util.*
 class ShowNotificationJob : Job() {
 
     override fun onRunJob(params: Params): Result {
-        // Show notification to user
-        val title = params.extras.getString(EXTRA_TITLE, "")
-        val text = params.extras.getString(EXTRA_TEXT, "")
-        val notification = NotificationCompat.Builder(context, CHANNEL_NOTIFICATIONS)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .build()
+        // Only continue if the notification being shown has a valid id attached to it
+        if (params.extras.containsKey(EXTRA_ID)) {
+            val id = params.extras.getString(EXTRA_ID, "should never happen")
+            val title = params.extras.getString(EXTRA_TITLE, "")
+            val text = params.extras.getString(EXTRA_TEXT, "")
 
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(System.currentTimeMillis().toInt(), notification)
+            // Create backstack when opening Reminder details, after user clicks on notification
+            val intent = ReminderActivity.intent(context, id)
+            val pi = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(intent)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        // Schedule the next event if the Reminder has a recurrence
-        val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))
-        if (recurrence != Recurrence.NONE) {
-            scheduleNextNotification(params.extras.getLong(EXTRA_TIME, System.currentTimeMillis()),
-                    params.extras.getString(EXTRA_ID, "should never happen"),
-                    title, text, recurrence)
+            // Show notification to user
+            val builder = NotificationCompat.Builder(context, CHANNEL_NOTIFICATIONS)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentIntent(pi)
+                    .setContentTitle(title)
+                    .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+
+            if (text.isNotEmpty()) {
+                builder.setContentText(text)
+                builder.setStyle(NotificationCompat.BigTextStyle().setSummaryText(text))
+            }
+
+            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.notify(System.currentTimeMillis().toInt(), builder.build())
+
+            // Schedule the next event if the Reminder has a recurrence
+            val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))
+            if (recurrence != Recurrence.NONE) {
+                scheduleNextNotification(params.extras.getLong(EXTRA_TIME, System.currentTimeMillis()), id, title, text, recurrence)
+            }
+            return Result.SUCCESS
         }
-
-        return Result.SUCCESS
+        else {
+            return Result.FAILURE
+        }
     }
 
     private fun scheduleNextNotification(time: Long, id: String, title: String, text: String, recurrence: Recurrence) {
