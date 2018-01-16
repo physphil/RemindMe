@@ -64,17 +64,21 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     fun saveReminder() {
         val reminder = getReminderValue()
         if (isNewReminder) {
-            getReminderValue().externalId = scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
-                    reminder.id,
-                    reminder.title,
-                    reminder.body,
-                    reminder.recurrence.id)
+            reminder.externalId = scheduleNotification(reminder)
             repo.insertReminder(reminder)
         }
         else {
-            // TODO - reschedule existing notification based on it's job id
-            // Also - cancel
+            scheduler.cancelJob(reminder.externalId)
+            reminder.externalId = scheduleNotification(reminder)
             repo.updateReminder(reminder)
         }
+    }
+
+    private fun scheduleNotification(reminder: Reminder): Int {
+        return scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
+                reminder.id,
+                reminder.title,
+                reminder.body,
+                reminder.recurrence.id)
     }
 }

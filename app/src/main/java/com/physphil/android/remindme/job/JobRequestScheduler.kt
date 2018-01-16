@@ -1,5 +1,6 @@
 package com.physphil.android.remindme.job
 
+import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import com.physphil.android.remindme.TAG_SHOW_NOTIFICATION_JOB
@@ -38,4 +39,6 @@ object JobRequestScheduler {
                 .build()
                 .schedule()
     }
+
+    fun cancelJob(id: Int) = JobManager.instance().cancel(id)
 }
