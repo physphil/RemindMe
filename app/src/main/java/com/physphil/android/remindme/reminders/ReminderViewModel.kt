@@ -3,6 +3,7 @@ package com.physphil.android.remindme.reminders
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.content.Context
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
@@ -48,11 +49,11 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
         reminderTime.value = getReminderValue().getDisplayTime()
     }
 
-    fun updateDate(year: Int, month: Int, dayOfMonth: Int) {
+    fun updateDate(context: Context, year: Int, month: Int, dayOfMonth: Int) {
         getReminderValue().time.set(Calendar.YEAR, year)
         getReminderValue().time.set(Calendar.MONTH, month)
         getReminderValue().time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        reminderDate.value = getReminderValue().getDisplayDate()
+        reminderDate.value = getReminderValue().getDisplayDate(context)
     }
 
     fun updateRecurrence(recurrence: Recurrence) {

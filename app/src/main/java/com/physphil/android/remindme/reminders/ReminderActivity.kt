@@ -71,7 +71,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
             titleText.setText(it.title, TextView.BufferType.EDITABLE)
             bodyText.setText(it.body, TextView.BufferType.EDITABLE)
             timeText.text = it.getDisplayTime()
-            dateText.text = it.getDisplayDate()
+            dateText.text = it.getDisplayDate(this)
             repeatText.setText(it.recurrence.getDisplayString())
         }
     }
@@ -146,7 +146,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        viewModel.updateDate(year, month, dayOfMonth)
+        viewModel.updateDate(this, year, month, dayOfMonth)
     }
 
     override fun onRecurrenceSet(recurrence: Recurrence) {

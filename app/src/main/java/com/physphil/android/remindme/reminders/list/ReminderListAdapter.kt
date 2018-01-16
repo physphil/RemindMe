@@ -54,7 +54,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val reminder = reminders[position]
-        holder.date.text = reminder.getDisplayDate()
+        holder.date.text = reminder.getDisplayDate(holder.date.context)
         holder.time.text = reminder.getDisplayTime()
         holder.title.text = reminder.title
         holder.body.text = reminder.body

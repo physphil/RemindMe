@@ -3,8 +3,11 @@ package com.physphil.android.remindme.room.entities
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.content.Context
 import com.physphil.android.remindme.*
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.util.isToday
+import com.physphil.android.remindme.util.isTomorrow
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +28,11 @@ data class Reminder(@ColumnInfo(name = REMINDER_COLUMN_TITLE) var title: String 
     @ColumnInfo(name = REMINDER_COLUMN_ID)
     var id: String = UUID.randomUUID().toString()
 
-    fun getDisplayTime() = SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(time.time)
+    fun getDisplayTime(): String = SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(time.time)
 
-    fun getDisplayDate() = SimpleDateFormat.getDateInstance().format(time.time)
+    fun getDisplayDate(context: Context): String = when {
+        time.isToday() -> context.getString(R.string.reminder_repeat_today)
+        time.isTomorrow() -> context.getString(R.string.reminder_repeat_tomorrow)
+        else -> SimpleDateFormat.getDateInstance().format(time.time)
+    }
 }
