@@ -20,7 +20,7 @@
 
     <string name="menu_save_reminder">Save</string>
 
-    <string name="recurrence_none">None</string>
+    <string name="recurrence_none">Once</string>
     <string name="recurrence_hourly">Hourly</string>
     <string name="recurrence_daily">Daily</string>
     <string name="recurrence_weekly">Weekly</string>

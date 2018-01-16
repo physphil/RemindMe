@@ -31,6 +31,9 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         @BindView(R.id.reminder_list_time)
         lateinit var time: TextView
 
+        @BindView(R.id.reminder_list_recurrence)
+        lateinit var recurrence: TextView
+
         @BindView(R.id.reminder_list_title)
         lateinit var title: TextView
 
@@ -56,6 +59,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         val reminder = reminders[position]
         holder.date.text = reminder.getDisplayDate(holder.date.context)
         holder.time.text = reminder.getDisplayTime()
+        holder.recurrence.setText(reminder.recurrence.getDisplayString())
         holder.title.text = reminder.title
         holder.body.text = reminder.body
     }

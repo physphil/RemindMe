@@ -25,7 +25,6 @@
         android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_large"
         android:layout_marginTop="@dimen/global_margin_large"
-        android:drawablePadding="@dimen/global_margin_typical"
         android:drawableStart="@drawable/ic_date_range_24dp"
         app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,17 +34,28 @@
     <TextView
         android:id="@+id/reminder_list_time"
         style="@style/ReminderListTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_large"
         android:layout_marginTop="@dimen/global_margin_typical"
-        android:drawablePadding="@dimen/global_margin_typical"
         android:drawableStart="@drawable/ic_time_24dp"
-        app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reminder_list_date"
         tools:text="9:30 AM"/>
+
+    <TextView
+        android:id="@+id/reminder_list_recurrence"
+        style="@style/ReminderListTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/global_margin_large"
+        android:layout_marginStart="@dimen/global_margin_xlarge"
+        android:drawableStart="@drawable/ic_repeat_24dp"
+        app:layout_constraintBottom_toBottomOf="@id/reminder_list_time"
+        app:layout_constraintLeft_toRightOf="@id/reminder_list_time"
+        app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
+        app:layout_constraintTop_toTopOf="@id/reminder_list_time"
+        tools:text="Yearly"/>
 
     <TextView
         android:id="@+id/reminder_list_title"

@@ -20,6 +20,7 @@
 
     <style name="ReminderListTime">
         <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">@dimen/global_margin_typical</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">@dimen/text_size_reminder_list_time</item>
         <item name="android:textStyle">bold</item>
