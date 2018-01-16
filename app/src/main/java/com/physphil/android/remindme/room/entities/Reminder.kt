@@ -33,6 +33,6 @@ data class Reminder(@ColumnInfo(name = REMINDER_COLUMN_TITLE) var title: String 
     fun getDisplayDate(context: Context): String = when {
         time.isToday() -> context.getString(R.string.reminder_repeat_today)
         time.isTomorrow() -> context.getString(R.string.reminder_repeat_tomorrow)
-        else -> SimpleDateFormat.getDateInstance().format(time.time)
+        else -> SimpleDateFormat.getDateInstance(DateFormat.LONG).format(time.time)
     }
 }
