@@ -9,7 +9,9 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.physphil.android.remindme.R
+import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.util.setVisibility
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
@@ -59,9 +61,17 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         val reminder = reminders[position]
         holder.date.text = reminder.getDisplayDate(holder.date.context)
         holder.time.text = reminder.getDisplayTime()
-        holder.recurrence.setText(reminder.recurrence.getDisplayString())
         holder.title.text = reminder.title
         holder.body.text = reminder.body
+
+        // Hide recurrence if it is a single alarm
+        if (reminder.recurrence != Recurrence.NONE) {
+            holder.recurrence.setVisibility(true)
+            holder.recurrence.setText(reminder.recurrence.getDisplayString())
+        }
+        else {
+            holder.recurrence.setVisibility(false)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
