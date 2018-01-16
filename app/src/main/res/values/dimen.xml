@@ -10,6 +10,7 @@
     <dimen name="radius_button_primary">24dp</dimen>
 
     <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_empty">18sp</dimen>
     <dimen name="text_size_button_primary">@dimen/text_size_large</dimen>
     <dimen name="text_size_progress_message">@dimen/text_size_large</dimen>
     <dimen name="text_size_reminder_list_time">12sp</dimen>

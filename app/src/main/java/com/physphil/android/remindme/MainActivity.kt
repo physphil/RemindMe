@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -23,6 +22,7 @@ import com.physphil.android.remindme.reminders.list.ReminderListViewModelFactory
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
+import com.physphil.android.remindme.util.setVisibility
 
 class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener {
 
@@ -59,15 +59,30 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
             nm.createNotificationChannel(channel)
         }
 
+        viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
+        viewModel.getListVisibility().observe(this, listVisibilityObserver)
+        viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
         viewModel.getReminderList().observe(this, reminderListObserver)
+    }
+
+    private val spinnerVisibilityObserver = Observer<Boolean> {
+        it?.let {
+            spinner.setVisibility(it)
+        }
+    }
+
+    private val listVisibilityObserver = Observer<Boolean> {
+        it?.let { recyclerView.setVisibility(it) }
+    }
+
+    private val emptyVisibilityObserver = Observer<Boolean> {
+        it?.let { empty.setVisibility(it) }
     }
 
     private val reminderListObserver = Observer<List<Reminder>> {
         it?.let {
             adapter.setReminderList(it)
-            recyclerView.visibility = View.VISIBLE
-            spinner.visibility = View.GONE
-            empty.visibility = View.GONE
+            viewModel.reminderListUpdated()
         }
     }
 

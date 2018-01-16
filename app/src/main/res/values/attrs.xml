@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressSpinner">
+        <attr name="spinner_message" format="reference|string"/>
+    </declare-styleable>
+</resources>

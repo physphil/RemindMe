@@ -15,7 +15,10 @@
     <com.physphil.android.remindme.ui.ProgressSpinner
         android:id="@+id/reminder_list_spinner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:spinner_message="@string/spinner_loading_reminders"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/reminder_list_empty"
@@ -27,11 +30,14 @@
         android:gravity="center"
         android:lineSpacingExtra="@dimen/line_spacing_large"
         android:text="@string/reminder_list_empty"
-        android:textSize="@dimen/text_size_large"
+        android:textSize="@dimen/text_size_empty"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        tools:visibility="visible"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/reminder_list_fab"

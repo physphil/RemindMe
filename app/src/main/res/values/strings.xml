@@ -12,7 +12,7 @@
     <string name="reminder_repeat_tomorrow">Tomorrow</string>
 
     <string name="reminder_list_edit_text">Edit</string>
-    <string name="reminder_list_empty">Hmmm, looks like you haven\'t added any reminders yet. Click the + to get started.</string>
+    <string name="reminder_list_empty">Hmmm, it looks like you haven\'t set any reminders yet.\n\nClick the + button below to get started.</string>
 
     <string name="title_add_reminder">New Reminder</string>
     <string name="title_edit_reminder">Edit Reminder</string>

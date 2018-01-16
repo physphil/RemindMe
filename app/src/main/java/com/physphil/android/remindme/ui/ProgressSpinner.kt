@@ -14,9 +14,27 @@ import com.physphil.android.remindme.R
  * Copyright (c) 2018 Phil Shadlyn
  */
 class ProgressSpinner : ConstraintLayout {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        val view = inflate(context, R.layout.progress_spinner, this)
+        ButterKnife.bind(this, view)
+
+        attrs?.let {
+            // Load any xml-specified attributes
+            val ta = context.obtainStyledAttributes(attrs, R.styleable.ProgressSpinner)
+            val res = ta.getResourceId(R.styleable.ProgressSpinner_spinner_message, 0)
+            val str = ta.getString(R.styleable.ProgressSpinner_spinner_message)
+
+            if (res != 0) {
+                setMessage(res)
+            }
+            else if (str != null) {
+                setMessage(str)
+            }
+            ta.recycle()
+        }
+    }
 
     @BindView(R.id.progress_spinner)
     lateinit var spinner: ProgressBar
@@ -24,12 +42,11 @@ class ProgressSpinner : ConstraintLayout {
     @BindView(R.id.progress_message)
     lateinit var message: TextView
 
-    init {
-        val view = inflate(context, R.layout.progress_spinner, this)
-        ButterKnife.bind(this, view)
-    }
-
     fun setMessage(@StringRes message: Int) {
         this.message.setText(message)
+    }
+
+    fun setMessage(message: String) {
+        this.message.text = message
     }
 }
