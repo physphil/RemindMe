@@ -19,6 +19,7 @@ const val REMINDER_COLUMN_TEXT = "text"
 const val REMINDER_COLUMN_TIME = "time"
 const val REMINDER_COLUMN_RECURRENCE = "recurrence"
 const val REMINDER_COLUMN_EXTERNAL_ID = "external_id"
+const val REMINDER_COLUMN_NOTIFICATION_ID = "notification_id"
 // endregion
 
 // region Android-Job subclass tags

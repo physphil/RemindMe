@@ -48,6 +48,12 @@ class ReminderRepo(private val dao: ReminderDao) {
         }).start()
     }
 
+    fun updateNotificationId(id: String, notificationId: Int) {
+        Thread(Runnable {
+            dao.updateNotificationId(id, notificationId)
+        }).start()
+    }
+
     fun deleteReminder(reminder: Reminder) {
         Thread(Runnable {
             dao.deleteReminder(reminder)

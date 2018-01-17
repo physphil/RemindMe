@@ -22,7 +22,8 @@ data class Reminder(@ColumnInfo(name = REMINDER_COLUMN_TITLE) var title: String 
                     @ColumnInfo(name = REMINDER_COLUMN_TEXT) var body: String = "",
                     @ColumnInfo(name = REMINDER_COLUMN_TIME) var time: Calendar = Calendar.getInstance(),
                     @ColumnInfo(name = REMINDER_COLUMN_RECURRENCE) var recurrence: Recurrence = Recurrence.NONE,
-                    @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID) var externalId: Int = 0) {
+                    @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID) var externalId: Int = 0,
+                    @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID) var notificationId: Int = 0) {
 
     @PrimaryKey
     @ColumnInfo(name = REMINDER_COLUMN_ID)

@@ -6,6 +6,7 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import com.evernote.android.job.Job
 import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
@@ -26,14 +27,17 @@ class ShowNotificationJob : Job() {
         // Only continue if the notification being shown has a valid id attached to it
         if (params.extras.containsKey(EXTRA_ID)) {
             val id = params.extras.getString(EXTRA_ID, "should never happen")
+            Log.d("phil", "showing notification for reminder id $id")
             val title = params.extras.getString(EXTRA_TITLE, "")
             val text = params.extras.getString(EXTRA_TEXT, "")
 
             // Create backstack when opening Reminder details, after user clicks on notification
+            // PendingIntent requires a unique ID, so that the notifications can be cleared individually by ID
+            val notificationId = System.currentTimeMillis().toInt()
             val intent = ReminderActivity.intent(context, id)
             val pi = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(intent)
-                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                    .getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT)
 
             // Show notification to user
             val builder = NotificationCompat.Builder(context, CHANNEL_NOTIFICATIONS)
@@ -48,7 +52,8 @@ class ShowNotificationJob : Job() {
             }
 
             val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.notify(System.currentTimeMillis().toInt(), builder.build())
+            nm.notify(notificationId, builder.build())
+            ReminderRepo(AppDatabase.getInstance(context).reminderDao()).updateNotificationId(id, notificationId)
 
             // Schedule the next event if the Reminder has a recurrence
             val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))

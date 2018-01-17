@@ -1,6 +1,7 @@
 package com.physphil.android.remindme.reminders
 
 import android.app.DatePickerDialog
+import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -74,6 +75,10 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
             timeText.text = it.getDisplayTime()
             dateText.text = it.getDisplayDate(this)
             repeatText.setText(it.recurrence.getDisplayString())
+
+            // Clear any notifications for this Reminder
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.cancel(it.notificationId)
         }
     }
 
