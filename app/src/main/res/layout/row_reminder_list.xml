@@ -4,17 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/global_margin_large">
 
     <Button
         android:id="@+id/reminder_list_edit"
         style="@style/Button.Small.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/global_margin_large"
-        android:layout_marginTop="@dimen/global_margin_large"
         android:text="@string/reminder_list_edit_text"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
@@ -23,10 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_large"
-        android:layout_marginStart="@dimen/global_margin_large"
-        android:layout_marginTop="@dimen/global_margin_large"
         android:drawableStart="@drawable/ic_date_range_24dp"
-        app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
+        app:layout_constraintEnd_toStartOf="@id/reminder_list_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Tuesday January 16, 2018"/>
@@ -36,7 +33,6 @@
         style="@style/ReminderListTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/global_margin_large"
         android:layout_marginTop="@dimen/global_margin_typical"
         android:drawableStart="@drawable/ic_time_24dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,12 +44,10 @@
         style="@style/ReminderListTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_xlarge"
         android:drawableStart="@drawable/ic_repeat_24dp"
-        app:layout_constraintBottom_toBottomOf="@id/reminder_list_time"
-        app:layout_constraintLeft_toRightOf="@id/reminder_list_time"
-        app:layout_constraintRight_toLeftOf="@id/reminder_list_edit"
+        app:layout_constraintEnd_toStartOf="@id/reminder_list_edit"
+        app:layout_constraintStart_toEndOf="@id/reminder_list_time"
         app:layout_constraintTop_toTopOf="@id/reminder_list_time"
         tools:text="Yearly"/>
 
@@ -61,8 +55,6 @@
         android:id="@+id/reminder_list_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/global_margin_large"
-        android:layout_marginStart="@dimen/global_margin_large"
         android:layout_marginTop="@dimen/global_margin_large"
         android:textColor="@color/material_white"
         android:textSize="@dimen/text_size_reminder_list_title"
@@ -75,9 +67,6 @@
         android:id="@+id/reminder_list_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/global_margin_large"
-        android:layout_marginEnd="@dimen/global_margin_large"
-        android:layout_marginStart="@dimen/global_margin_large"
         android:layout_marginTop="@dimen/global_margin_typical"
         android:ellipsize="end"
         android:maxLines="1"

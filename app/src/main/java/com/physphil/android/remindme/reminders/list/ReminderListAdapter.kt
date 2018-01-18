@@ -62,7 +62,15 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         holder.date.text = reminder.getDisplayDate(holder.date.context)
         holder.time.text = reminder.getDisplayTime(holder.time.context)
         holder.title.text = reminder.title
-        holder.body.text = reminder.body
+
+        // Hide description if not entered
+        if (reminder.body.isNotEmpty()) {
+            holder.body.setVisibility(true)
+            holder.body.text = reminder.body
+        }
+        else {
+            holder.body.setVisibility(false)
+        }
 
         // Hide recurrence if it is a single alarm
         if (reminder.recurrence != Recurrence.NONE) {
