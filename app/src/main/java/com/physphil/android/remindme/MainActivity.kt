@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -47,6 +48,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         adapter.setOnClickListener(this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+        recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         // Create required notification channel on Android 8.0+
