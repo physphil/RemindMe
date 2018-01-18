@@ -132,7 +132,15 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_reminder, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val delete = menu.findItem(R.id.menu_delete)
+        delete?.let { viewModel.prepareOptionsMenuItems(delete) }
         return true
     }
 

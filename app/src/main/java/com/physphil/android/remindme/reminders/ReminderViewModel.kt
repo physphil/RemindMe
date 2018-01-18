@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
+import android.view.MenuItem
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
@@ -77,6 +78,10 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     fun deleteReminder() {
         scheduler.cancelJob(getReminderValue().externalId)
         repo.deleteReminder(getReminderValue())
+    }
+
+    fun prepareOptionsMenuItems(delete: MenuItem) {
+        delete.isVisible = !isNewReminder
     }
 
     private fun scheduleNotification(reminder: Reminder): Int {
