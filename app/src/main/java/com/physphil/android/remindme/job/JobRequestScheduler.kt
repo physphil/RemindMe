@@ -13,6 +13,11 @@ const val EXTRA_RECURRENCE = "com.physphil.android.remindme.EXTRA_RECURRENCE"
 const val EXTRA_TIME = "com.physphil.android.remindme.EXTRA_TIME"
 
 /**
+ * Offset (in ms) for any reminder to be scheduled immediately
+ */
+private const val DEFAULT_OFFSET = 3000
+
+/**
  * Copyright (c) 2018 Phil Shadlyn
  */
 object JobRequestScheduler {
@@ -34,11 +39,27 @@ object JobRequestScheduler {
         extras.putInt(EXTRA_RECURRENCE, recurrence)
 
         return JobRequest.Builder(TAG_SHOW_NOTIFICATION_JOB)
-                .setExact(time - System.currentTimeMillis())    // requires offset from current time
+                .setExact(calculateOffset(time))    // requires offset from current time
                 .setExtras(extras)
                 .build()
                 .schedule()
     }
 
     fun cancelJob(id: Int) = JobManager.instance().cancel(id)
+
+    /**
+     * Calculate the time offset required by the JobRequest. If the time supplied is in the past, this function
+     * will return [DEFAULT_OFFSET]. This will allow the reminder to be shown immediately.
+     * @param time the time at which the reminder is scheduled
+     * @return the offset between the supplied time and the current time
+     */
+    private fun calculateOffset(time: Long): Long {
+        val now = System.currentTimeMillis()
+        return if (time > now) {
+            time - now
+        }
+        else {
+            DEFAULT_OFFSET.toLong()
+        }
+    }
 }

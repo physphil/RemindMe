@@ -19,3 +19,8 @@ fun Calendar.isTomorrow(): Boolean {
             && get(Calendar.YEAR) == today.get(Calendar.YEAR)
             && get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) + 1))
 }
+
+fun Calendar.isNow(): Boolean {
+    val now = System.currentTimeMillis()
+    return Math.abs(timeInMillis - now) < (1000 * 5)   // Considered "now" if within 5 seconds of current time
+}

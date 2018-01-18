@@ -38,7 +38,7 @@ public class Converters2 {
         LiveData<String> time = Transformations.map(reminder, new Function<Reminder, String>() {
             @Override
             public String apply(Reminder input) {
-                return input.getDisplayTime();
+                return "";
             }
         });
 

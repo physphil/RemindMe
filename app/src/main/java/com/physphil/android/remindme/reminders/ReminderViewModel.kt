@@ -43,10 +43,10 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
         getReminderValue().body = body
     }
 
-    fun updateTime(hourOfDay: Int, minute: Int) {
+    fun updateTime(context: Context, hourOfDay: Int, minute: Int) {
         getReminderValue().time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         getReminderValue().time.set(Calendar.MINUTE, minute)
-        reminderTime.value = getReminderValue().getDisplayTime()
+        reminderTime.value = getReminderValue().getDisplayTime(context)
     }
 
     fun updateDate(context: Context, year: Int, month: Int, dayOfMonth: Int) {
