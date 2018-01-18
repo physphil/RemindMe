@@ -31,4 +31,6 @@
 
     <string name="spinner_loading_generic">Loading…</string>
     <string name="spinner_loading_reminders">Grabbing Your Reminders…</string>
+
+    <string name="shortcut_new_reminder_title">New Reminder</string>
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:icon="@drawable/ic_shortcut_new_reminder"
+        android:shortcutId="shortcut_new_reminder"
+        android:shortcutLongLabel="@string/shortcut_new_reminder_title"
+        android:shortcutShortLabel="@string/shortcut_new_reminder_title">
+        <!-- These two intents provide the desired screen, and it's backstack -->
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.physphil.android.remindme.MainActivity"
+            android:targetPackage="com.physphil.android.remindme"/>
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.physphil.android.remindme.reminders.ReminderActivity"
+            android:targetPackage="com.physphil.android.remindme"/>
+    </shortcut>
+</shortcuts>
