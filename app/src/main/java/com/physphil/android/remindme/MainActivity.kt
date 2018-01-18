@@ -17,8 +17,6 @@ import butterknife.OnClick
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
-import com.physphil.android.remindme.reminders.list.ReminderListViewModel
-import com.physphil.android.remindme.reminders.list.ReminderListViewModelFactory
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
@@ -36,9 +34,9 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     lateinit var empty: TextView
 
     private val adapter = ReminderListAdapter()
-    private val viewModel: ReminderListViewModel by lazy {
-        ViewModelProviders.of(this, ReminderListViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao())))
-                .get(ReminderListViewModel::class.java)
+    private val viewModel: MainActivityViewModel by lazy {
+        ViewModelProviders.of(this, MainActivityViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao())))
+                .get(MainActivityViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

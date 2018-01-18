@@ -1,4 +1,4 @@
-package com.physphil.android.remindme.reminders.list
+package com.physphil.android.remindme
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import com.physphil.android.remindme.room.entities.Reminder
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderListViewModel(private val repo: ReminderRepo) : ViewModel() {
+class MainActivityViewModel(repo: ReminderRepo) : ViewModel() {
 
     private val reminderList = repo.getActiveReminders()
     private val spinnerVisibility = MutableLiveData<Boolean>()
