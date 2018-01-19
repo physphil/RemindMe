@@ -11,6 +11,8 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -66,9 +68,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     }
 
     private val spinnerVisibilityObserver = Observer<Boolean> {
-        it?.let {
-            spinner.setVisibility(it)
-        }
+        it?.let { spinner.setVisibility(it) }
     }
 
     private val listVisibilityObserver = Observer<Boolean> {
@@ -90,6 +90,23 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     fun onAddReminderClick() {
         startActivity(ReminderActivity.intent(this))
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_delete_all -> {
+                viewModel.deleteAllReminders()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     override fun onReminderClicked(reminder: Reminder) {
         startActivity(ReminderActivity.intent(this, reminder.id))

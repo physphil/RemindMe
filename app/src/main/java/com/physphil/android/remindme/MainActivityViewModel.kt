@@ -9,7 +9,7 @@ import com.physphil.android.remindme.room.entities.Reminder
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
-class MainActivityViewModel(repo: ReminderRepo) : ViewModel() {
+class MainActivityViewModel(private val repo: ReminderRepo) : ViewModel() {
 
     private val reminderList = repo.getActiveReminders()
     private val spinnerVisibility = MutableLiveData<Boolean>()
@@ -31,5 +31,9 @@ class MainActivityViewModel(repo: ReminderRepo) : ViewModel() {
         spinnerVisibility.value = false
         listVisibility.value = reminderList.value?.isNotEmpty() ?: false
         emptyVisibility.value = reminderList.value?.isEmpty() ?: true
+    }
+
+    fun deleteAllReminders() {
+        repo.deleteAllReminders()
     }
 }

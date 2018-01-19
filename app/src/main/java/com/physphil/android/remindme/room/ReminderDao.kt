@@ -37,4 +37,7 @@ interface ReminderDao {
             "SET $REMINDER_COLUMN_NOTIFICATION_ID = :notificationId " +
             "WHERE $REMINDER_COLUMN_ID = :id")
     fun updateNotificationId(id: String, notificationId: Int)
+
+    @Query("DELETE FROM $TABLE_REMINDERS")
+    fun deleteAllReminders()
 }

@@ -59,4 +59,10 @@ class ReminderRepo(private val dao: ReminderDao) {
             dao.deleteReminder(reminder)
         }).start()
     }
+
+    fun deleteAllReminders() {
+        Thread(Runnable {
+            dao.deleteAllReminders()
+        }).start()
+    }
 }

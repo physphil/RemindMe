@@ -21,6 +21,7 @@
 
     <string name="menu_save_reminder">Save</string>
     <string name="menu_delete_reminder">Delete</string>
+    <string name="menu_delete_all">Delete All</string>
 
     <string name="recurrence_none">Once</string>
     <string name="recurrence_hourly">Hourly</string>
