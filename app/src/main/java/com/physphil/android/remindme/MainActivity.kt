@@ -19,13 +19,14 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.reminders.ReminderActivity
+import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
 import com.physphil.android.remindme.util.setVisibility
 
-class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener {
+class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener, DeleteAllDialogFragment.Listener {
 
     @BindView(R.id.reminder_list_recyclerview)
     lateinit var recyclerView: RecyclerView
@@ -100,15 +101,22 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_delete_all -> {
-                viewModel.deleteAllReminders()
+                DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-
+    // region ReminderListAdapterClickListener implementation
     override fun onReminderClicked(reminder: Reminder) {
         startActivity(ReminderActivity.intent(this, reminder.id))
     }
+    // endregion
+
+    // region DeleteAllDialogFragment.Listener implementation
+    override fun onDeleteAllReminders() {
+        viewModel.deleteAllReminders()
+    }
+    // endregion
 }

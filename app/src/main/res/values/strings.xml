@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Remind Me</string>
+    <string name="btn_yes">Oh Yeah</string>
+    <string name="btn_no">No Way</string>
 
     <string name="channel_notifications">Notifications</string>
 
@@ -34,4 +36,7 @@
     <string name="spinner_loading_reminders">Grabbing Your Reminders…</string>
 
     <string name="shortcut_new_reminder_title">New Reminder</string>
+
+    <string name="dialog_title_delete_all_reminders">Delete All Reminders?</string>
+    <string name="dialog_message_delete_all_reminders">Are you sure you want to delete all your saved reminders?</string>
 </resources>
