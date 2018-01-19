@@ -64,6 +64,11 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
 
     fun saveReminder() {
         val reminder = getReminderValue()
+
+        // Set all second fields to 0 before saving, so alarm happens at exactly the specified time
+        reminder.time.set(Calendar.SECOND, 0)
+        reminder.time.set(Calendar.MILLISECOND, 0)
+
         if (isNewReminder) {
             reminder.externalId = scheduleNotification(reminder)
             repo.insertReminder(reminder)
