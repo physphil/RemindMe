@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="global_single">1dp</dimen>
+    <dimen name="global_margin_tiny">2dp</dimen>
     <dimen name="global_margin_small">4dp</dimen>
     <dimen name="global_margin_typical">8dp</dimen>
     <dimen name="global_margin_large">16dp</dimen>
@@ -19,4 +21,5 @@
     <dimen name="line_spacing_large">4dp</dimen>
 
     <dimen name="reminder_input_margin_start">64dp</dimen>
+    <dimen name="reminder_divider_margin">12dp</dimen>
 </resources>

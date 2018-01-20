@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#324090</color>
-    <color name="colorAccent">#555555</color>
+    <color name="colorPrimary">@color/theme_purple</color>
+    <color name="colorPrimaryDark">@color/theme_purple_dark</color>
+    <color name="colorAccent">@color/theme_silver</color>
+
+    <color name="theme_purple">#3f51b5</color>
+    <color name="theme_purple_dark">#324090</color>
+    <color name="theme_silver">#555555</color>
+    <color name="material_white">#e9e9e9</color>
 
     <color name="bg_progress_spinner">#55000000</color>
-
-    <color name="material_white">#e9e9e9</color>
     <color name="theme_icon_colour">#c1c1c1</color>
+    <color name="recyclerview_divider_colour">#55c1c1c1</color>
 </resources>

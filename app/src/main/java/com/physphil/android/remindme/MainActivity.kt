@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -48,12 +49,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
-
-        adapter.setOnClickListener(this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        setupRecyclerview()
 
         // Create required notification channel on Android 8.0+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -61,6 +57,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
             notificationManager.createNotificationChannel(channel)
         }
 
+        // Observe all LiveData from ViewModel
         viewModel.getDeleteAllNotificationsEvent().observe(this, deleteNotificationsObserver)
         viewModel.getShowDeleteConfirmationEvent().observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
@@ -69,31 +66,17 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         viewModel.getReminderList().observe(this, reminderListObserver)
     }
 
-    private val spinnerVisibilityObserver = Observer<Boolean> {
-        it?.let { spinner.setVisibility(it) }
-    }
+    private fun setupRecyclerview() {
+        adapter.setOnClickListener(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.itemAnimator = DefaultItemAnimator()
 
-    private val listVisibilityObserver = Observer<Boolean> {
-        it?.let { recyclerView.setVisibility(it) }
-    }
-
-    private val emptyVisibilityObserver = Observer<Boolean> {
-        it?.let { empty.setVisibility(it) }
-    }
-
-    private val reminderListObserver = Observer<List<Reminder>> {
-        it?.let {
-            adapter.setReminderList(it)
-            viewModel.reminderListUpdated()
-        }
-    }
-
-    private val deleteNotificationsObserver = Observer<Void> {
-        notificationManager.cancelAll()
-    }
-
-    private val showDeleteConfirmationObserver = Observer<Void> {
-        DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
+        // Setup list divider
+        val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        divider.setDrawable(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
+        recyclerView.addItemDecoration(divider)
     }
 
     @OnClick(R.id.reminder_list_fab)
@@ -116,6 +99,34 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    // region ViewModel observers
+    private val spinnerVisibilityObserver = Observer<Boolean> {
+        it?.let { spinner.setVisibility(it) }
+    }
+
+    private val listVisibilityObserver = Observer<Boolean> {
+        it?.let { recyclerView.setVisibility(it) }
+    }
+
+    private val emptyVisibilityObserver = Observer<Boolean> {
+        it?.let { empty.setVisibility(it) }
+    }
+
+    private val reminderListObserver = Observer<List<Reminder>> {
+        it?.let {
+            adapter.setReminderList(it)
+            viewModel.reminderListUpdated()
+        }
+    }
+
+    private val deleteNotificationsObserver = Observer<Void> {
+        notificationManager.cancelAll()
+    }
+    private val showDeleteConfirmationObserver = Observer<Void> {
+        DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
+    }
+    // endregion
 
     // region ReminderListAdapterClickListener implementation
     override fun onReminderClicked(reminder: Reminder) {
