@@ -10,6 +10,7 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.util.SingleLiveEvent
 import java.util.*
 
 /**
@@ -24,6 +25,7 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     private val reminderDate = MutableLiveData<String>()
     private val reminderRecurrence = MutableLiveData<Int>()
     private val toolbarTitle = MutableLiveData<Int>()
+    private val clearNotificationEvent = SingleLiveEvent<Int>()
 
     init {
         toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
@@ -35,6 +37,7 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     fun getReminderDate(): LiveData<String> = reminderDate
     fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
     fun getToolbarTitle(): LiveData<Int> = toolbarTitle
+    fun getClearNotificationEvent(): LiveData<Int> = clearNotificationEvent
 
     fun updateTitle(title: String) {
         getReminderValue().title = title
@@ -81,6 +84,7 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     }
 
     fun deleteReminder() {
+        clearNotificationEvent.value = getReminderValue().notificationId
         scheduler.cancelJob(getReminderValue().externalId)
         repo.deleteReminder(getReminderValue())
     }

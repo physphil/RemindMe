@@ -52,6 +52,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         ViewModelProviders.of(this, ReminderViewModelFactory(id, ReminderRepo(AppDatabase.getInstance(this).reminderDao()), JobRequestScheduler))
                 .get(ReminderViewModel::class.java)
     }
+    private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +66,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.getReminderDate().observe(this, dateObserver)
         viewModel.getReminderRecurrence().observe(this, recurrenceObserver)
         viewModel.getToolbarTitle().observe(this, toolbarTitleObserver)
+        viewModel.getClearNotificationEvent().observe(this, clearNotificationEventObserver)
     }
 
     private val reminderObserver = Observer<Reminder> {
@@ -77,8 +79,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
             repeatText.setText(it.recurrence.getDisplayString())
 
             // Clear any notifications for this Reminder
-            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.cancel(it.notificationId)
+            notificationManager.cancel(it.notificationId)
         }
     }
 
@@ -96,6 +97,10 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     private val toolbarTitleObserver = Observer<Int> {
         it?.let { setToolbarTitle(it) }
+    }
+
+    private val clearNotificationEventObserver = Observer<Int> {
+        it?.let { notificationManager.cancel(it) }
     }
 
     @OnTextChanged(R.id.reminder_title_text)
