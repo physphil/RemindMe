@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.util.SingleLiveEvent
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
@@ -15,6 +16,8 @@ class MainActivityViewModel(private val repo: ReminderRepo) : ViewModel() {
     private val spinnerVisibility = MutableLiveData<Boolean>()
     private val emptyVisibility = MutableLiveData<Boolean>()
     private val listVisibility = MutableLiveData<Boolean>()
+    private val deleteNotificationsEvent = SingleLiveEvent<Void>()
+    private val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
 
     init {
         spinnerVisibility.value = true
@@ -26,6 +29,8 @@ class MainActivityViewModel(private val repo: ReminderRepo) : ViewModel() {
     fun getSpinnerVisibility(): LiveData<Boolean> = spinnerVisibility
     fun getListVisibility(): LiveData<Boolean> = listVisibility
     fun getEmptyVisibility(): LiveData<Boolean> = emptyVisibility
+    fun getDeleteAllNotificationsEvent(): LiveData<Void> = deleteNotificationsEvent
+    fun getShowDeleteConfirmationEvent(): LiveData<Void> = showDeleteConfirmationEvent
 
     fun reminderListUpdated() {
         spinnerVisibility.value = false
@@ -33,7 +38,12 @@ class MainActivityViewModel(private val repo: ReminderRepo) : ViewModel() {
         emptyVisibility.value = reminderList.value?.isEmpty() ?: true
     }
 
+    fun confirmDeleteAllReminders() {
+        showDeleteConfirmationEvent.call()
+    }
+
     fun deleteAllReminders() {
         repo.deleteAllReminders()
+        deleteNotificationsEvent.call()
     }
 }

@@ -42,6 +42,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         ViewModelProviders.of(this, MainActivityViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao())))
                 .get(MainActivityViewModel::class.java)
     }
+    private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +58,11 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         // Create required notification channel on Android 8.0+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_NOTIFICATIONS, getString(R.string.channel_notifications), NotificationManager.IMPORTANCE_HIGH)
-
-            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
         }
 
+        viewModel.getDeleteAllNotificationsEvent().observe(this, deleteNotificationsObserver)
+        viewModel.getShowDeleteConfirmationEvent().observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
         viewModel.getListVisibility().observe(this, listVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
@@ -87,6 +88,14 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
     }
 
+    private val deleteNotificationsObserver = Observer<Void> {
+        notificationManager.cancelAll()
+    }
+
+    private val showDeleteConfirmationObserver = Observer<Void> {
+        DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
+    }
+
     @OnClick(R.id.reminder_list_fab)
     fun onAddReminderClick() {
         startActivity(ReminderActivity.intent(this))
@@ -101,7 +110,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_delete_all -> {
-                DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
+                viewModel.confirmDeleteAllReminders()
                 true
             }
             else -> super.onOptionsItemSelected(item)
