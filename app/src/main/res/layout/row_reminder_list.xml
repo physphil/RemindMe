@@ -44,6 +44,7 @@
         style="@style/ReminderListTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_xlarge"
         android:drawableStart="@drawable/ic_repeat_24dp"
         app:layout_constraintEnd_toStartOf="@id/reminder_list_edit"
