@@ -19,7 +19,7 @@
             android:layout_marginStart="@dimen/reminder_input_margin_start"
             android:layout_marginTop="@dimen/global_margin_xlarge"
             android:text="@string/reminder_title_title"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <EditText
@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_xlarge"
             android:inputType="textCapSentences"
-            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@id/reminder_title_title"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reminder_title_title"/>
 
         <ImageView
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/reminder_title_title"
             app:srcCompat="@drawable/ic_notifications_24dp"/>
 
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reminder_body_title"
-            app:layout_constraintLeft_toLeftOf="@id/reminder_title_title"
+            app:layout_constraintStart_toStartOf="@id/reminder_title_title"
             app:layout_constraintTop_toBottomOf="@id/reminder_title_text"/>
 
         <EditText
@@ -56,8 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_xlarge"
             android:inputType="textMultiLine|textCapSentences"
-            app:layout_constraintLeft_toLeftOf="@id/reminder_body_title"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@id/reminder_body_title"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reminder_body_title"/>
 
         <ImageView
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/reminder_body_title"
             app:srcCompat="@drawable/ic_view_headline_24dp"/>
 
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/global_margin_xxxlarge"
-            app:layout_constraintLeft_toLeftOf="@id/reminder_body_text"
+            app:layout_constraintStart_toStartOf="@id/reminder_body_text"
             app:layout_constraintTop_toBottomOf="@id/reminder_body_text"
             tools:text="12:09pm"/>
 
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             app:layout_constraintBottom_toBottomOf="@id/reminder_time_btn"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/reminder_time_btn"
             app:srcCompat="@drawable/ic_time_24dp"/>
 
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/global_margin_xxxlarge"
-            app:layout_constraintLeft_toLeftOf="@id/reminder_time_btn"
+            app:layout_constraintStart_toStartOf="@id/reminder_time_btn"
             app:layout_constraintTop_toBottomOf="@id/reminder_time_btn"
             tools:text="Jan 25, 2018"/>
 
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             app:layout_constraintBottom_toBottomOf="@id/reminder_date_btn"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/reminder_date_btn"
             app:srcCompat="@drawable/ic_date_range_24dp"/>
 
@@ -117,7 +117,7 @@
             android:layout_marginBottom="@dimen/global_margin_typical"
             android:layout_marginTop="@dimen/global_margin_xxxlarge"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/reminder_date_btn"
+            app:layout_constraintStart_toStartOf="@id/reminder_date_btn"
             app:layout_constraintTop_toBottomOf="@id/reminder_date_btn"
             tools:text="Hourly"/>
 
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             app:layout_constraintBottom_toBottomOf="@id/reminder_repeat_btn"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/reminder_repeat_btn"
             app:srcCompat="@drawable/ic_repeat_24dp"/>
 
