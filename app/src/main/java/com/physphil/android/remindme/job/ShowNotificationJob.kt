@@ -6,7 +6,6 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.evernote.android.job.Job
 import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
@@ -27,7 +26,6 @@ class ShowNotificationJob : Job() {
         // Only continue if the notification being shown has a valid id attached to it
         if (params.extras.containsKey(EXTRA_ID)) {
             val id = params.extras.getString(EXTRA_ID, "should never happen")
-            Log.d("phil", "showing notification for reminder id $id")
             val title = params.extras.getString(EXTRA_TITLE, "")
             val text = params.extras.getString(EXTRA_TEXT, "")
 
