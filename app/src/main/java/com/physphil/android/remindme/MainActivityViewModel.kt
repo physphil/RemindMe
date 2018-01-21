@@ -16,26 +16,22 @@ class MainActivityViewModel(private val repo: ReminderRepo, private val schedule
     private val reminderList = repo.getActiveReminders()
     private val spinnerVisibility = MutableLiveData<Boolean>()
     private val emptyVisibility = MutableLiveData<Boolean>()
-    private val listVisibility = MutableLiveData<Boolean>()
     private val deleteNotificationsEvent = SingleLiveEvent<Void>()
     private val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
 
     init {
         spinnerVisibility.value = true
         emptyVisibility.value = false
-        listVisibility.value = false
     }
 
     fun getReminderList(): LiveData<List<Reminder>> = reminderList
     fun getSpinnerVisibility(): LiveData<Boolean> = spinnerVisibility
-    fun getListVisibility(): LiveData<Boolean> = listVisibility
     fun getEmptyVisibility(): LiveData<Boolean> = emptyVisibility
     fun getDeleteAllNotificationsEvent(): LiveData<Void> = deleteNotificationsEvent
     fun getShowDeleteConfirmationEvent(): LiveData<Void> = showDeleteConfirmationEvent
 
     fun reminderListUpdated() {
         spinnerVisibility.value = false
-        listVisibility.value = reminderList.value?.isNotEmpty() ?: false
         emptyVisibility.value = reminderList.value?.isEmpty() ?: true
     }
 

@@ -7,10 +7,27 @@
     android:layout_height="match_parent"
     tools:context="com.physphil.android.remindme.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/reminder_list_recyclerview"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/reminder_list_recyclerview_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reminder_list_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/reminder_list_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/global_margin_large"
+            android:src="@drawable/ic_add_24dp"
+            app:layout_anchor="@id/reminder_list_recyclerview"
+            app:layout_anchorGravity="bottom|end"
+            app:layout_behavior="com.physphil.android.remindme.ui.ScrollAwareFabBehaviour"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 
     <com.physphil.android.remindme.ui.ProgressSpinner
         android:id="@+id/reminder_list_spinner"
@@ -33,19 +50,10 @@
         android:textSize="@dimen/text_size_empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
         tools:visibility="visible"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/reminder_list_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/global_margin_large"
-        android:src="@drawable/ic_add_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

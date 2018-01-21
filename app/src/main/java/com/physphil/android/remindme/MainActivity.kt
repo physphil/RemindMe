@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -32,6 +33,9 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
     @BindView(R.id.reminder_list_recyclerview)
     lateinit var recyclerView: RecyclerView
+
+    @BindView(R.id.reminder_list_fab)
+    lateinit var fab: FloatingActionButton
 
     @BindView(R.id.reminder_list_spinner)
     lateinit var spinner: ProgressSpinner
@@ -62,7 +66,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         viewModel.getDeleteAllNotificationsEvent().observe(this, deleteNotificationsObserver)
         viewModel.getShowDeleteConfirmationEvent().observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
-        viewModel.getListVisibility().observe(this, listVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
         viewModel.getReminderList().observe(this, reminderListObserver)
     }
@@ -106,10 +109,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         it?.let { spinner.setVisibility(it) }
     }
 
-    private val listVisibilityObserver = Observer<Boolean> {
-        it?.let { recyclerView.setVisibility(it) }
-    }
-
     private val emptyVisibilityObserver = Observer<Boolean> {
         it?.let { empty.setVisibility(it) }
     }
@@ -118,12 +117,14 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         it?.let {
             adapter.setReminderList(it)
             viewModel.reminderListUpdated()
+            fab.show()  // make sure the fab is always showing when the list is updated
         }
     }
 
     private val deleteNotificationsObserver = Observer<Void> {
         notificationManager.cancelAll()
     }
+
     private val showDeleteConfirmationObserver = Observer<Void> {
         DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
     }
