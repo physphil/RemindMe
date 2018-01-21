@@ -19,6 +19,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.physphil.android.remindme.data.ReminderRepo
+import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
@@ -40,7 +41,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
     private val adapter = ReminderListAdapter()
     private val viewModel: MainActivityViewModel by lazy {
-        ViewModelProviders.of(this, MainActivityViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao())))
+        ViewModelProviders.of(this, MainActivityViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao()), JobRequestScheduler))
                 .get(MainActivityViewModel::class.java)
     }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }

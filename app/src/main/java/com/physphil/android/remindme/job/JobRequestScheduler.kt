@@ -47,6 +47,10 @@ object JobRequestScheduler {
 
     fun cancelJob(id: Int) = JobManager.instance().cancel(id)
 
+    fun cancelAllJobs() {
+        JobManager.instance().cancelAllForTag(TAG_SHOW_NOTIFICATION_JOB)
+    }
+
     /**
      * Calculate the time offset required by the JobRequest. If the time supplied is in the past, this function
      * will return [DEFAULT_OFFSET]. This will allow the reminder to be shown immediately.
