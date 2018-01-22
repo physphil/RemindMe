@@ -16,8 +16,10 @@ class MainActivityViewModel(private val repo: ReminderRepo, private val schedule
     private val reminderList = repo.getActiveReminders()
     private val spinnerVisibility = MutableLiveData<Boolean>()
     private val emptyVisibility = MutableLiveData<Boolean>()
-    private val deleteNotificationsEvent = SingleLiveEvent<Void>()
+    private val clearNotificationEvent = SingleLiveEvent<Int?>()
     private val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
+    private val showDeleteAllConfirmationEvent = SingleLiveEvent<Void>()
+    private var reminderToDelete: Reminder? = null
 
     init {
         spinnerVisibility.value = true
@@ -27,8 +29,9 @@ class MainActivityViewModel(private val repo: ReminderRepo, private val schedule
     fun getReminderList(): LiveData<List<Reminder>> = reminderList
     fun getSpinnerVisibility(): LiveData<Boolean> = spinnerVisibility
     fun getEmptyVisibility(): LiveData<Boolean> = emptyVisibility
-    fun getDeleteAllNotificationsEvent(): LiveData<Void> = deleteNotificationsEvent
+    fun getClearNotificationEvent(): LiveData<Int?> = clearNotificationEvent
     fun getShowDeleteConfirmationEvent(): LiveData<Void> = showDeleteConfirmationEvent
+    fun getShowDeleteAllConfirmationEvent(): LiveData<Void> = showDeleteAllConfirmationEvent
 
     fun reminderListUpdated() {
         spinnerVisibility.value = false
@@ -36,12 +39,30 @@ class MainActivityViewModel(private val repo: ReminderRepo, private val schedule
     }
 
     fun confirmDeleteAllReminders() {
-        showDeleteConfirmationEvent.call()
+        showDeleteAllConfirmationEvent.call()
     }
 
     fun deleteAllReminders() {
         scheduler.cancelAllJobs()
         repo.deleteAllReminders()
-        deleteNotificationsEvent.call()
+        clearNotificationEvent.call()
+    }
+
+    fun confirmDeleteReminder(reminder: Reminder) {
+        reminderToDelete = reminder
+        showDeleteConfirmationEvent.call()
+    }
+
+    fun deleteReminder() {
+        reminderToDelete?.let {
+            scheduler.cancelJob(it.externalId)
+            repo.deleteReminder(it)
+            clearNotificationEvent.value = it.notificationId
+            reminderToDelete = null
+        }
+    }
+
+    fun cancelDeleteReminder() {
+        reminderToDelete = null
     }
 }

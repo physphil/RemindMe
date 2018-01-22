@@ -20,6 +20,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
     interface ReminderListAdapterClickListener {
         fun onReminderClicked(reminder: Reminder)
+        fun onDeleteReminder(reminder: Reminder)
     }
 
     private val HEADER_ID = "header_id"
@@ -125,8 +126,8 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
     inner class ReminderViewHolder(view: View) : ViewHolder(view), View.OnClickListener {
 
-        @BindView(R.id.reminder_list_edit)
-        lateinit var edit: Button
+        @BindView(R.id.reminder_list_delete)
+        lateinit var delete: Button
 
         @BindView(R.id.reminder_list_date)
         lateinit var date: TextView
@@ -145,11 +146,15 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
         init {
             ButterKnife.bind(this, view)
-            edit.setOnClickListener(this)
+            view.setOnClickListener(this)
+            delete.setOnClickListener(this)
         }
 
         override fun onClick(v: View) {
-            listener?.onReminderClicked(reminders[adapterPosition])
+            when (v.id) {
+                R.id.reminder_list_delete -> listener?.onDeleteReminder(reminders[adapterPosition])
+                else -> listener?.onReminderClicked(reminders[adapterPosition])
+            }
         }
     }
 }

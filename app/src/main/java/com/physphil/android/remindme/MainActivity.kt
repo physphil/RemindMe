@@ -22,6 +22,7 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
+import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
@@ -29,7 +30,9 @@ import com.physphil.android.remindme.ui.ProgressSpinner
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
 
-class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener, DeleteAllDialogFragment.Listener {
+class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener,
+        DeleteAllDialogFragment.Listener,
+        DeleteReminderDialogFragment.Listener {
 
     @BindView(R.id.reminder_list_recyclerview)
     lateinit var recyclerView: RecyclerView
@@ -63,7 +66,8 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
 
         // Observe all LiveData from ViewModel
-        viewModel.getDeleteAllNotificationsEvent().observe(this, deleteNotificationsObserver)
+        viewModel.getClearNotificationEvent().observe(this, deleteNotificationsObserver)
+        viewModel.getShowDeleteAllConfirmationEvent().observe(this, showDeleteAllConfirmationObserver)
         viewModel.getShowDeleteConfirmationEvent().observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
@@ -125,12 +129,21 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
     }
 
-    private val deleteNotificationsObserver = Observer<Void> {
-        notificationManager.cancelAll()
+    private val deleteNotificationsObserver = Observer<Int?> {
+        if (it != null) {
+            notificationManager.cancel(it)
+        }
+        else {
+            notificationManager.cancelAll()
+        }
+    }
+
+    private val showDeleteAllConfirmationObserver = Observer<Void> {
+        DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
     }
 
     private val showDeleteConfirmationObserver = Observer<Void> {
-        DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
+        DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
     }
     // endregion
 
@@ -138,11 +151,25 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     override fun onReminderClicked(reminder: Reminder) {
         startActivity(ReminderActivity.intent(this, reminder.id))
     }
+
+    override fun onDeleteReminder(reminder: Reminder) {
+        viewModel.confirmDeleteReminder(reminder)
+    }
     // endregion
 
     // region DeleteAllDialogFragment.Listener implementation
     override fun onDeleteAllReminders() {
         viewModel.deleteAllReminders()
+    }
+    // endregion
+
+    // region DeleteReminderDialogFragment.Listener implementation
+    override fun onDeleteReminder() {
+        viewModel.deleteReminder()
+    }
+
+    override fun onCancel() {
+        viewModel.cancelDeleteReminder()
     }
     // endregion
 }
