@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -27,6 +26,7 @@ import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
+import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
 
 class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener, DeleteAllDialogFragment.Listener {
@@ -78,9 +78,13 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
         // Setup list divider
         val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        divider.setDrawable(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
+        val divider = ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
         recyclerView.addItemDecoration(divider)
+
+        // Setup random list header
+        val headers = resources.getStringArray(R.array.reminder_list_headers)
+        val index = (Math.random() * headers.size).toInt()
+        adapter.headerText = headers[index]
     }
 
     @OnClick(R.id.reminder_list_fab)

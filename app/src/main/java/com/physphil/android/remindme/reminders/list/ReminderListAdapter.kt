@@ -22,7 +22,108 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         fun onReminderClicked(reminder: Reminder)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private val HEADER_ID = "header_id"
+    private val VIEW_TYPE_HEADER = 0
+    private val VIEW_TYPE_ITEM = 1
+
+    private var listener: ReminderListAdapterClickListener? = null
+    private val reminders = mutableListOf<Reminder>()
+    private val headerReminder: Reminder by lazy {
+        val header = Reminder()
+        header.id = HEADER_ID
+        header
+    }
+
+    /**
+     * The text that will be displayed in the RecyclerView's header. Header will be invisible if not specified
+     */
+    var headerText = ""
+
+    override fun getItemCount() = reminders.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        if (holder is HeaderViewHolder) {
+            holder.header.setVisibility(headerText.isNotEmpty())
+            holder.header.text = headerText
+        }
+        else if (holder is ReminderViewHolder) {
+            val reminder = reminders[position]
+            holder.date.text = reminder.getDisplayDate(holder.date.context)
+            holder.time.text = reminder.getDisplayTime(holder.time.context)
+            holder.title.text = reminder.title
+
+            // Hide description if not entered
+            if (reminder.body.isNotEmpty()) {
+                holder.body.setVisibility(true)
+                holder.body.text = reminder.body
+            }
+            else {
+                holder.body.setVisibility(false)
+            }
+
+            // Hide recurrence if it is a single alarm
+            if (reminder.recurrence != Recurrence.NONE) {
+                holder.recurrence.setVisibility(true)
+                holder.recurrence.setText(reminder.recurrence.getDisplayString())
+            }
+            else {
+                holder.recurrence.setVisibility(false)
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return if (viewType == VIEW_TYPE_HEADER) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.header_reminder_list, parent, false)
+            HeaderViewHolder(view)
+        }
+        else {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.row_reminder_list, parent, false)
+            ReminderViewHolder(view)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val reminder = reminders[position]
+        return when (reminder.id) {
+            HEADER_ID -> VIEW_TYPE_HEADER
+            else -> VIEW_TYPE_ITEM
+        }
+    }
+
+    fun setOnClickListener(listener: ReminderListAdapterClickListener) {
+        this.listener = listener
+    }
+
+    fun setReminderList(reminders: List<Reminder>) {
+        this.reminders.clear()
+        if (reminders.isNotEmpty()) {
+            this.reminders.add(headerReminder)
+            this.reminders.addAll(reminders)
+        }
+        notifyDataSetChanged()
+    }
+
+
+    /*
+     *  The ViewHolders used for both the Header and Reminder. They both extend from RecyclerView.ViewHolder
+     *  in order to work with RecyclerView
+     */
+
+    abstract inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    inner class HeaderViewHolder(view: View) : ViewHolder(view) {
+
+        @BindView(R.id.reminder_list_header)
+        lateinit var header: TextView
+
+        init {
+            ButterKnife.bind(this, view)
+        }
+    }
+
+    inner class ReminderViewHolder(view: View) : ViewHolder(view), View.OnClickListener {
 
         @BindView(R.id.reminder_list_edit)
         lateinit var edit: Button
@@ -50,50 +151,5 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         override fun onClick(v: View) {
             listener?.onReminderClicked(reminders[adapterPosition])
         }
-    }
-
-    private val reminders = mutableListOf<Reminder>()
-    private var listener: ReminderListAdapterClickListener? = null
-
-    override fun getItemCount() = reminders.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val reminder = reminders[position]
-        holder.date.text = reminder.getDisplayDate(holder.date.context)
-        holder.time.text = reminder.getDisplayTime(holder.time.context)
-        holder.title.text = reminder.title
-
-        // Hide description if not entered
-        if (reminder.body.isNotEmpty()) {
-            holder.body.setVisibility(true)
-            holder.body.text = reminder.body
-        }
-        else {
-            holder.body.setVisibility(false)
-        }
-
-        // Hide recurrence if it is a single alarm
-        if (reminder.recurrence != Recurrence.NONE) {
-            holder.recurrence.setVisibility(true)
-            holder.recurrence.setText(reminder.recurrence.getDisplayString())
-        }
-        else {
-            holder.recurrence.setVisibility(false)
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_reminder_list, parent, false)
-        return ViewHolder(view)
-    }
-
-    fun setOnClickListener(listener: ReminderListAdapterClickListener) {
-        this.listener = listener
-    }
-
-    fun setReminderList(reminders: List<Reminder>) {
-        this.reminders.clear()
-        this.reminders.addAll(reminders)
-        notifyDataSetChanged()
     }
 }

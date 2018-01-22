@@ -8,4 +8,11 @@
         <item>@string/recurrence_monthly</item>
         <item>@string/recurrence_yearly</item>
     </string-array>
+
+    <string-array name="reminder_list_headers">
+        <item>Your Upcoming Reminders</item>
+        <item>Here\'s What\'s On Tap</item>
+        <item>Coming Attractions</item>
+        <item>Oooh, You\'re Busy</item>
+    </string-array>
 </resources>

@@ -17,6 +17,7 @@
     <dimen name="text_size_progress_message">@dimen/text_size_large</dimen>
     <dimen name="text_size_reminder_list_time">12sp</dimen>
     <dimen name="text_size_reminder_list_title">@dimen/text_size_large</dimen>
+    <dimen name="text_size_reminder_list_header">16sp</dimen>
 
     <dimen name="line_spacing_large">4dp</dimen>
 
