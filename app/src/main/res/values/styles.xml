@@ -55,4 +55,8 @@
         <item name="android:background">@drawable/bg_button_primary</item>
     </style>
 
+    <style name="Button.Small.Accent">
+        <item name="android:background">@drawable/bg_button_accent</item>
+    </style>
+
 </resources>

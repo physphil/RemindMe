@@ -13,7 +13,7 @@
 
     <Button
         android:id="@+id/reminder_list_delete"
-        style="@style/Button.Small.Primary"
+        style="@style/Button.Small.Accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/reminder_list_delete_text"
