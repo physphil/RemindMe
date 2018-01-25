@@ -20,6 +20,7 @@ import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import java.util.*
@@ -30,7 +31,8 @@ import java.util.*
  * Copyright (c) 2017 Phil Shadlyn
  */
 class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
-        DatePickerDialog.OnDateSetListener, RecurrencePickerDialog.OnRecurrenceSetListener {
+        DatePickerDialog.OnDateSetListener, RecurrencePickerDialog.OnRecurrenceSetListener,
+        DeleteReminderDialogFragment.Listener {
 
     @BindView(R.id.reminder_title_text)
     lateinit var titleText: EditText
@@ -67,6 +69,8 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.getReminderRecurrence().observe(this, recurrenceObserver)
         viewModel.getToolbarTitle().observe(this, toolbarTitleObserver)
         viewModel.getClearNotificationEvent().observe(this, clearNotificationEventObserver)
+        viewModel.getConfirmDeleteEvent().observe(this, confirmDeleteObserver)
+        viewModel.getCloseActivityEvent().observe(this, closeActivityObserver)
     }
 
     private val reminderObserver = Observer<Reminder> {
@@ -101,6 +105,14 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     private val clearNotificationEventObserver = Observer<Int> {
         it?.let { notificationManager.cancel(it) }
+    }
+
+    private val confirmDeleteObserver = Observer<Void> {
+        DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
+    }
+
+    private val closeActivityObserver = Observer<Void> {
+        finish()
     }
 
     @OnTextChanged(R.id.reminder_title_text)
@@ -157,8 +169,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
                 true
             }
             R.id.menu_delete -> {
-                viewModel.deleteReminder()
-                finish()
+                viewModel.confirmDeleteReminder()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -176,6 +187,16 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     override fun onRecurrenceSet(recurrence: Recurrence) {
         viewModel.updateRecurrence(recurrence)
     }
+
+    // region DeleteReminderDialogFragment.Listener implementation
+    override fun onDeleteReminder() {
+        viewModel.deleteReminder()
+    }
+
+    override fun onCancel() {
+        // do nothing
+    }
+    // endregion
 
     companion object {
         private const val EXTRA_REMINDER_ID = "com.physphil.android.remindme.EXTRA_REMINDER_ID"

@@ -26,6 +26,8 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     private val reminderRecurrence = MutableLiveData<Int>()
     private val toolbarTitle = MutableLiveData<Int>()
     private val clearNotificationEvent = SingleLiveEvent<Int>()
+    private val confirmDeleteEvent = SingleLiveEvent<Void>()
+    private val closeActivityEvent = SingleLiveEvent<Void>()
 
     init {
         toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
@@ -38,6 +40,8 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
     fun getToolbarTitle(): LiveData<Int> = toolbarTitle
     fun getClearNotificationEvent(): LiveData<Int> = clearNotificationEvent
+    fun getConfirmDeleteEvent(): LiveData<Void> = confirmDeleteEvent
+    fun getCloseActivityEvent(): LiveData<Void> = closeActivityEvent
 
     fun updateTitle(title: String) {
         getReminderValue().title = title
@@ -83,10 +87,15 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
         }
     }
 
+    fun confirmDeleteReminder() {
+        confirmDeleteEvent.call()
+    }
+
     fun deleteReminder() {
         clearNotificationEvent.value = getReminderValue().notificationId
         scheduler.cancelJob(getReminderValue().externalId)
         repo.deleteReminder(getReminderValue())
+        closeActivityEvent.call()
     }
 
     fun prepareOptionsMenuItems(delete: MenuItem) {
