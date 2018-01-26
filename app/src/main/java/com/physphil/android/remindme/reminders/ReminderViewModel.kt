@@ -12,11 +12,15 @@ import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
-class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+class ReminderViewModel(id: String?, private val repo: ReminderRepo) : ViewModel() {
+
+    @Inject
+    lateinit var scheduler: JobRequestScheduler
 
     private val isNewReminder = (id == null)
 
