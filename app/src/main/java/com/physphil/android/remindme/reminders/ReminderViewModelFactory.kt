@@ -4,18 +4,26 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
+import com.physphil.android.remindme.job.JobRequestScheduler
+import javax.inject.Inject
 
 /**
  * Used to create a ReminderViewModel with the correct arguments
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderViewModelFactory(private val application: RemindMeApplication, private val id: String?, private val repo: ReminderRepo) : ViewModelProvider.Factory {
+class ReminderViewModelFactory(private val application: RemindMeApplication, private val id: String?) : ViewModelProvider.Factory {
+
+    @Inject
+    lateinit var scheduler: JobRequestScheduler
+
+    @Inject
+    lateinit var repo: ReminderRepo
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
-            val viewModel = ReminderViewModel(id, repo)
-            application.applicationComponent.inject(viewModel)
-            return viewModel as T
+            application.applicationComponent.inject(this)
+            return ReminderViewModel(id, repo, scheduler) as T
         }
 
         throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")

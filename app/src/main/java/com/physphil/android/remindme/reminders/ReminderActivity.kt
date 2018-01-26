@@ -18,10 +18,8 @@ import butterknife.OnTextChanged
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
-import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
-import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import java.util.*
 
@@ -51,7 +49,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     private val viewModel: ReminderViewModel by lazy {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID)
-        ViewModelProviders.of(this, ReminderViewModelFactory(application as RemindMeApplication, id, ReminderRepo(AppDatabase.getInstance(this).reminderDao())))
+        ViewModelProviders.of(this, ReminderViewModelFactory(application as RemindMeApplication, id))
                 .get(ReminderViewModel::class.java)
     }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
