@@ -1,6 +1,7 @@
 package com.physphil.android.remindme.inject
 
 import android.content.Context
+import com.physphil.android.remindme.MainActivityViewModelFactory
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
@@ -29,4 +30,7 @@ class ApplicationModule(private val application: RemindMeApplication) {
     @Provides
     @Singleton
     fun providesReminderRepo(appDatabase: AppDatabase): ReminderRepo = ReminderRepo(appDatabase.reminderDao())
+
+    @Provides
+    fun providesMainActivityViewModelFactory(repo: ReminderRepo, scheduler: JobRequestScheduler) = MainActivityViewModelFactory(repo, scheduler)
 }

@@ -1,5 +1,6 @@
 package com.physphil.android.remindme.inject
 
+import com.physphil.android.remindme.MainActivity
 import com.physphil.android.remindme.reminders.ReminderViewModelFactory
 import dagger.Component
 import javax.inject.Singleton
@@ -10,5 +11,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(ApplicationModule::class))
 interface ApplicationComponent {
+    fun inject(target: MainActivity)
     fun inject(target: ReminderViewModelFactory)
 }

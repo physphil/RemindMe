@@ -18,21 +18,22 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import com.physphil.android.remindme.data.ReminderRepo
-import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
-import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
+import javax.inject.Inject
 
 class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener,
         DeleteAllDialogFragment.Listener,
         DeleteReminderDialogFragment.Listener {
+
+    @Inject
+    lateinit var viewModelFactory: MainActivityViewModelFactory
 
     @BindView(R.id.reminder_list_recyclerview)
     lateinit var recyclerView: RecyclerView
@@ -47,15 +48,13 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     lateinit var empty: TextView
 
     private val adapter = ReminderListAdapter()
-    private val viewModel: MainActivityViewModel by lazy {
-        ViewModelProviders.of(this, MainActivityViewModelFactory(ReminderRepo(AppDatabase.getInstance(this).reminderDao()), JobRequestScheduler))
-                .get(MainActivityViewModel::class.java)
-    }
+    private val viewModel: MainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        (application as RemindMeApplication).applicationComponent.inject(this)
         ButterKnife.bind(this)
         setupRecyclerview()
 
