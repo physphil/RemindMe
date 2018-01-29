@@ -18,6 +18,8 @@ const val EXTRA_TIME = "com.physphil.android.remindme.EXTRA_TIME"
 private const val DEFAULT_OFFSET = 3000
 
 /**
+ * Handles all interactions with Job library to schedule and manage jobs
+ *
  * Copyright (c) 2018 Phil Shadlyn
  */
 object JobRequestScheduler {
@@ -45,8 +47,15 @@ object JobRequestScheduler {
                 .schedule()
     }
 
+    /**
+     * Cancel a scheduled job
+     * @param id the id of the job to cancel
+     */
     fun cancelJob(id: Int) = JobManager.instance().cancel(id)
 
+    /**
+     * Cancel all scheduled jobs
+     */
     fun cancelAllJobs() {
         JobManager.instance().cancelAllForTag(TAG_SHOW_NOTIFICATION_JOB)
     }

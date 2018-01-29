@@ -56,6 +56,10 @@ class RecurrencePickerDialog : DialogFragment() {
         const val TAG = "com.physphil.android.remindme.TAG_RECURRENCE_PICKER_DIALOG"
         private const val ARGS_RECURRENCE = "recurrence"
 
+        /**
+         * Create a new instance of the fragment
+         * @param recurrence the initially selected Recurrence
+         */
         fun newInstance(recurrence: Recurrence): RecurrencePickerDialog {
             val dialog = RecurrencePickerDialog()
             val args = Bundle()

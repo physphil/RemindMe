@@ -3,6 +3,8 @@ package com.physphil.android.remindme.models
 import com.physphil.android.remindme.R
 
 /**
+ * Recurrence options for a Reminder
+ *
  * Copyright (c) 2017 Phil Shadlyn
  */
 enum class Recurrence(val id: Int) {
@@ -13,6 +15,9 @@ enum class Recurrence(val id: Int) {
     MONTHLY(4),
     YEARLY(5);
 
+    /**
+     * Get a string representation of the Recurrence to show to the user
+     */
     fun getDisplayString(): Int {
         return when (this) {
             HOURLY -> R.string.recurrence_hourly
@@ -25,6 +30,10 @@ enum class Recurrence(val id: Int) {
     }
 
     companion object {
+        /**
+         * Creates a Recurrence from the supplied id
+         * @param id a valid Recurrence id
+         */
         fun fromId(id: Int) = values().first { it.ordinal == id }
     }
 }

@@ -42,12 +42,19 @@ class ReminderRepo(private val dao: ReminderDao) {
         }).start()
     }
 
+    /**
+     * When the next event in a recurring reminder is scheduled, call this method to update the Reminder's
+     * externalId and time fields for the next scheduled notification
+     */
     fun updateRecurringReminder(id: String, newExternalId: Int, newTime: Long) {
         Thread(Runnable {
             dao.updateRecurringReminder(id, newExternalId, newTime)
         }).start()
     }
 
+    /**
+     * Update a Reminder's notificationId, once the Reminder's notification has been shown to the user.
+     */
     fun updateNotificationId(id: String, notificationId: Int) {
         Thread(Runnable {
             dao.updateNotificationId(id, notificationId)

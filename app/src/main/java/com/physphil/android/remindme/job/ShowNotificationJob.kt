@@ -53,7 +53,7 @@ class ShowNotificationJob : Job() {
             nm.notify(notificationId, builder.build())
             ReminderRepo(AppDatabase.getInstance(context).reminderDao()).updateNotificationId(id, notificationId)
 
-            // Schedule the next event if the Reminder has a recurrence
+            // Schedule the next event in the series if the Reminder has a recurrence
             val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))
             if (recurrence != Recurrence.NONE) {
                 scheduleNextNotification(params.extras.getLong(EXTRA_TIME, System.currentTimeMillis()), id, title, text, recurrence)
@@ -78,6 +78,7 @@ class ShowNotificationJob : Job() {
 
         val newTime = calendar.timeInMillis
         val newId = JobRequestScheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
+        // FIXME - use dagger to inject
         ReminderRepo(AppDatabase.getInstance(context).reminderDao()).updateRecurringReminder(id, newId, newTime)
     }
 }

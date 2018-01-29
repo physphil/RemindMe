@@ -8,6 +8,8 @@ import android.support.v7.app.AlertDialog
 import com.physphil.android.remindme.R
 
 /**
+ * Confirmation Dialog before deleting all Reminders
+ *
  * Copyright (c) 2018 Phil Shadlyn
  */
 class DeleteAllDialogFragment : DialogFragment() {

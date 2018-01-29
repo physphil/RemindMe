@@ -13,6 +13,10 @@ import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.setVisibility
 
+private const val HEADER_ID = "header_id"
+private const val VIEW_TYPE_HEADER = 0
+private const val VIEW_TYPE_ITEM = 1
+
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
@@ -23,12 +27,10 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         fun onDeleteReminder(reminder: Reminder)
     }
 
-    private val HEADER_ID = "header_id"
-    private val VIEW_TYPE_HEADER = 0
-    private val VIEW_TYPE_ITEM = 1
-
     private var listener: ReminderListAdapterClickListener? = null
     private val reminders = mutableListOf<Reminder>()
+
+    /** Reminder object representing a header to add to the list */
     private val headerReminder: Reminder by lazy {
         val header = Reminder()
         header.id = HEADER_ID
@@ -111,7 +113,6 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
      *  The ViewHolders used for both the Header and Reminder. They both extend from RecyclerView.ViewHolder
      *  in order to work with RecyclerView
      */
-
     abstract inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class HeaderViewHolder(view: View) : ViewHolder(view) {
