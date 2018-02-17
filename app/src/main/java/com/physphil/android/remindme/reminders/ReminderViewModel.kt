@@ -99,6 +99,11 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
         delete.isVisible = !isNewReminder
     }
 
+    /**
+     * Schedule a notification for the Reminder
+     * @param reminder the reminder to schedule a notification for
+     * @return the job id of the newly scheduled notification
+     */
     private fun scheduleNotification(reminder: Reminder): Int {
         return scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id,

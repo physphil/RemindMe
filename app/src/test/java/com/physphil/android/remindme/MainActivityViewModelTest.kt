@@ -14,8 +14,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations.initMocks
 
-
-
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
@@ -25,7 +23,8 @@ class MainActivityViewModelTest {
      * This is required to test LiveData. When setting values Android checks to see what thread the call is made from,
      * and this rule returns the required result to avoid an NPE
      */
-    @get:Rule var instantTaskExecutorRule = InstantTaskExecutorRule()
+    @get: Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
     private lateinit var repo: ReminderRepo
