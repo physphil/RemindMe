@@ -12,9 +12,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations.initMocks
+import java.util.*
 
 private const val TITLE = "Buy cucumbers"
 private const val BODY = "And some limes"
@@ -22,8 +23,8 @@ private const val TIME = "9:21 pm"
 private const val DATE = "March 8, 2018"
 private val RECURRENCE = Recurrence.WEEKLY.id
 private const val EXTERNAL_ID = 9
+private const val NEW_EXTERNAL_ID = 99
 private const val NOTIFICATION_ID = 8
-private const val NEW_NOTIFICATION_ID = 88
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
@@ -60,7 +61,12 @@ class ReminderViewModelTest {
         reminder.notificationId = NOTIFICATION_ID
         val reminderLiveData = MutableLiveData<Reminder>()
         reminderLiveData.value = reminder
-        Mockito.`when`(repo.getReminderById(reminder.id)).thenReturn(reminderLiveData)
+        `when`(repo.getReminderById(reminder.id)).thenReturn(reminderLiveData)
+        `when`(repo.getReminderById(null)).thenReturn(reminderLiveData)
+
+        `when`(scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
+                reminder.id, reminder.title, reminder.body, reminder.recurrence.id)).thenReturn(NEW_EXTERNAL_ID)
+
 
         viewModel = ReminderViewModel(reminder.id, repo, scheduler)
     }
@@ -94,6 +100,26 @@ class ReminderViewModelTest {
         viewModel.updateRecurrence(recurrence)
         assert(viewModel.getReminderValue().recurrence == recurrence)
         assert(viewModel.getReminderRecurrence().value == recurrence.displayString)
+    }
+
+    @Test
+    fun testSaveNewReminder() {
+        viewModel = ReminderViewModel(null, repo, scheduler)
+        viewModel.saveReminder()
+        assert(viewModel.getReminderValue().time.get(Calendar.SECOND) == 0)
+        assert(viewModel.getReminderValue().time.get(Calendar.MILLISECOND) == 0)
+        assert(viewModel.getReminderValue().externalId == NEW_EXTERNAL_ID)
+        verify(repo).insertReminder(reminder)
+    }
+
+    @Test
+    fun testSaveExistingReminder() {
+        viewModel.saveReminder()
+        assert(viewModel.getReminderValue().time.get(Calendar.SECOND) == 0)
+        assert(viewModel.getReminderValue().time.get(Calendar.MILLISECOND) == 0)
+        verify(scheduler).cancelJob(EXTERNAL_ID)
+        assert(viewModel.getReminderValue().externalId == NEW_EXTERNAL_ID)
+        verify(repo).updateReminder(reminder)
     }
 
     @Test
