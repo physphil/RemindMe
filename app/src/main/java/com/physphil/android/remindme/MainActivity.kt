@@ -65,12 +65,12 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
 
         // Observe all LiveData from ViewModel
-        viewModel.getClearNotificationEvent().observe(this, deleteNotificationsObserver)
-        viewModel.getShowDeleteAllConfirmationEvent().observe(this, showDeleteAllConfirmationObserver)
-        viewModel.getShowDeleteConfirmationEvent().observe(this, showDeleteConfirmationObserver)
+        viewModel.clearNotificationEvent.observe(this, deleteNotificationsObserver)
+        viewModel.showDeleteAllConfirmationEvent.observe(this, showDeleteAllConfirmationObserver)
+        viewModel.showDeleteConfirmationEvent.observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
-        viewModel.getReminderList().observe(this, reminderListObserver)
+        viewModel.reminderList.observe(this, reminderListObserver)
     }
 
     private fun setupRecyclerview() {

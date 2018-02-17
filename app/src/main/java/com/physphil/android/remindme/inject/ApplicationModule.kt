@@ -25,11 +25,7 @@ class ApplicationModule(private val application: RemindMeApplication) {
 
     @Provides
     @Singleton
-    fun providesAppDatabase(): AppDatabase = AppDatabase.getInstance(application)
-
-    @Provides
-    @Singleton
-    fun providesReminderRepo(appDatabase: AppDatabase): ReminderRepo = ReminderRepo(appDatabase.reminderDao())
+    fun providesReminderRepo(): ReminderRepo = ReminderRepo(AppDatabase.getInstance(application).reminderDao())
 
     @Provides
     fun providesMainActivityViewModelFactory(repo: ReminderRepo, scheduler: JobRequestScheduler) = MainActivityViewModelFactory(repo, scheduler)

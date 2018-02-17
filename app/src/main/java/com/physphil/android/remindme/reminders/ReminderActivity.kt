@@ -66,9 +66,9 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.getReminderDate().observe(this, dateObserver)
         viewModel.getReminderRecurrence().observe(this, recurrenceObserver)
         viewModel.getToolbarTitle().observe(this, toolbarTitleObserver)
-        viewModel.getClearNotificationEvent().observe(this, clearNotificationEventObserver)
-        viewModel.getConfirmDeleteEvent().observe(this, confirmDeleteObserver)
-        viewModel.getCloseActivityEvent().observe(this, closeActivityObserver)
+        viewModel.clearNotificationEvent.observe(this, clearNotificationEventObserver)
+        viewModel.confirmDeleteEvent.observe(this, confirmDeleteObserver)
+        viewModel.closeActivityEvent.observe(this, closeActivityObserver)
     }
 
     private val reminderObserver = Observer<Reminder> {
