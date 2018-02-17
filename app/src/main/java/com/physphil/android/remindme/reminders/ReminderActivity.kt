@@ -78,7 +78,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
             bodyText.setText(it.body, TextView.BufferType.EDITABLE)
             timeText.text = it.getDisplayTime(this)
             dateText.text = it.getDisplayDate(this)
-            repeatText.setText(it.recurrence.getDisplayString())
+            repeatText.setText(it.recurrence.displayString)
 
             // Clear any notifications for this Reminder
             notificationManager.cancel(it.notificationId)

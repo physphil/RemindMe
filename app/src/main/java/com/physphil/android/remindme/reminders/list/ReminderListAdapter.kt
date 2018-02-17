@@ -68,7 +68,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
             // Hide recurrence if it is a single alarm
             if (reminder.recurrence != Recurrence.NONE) {
                 holder.recurrence.setVisibility(true)
-                holder.recurrence.setText(reminder.recurrence.getDisplayString())
+                holder.recurrence.setText(reminder.recurrence.displayString)
             }
             else {
                 holder.recurrence.setVisibility(false)

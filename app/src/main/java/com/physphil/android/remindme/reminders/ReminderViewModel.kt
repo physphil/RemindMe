@@ -63,7 +63,7 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
 
     fun updateRecurrence(recurrence: Recurrence) {
         getReminderValue().recurrence = recurrence
-        reminderRecurrence.value = recurrence.getDisplayString()
+        reminderRecurrence.value = recurrence.displayString
     }
 
     fun saveReminder() {

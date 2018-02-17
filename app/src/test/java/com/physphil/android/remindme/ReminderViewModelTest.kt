@@ -93,7 +93,7 @@ class ReminderViewModelTest {
         val recurrence = Recurrence.fromId(RECURRENCE)
         viewModel.updateRecurrence(recurrence)
         assert(viewModel.getReminderValue().recurrence == recurrence)
-        assert(viewModel.getReminderRecurrence().value == recurrence.getDisplayString())
+        assert(viewModel.getReminderRecurrence().value == recurrence.displayString)
     }
 
     @Test
