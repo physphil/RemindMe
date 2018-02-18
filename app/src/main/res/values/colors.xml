@@ -15,7 +15,9 @@
     <color name="theme_twilight_lavender">#8d3b72</color>
 
     <color name="material_white">#e9e9e9</color>
-    <color name="bg_progress_spinner">#55000000</color>
     <color name="theme_icon_colour">#c1c1c1</color>
+    <color name="theme_background">#242424</color>
+    <color name="theme_background_dark">#181818</color>
+    <color name="bg_progress_spinner">#55000000</color>
     <color name="recyclerview_divider_colour">#55c1c1c1</color>
 </resources>
