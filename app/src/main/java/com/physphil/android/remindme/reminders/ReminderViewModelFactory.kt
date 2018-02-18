@@ -14,6 +14,7 @@ import javax.inject.Inject
  */
 class ReminderViewModelFactory(private val application: RemindMeApplication, private val id: String?) : ViewModelProvider.Factory {
 
+    // Do injection here as we require the id when creating the factory, and it is unknown at compile time
     @Inject
     lateinit var scheduler: JobRequestScheduler
 
