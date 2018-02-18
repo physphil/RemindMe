@@ -16,25 +16,25 @@ import java.util.*
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
-class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
 
     private val isNewReminder = (id == null)
 
-    private val reminder = repo.getReminderById(id)
+    val reminder: LiveData<Reminder> = repo.getReminderByIdOrNew(id)
+    val clearNotificationEvent = SingleLiveEvent<Int>()
+    val confirmDeleteEvent = SingleLiveEvent<Void>()
+    val closeActivityEvent = SingleLiveEvent<Void>()
+
     private val reminderTime = MutableLiveData<String>()
     private val reminderDate = MutableLiveData<String>()
     private val reminderRecurrence = MutableLiveData<Int>()
     private val toolbarTitle = MutableLiveData<Int>()
-    val clearNotificationEvent = SingleLiveEvent<Int>()
-    val confirmDeleteEvent = SingleLiveEvent<Void>()
-    val closeActivityEvent = SingleLiveEvent<Void>()
 
     init {
         toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
     }
 
     fun getReminderValue() = reminder.value!!
-    fun getReminder(): LiveData<Reminder> = reminder
     fun getReminderTime(): LiveData<String> = reminderTime
     fun getReminderDate(): LiveData<String> = reminderDate
     fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence

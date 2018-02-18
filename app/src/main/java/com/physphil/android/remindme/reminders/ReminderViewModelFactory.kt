@@ -12,7 +12,7 @@ import javax.inject.Inject
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderViewModelFactory(private val application: RemindMeApplication, private val id: String?) : ViewModelProvider.Factory {
+class ReminderViewModelFactory(private val application: RemindMeApplication, private val id: String? = null) : ViewModelProvider.Factory {
 
     // Do injection here as we require the id when creating the factory, and it is unknown at compile time
     @Inject

@@ -61,7 +61,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         ButterKnife.bind(this)
 
         // Will either be called immediately with stored value, or will be updated upon successful read from database
-        viewModel.getReminder().observe(this, reminderObserver)
+        viewModel.reminder.observe(this, reminderObserver)
         viewModel.getReminderTime().observe(this, timeObserver)
         viewModel.getReminderDate().observe(this, dateObserver)
         viewModel.getReminderRecurrence().observe(this, recurrenceObserver)

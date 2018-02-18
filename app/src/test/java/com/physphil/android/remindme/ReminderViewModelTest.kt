@@ -61,8 +61,8 @@ class ReminderViewModelTest {
         reminder.notificationId = NOTIFICATION_ID
         val reminderLiveData = MutableLiveData<Reminder>()
         reminderLiveData.value = reminder
-        `when`(repo.getReminderById(reminder.id)).thenReturn(reminderLiveData)
-        `when`(repo.getReminderById(null)).thenReturn(reminderLiveData)
+        `when`(repo.getReminderByIdOrNew(reminder.id)).thenReturn(reminderLiveData)
+        `when`(repo.getReminderByIdOrNew()).thenReturn(reminderLiveData)
 
         `when`(scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id, reminder.title, reminder.body, reminder.recurrence.id)).thenReturn(NEW_EXTERNAL_ID)
@@ -73,7 +73,7 @@ class ReminderViewModelTest {
 
     @Test
     fun testToolbarTitleNewReminder() {
-        viewModel = ReminderViewModel(null, repo, scheduler)
+        viewModel = ReminderViewModel(repo = repo, scheduler = scheduler)
         assert(viewModel.getToolbarTitle().value == R.string.title_add_reminder)
     }
 
@@ -104,7 +104,7 @@ class ReminderViewModelTest {
 
     @Test
     fun testSaveNewReminder() {
-        viewModel = ReminderViewModel(null, repo, scheduler)
+        viewModel = ReminderViewModel(repo = repo, scheduler = scheduler)
         viewModel.saveReminder()
         assert(viewModel.getReminderValue().time.get(Calendar.SECOND) == 0)
         assert(viewModel.getReminderValue().time.get(Calendar.MILLISECOND) == 0)
