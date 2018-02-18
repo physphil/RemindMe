@@ -9,11 +9,12 @@ import android.support.v4.content.ContextCompat
 import com.evernote.android.job.Job
 import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
+import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.ReminderActivity
-import com.physphil.android.remindme.room.AppDatabase
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -22,9 +23,17 @@ import java.util.*
  */
 class ShowNotificationJob : Job() {
 
+    @Inject
+    lateinit var repo: ReminderRepo
+
+    @Inject
+    lateinit var scheduler: JobRequestScheduler
+
     override fun onRunJob(params: Params): Result {
         // Only continue if the notification being shown has a valid id attached to it
         if (params.extras.containsKey(EXTRA_ID)) {
+            RemindMeApplication.instance.applicationComponent.inject(this)
+
             val id = params.extras.getString(EXTRA_ID, "should never happen")
             val title = params.extras.getString(EXTRA_TITLE, "")
             val text = params.extras.getString(EXTRA_TEXT, "")
@@ -51,7 +60,7 @@ class ShowNotificationJob : Job() {
 
             val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nm.notify(notificationId, builder.build())
-            ReminderRepo(AppDatabase.getInstance(context).reminderDao()).updateNotificationId(id, notificationId)
+            repo.updateNotificationId(id, notificationId)
 
             // Schedule the next event in the series if the Reminder has a recurrence
             val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))
@@ -77,8 +86,7 @@ class ShowNotificationJob : Job() {
         }
 
         val newTime = calendar.timeInMillis
-        val newId = JobRequestScheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
-        // FIXME - use dagger to inject
-        ReminderRepo(AppDatabase.getInstance(context).reminderDao()).updateRecurringReminder(id, newId, newTime)
+        val newId = scheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
+        repo.updateRecurringReminder(id, newId, newTime)
     }
 }

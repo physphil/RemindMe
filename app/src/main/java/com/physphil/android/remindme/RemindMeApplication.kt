@@ -20,6 +20,11 @@ open class RemindMeApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         JobManager.create(this).addJobCreator(GlobalJobCreator())
+    }
+
+    companion object {
+        lateinit var instance: RemindMeApplication
     }
 }
