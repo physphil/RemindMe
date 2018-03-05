@@ -14,6 +14,7 @@ import com.physphil.android.remindme.util.SingleLiveEvent
 class MainActivityViewModel(private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
 
     val reminderList = repo.getActiveReminders()
+    val reminderListRx = repo.getActiveRemindersRx()
     val clearNotificationEvent = SingleLiveEvent<Int?>()
     val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
     val showDeleteAllConfirmationEvent = SingleLiveEvent<Void>()
@@ -30,9 +31,10 @@ class MainActivityViewModel(private val repo: ReminderRepo, private val schedule
     fun getSpinnerVisibility(): LiveData<Boolean> = spinnerVisibility
     fun getEmptyVisibility(): LiveData<Boolean> = emptyVisibility
 
-    fun reminderListUpdated() {
+    fun reminderListUpdated(reminders: List<Reminder>) {
         spinnerVisibility.value = false
         emptyVisibility.value = reminderList.value?.isEmpty() ?: true
+        emptyVisibility.value = reminders.isEmpty()
     }
 
     fun confirmDeleteAllReminders() {

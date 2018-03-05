@@ -50,7 +50,7 @@ class MainActivityViewModelTest {
         `when`(repo.getActiveReminders()).thenReturn(reminderList)
 
         viewModel = MainActivityViewModel(repo, scheduler)
-        viewModel.reminderListUpdated()
+        viewModel.reminderListUpdated(reminderList.value!!)
         assert(viewModel.getSpinnerVisibility().value == false)
         assert(viewModel.getEmptyVisibility().value == true)
     }
@@ -62,7 +62,7 @@ class MainActivityViewModelTest {
         `when`(repo.getActiveReminders()).thenReturn(reminderList)
 
         viewModel = MainActivityViewModel(repo, scheduler)
-        viewModel.reminderListUpdated()
+        viewModel.reminderListUpdated(reminderList.value!!)
         assert(viewModel.getSpinnerVisibility().value == false)
         assert(viewModel.getEmptyVisibility().value == false)
     }

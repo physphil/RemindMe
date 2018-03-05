@@ -30,10 +30,16 @@ class ReminderRepo(private val dao: ReminderDao) {
 
     fun getActiveReminders() = dao.getAllReminders()
 
+    fun getActiveRemindersRx() = dao.getAllRemindersRx()
+
     fun insertReminder(reminder: Reminder) {
         Thread(Runnable {
             dao.insertReminder(reminder)
         }).start()
+    }
+
+    fun insertReminderRx(reminder: Reminder) {
+        dao.insertReminder(reminder).subscribe()
     }
 
     fun updateReminder(reminder: Reminder) {

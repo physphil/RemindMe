@@ -73,7 +73,8 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
 
         if (isNewReminder) {
             getReminderValue().externalId = scheduleNotification(getReminderValue())
-            repo.insertReminder(getReminderValue())
+//            repo.insertReminder(getReminderValue())
+            repo.insertReminderRx(getReminderValue())
         }
         else {
             scheduler.cancelJob(getReminderValue().externalId)
