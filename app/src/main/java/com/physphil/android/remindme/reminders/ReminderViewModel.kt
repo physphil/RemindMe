@@ -11,6 +11,7 @@ import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
+import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
 /**
@@ -73,8 +74,7 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
 
         if (isNewReminder) {
             getReminderValue().externalId = scheduleNotification(getReminderValue())
-//            repo.insertReminder(getReminderValue())
-            repo.insertReminderRx(getReminderValue())
+            repo.insertReminder(getReminderValue())
         }
         else {
             scheduler.cancelJob(getReminderValue().externalId)

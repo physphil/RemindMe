@@ -109,7 +109,7 @@ class ReminderViewModelTest {
         assert(viewModel.getReminderValue().time.get(Calendar.SECOND) == 0)
         assert(viewModel.getReminderValue().time.get(Calendar.MILLISECOND) == 0)
         assert(viewModel.getReminderValue().externalId == NEW_EXTERNAL_ID)
-        verify(repo).insertReminderRx(reminder)
+        verify(repo).insertReminder(reminder)
     }
 
     @Test

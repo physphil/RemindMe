@@ -38,7 +38,7 @@ class ReminderRepo(private val dao: ReminderDao) {
      * @param reminder the Reminder to insert.
      * @return a disposable for the subscription
      */
-    fun insertReminderRx(reminder: Reminder): Disposable {
+    fun insertReminder(reminder: Reminder): Disposable {
         return Completable.fromAction {
             dao.insertReminder(reminder)
         }

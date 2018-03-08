@@ -27,6 +27,7 @@ import com.physphil.android.remindme.ui.ProgressSpinner
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -49,6 +50,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     @BindView(R.id.reminder_list_empty)
     lateinit var empty: TextView
 
+    private val disposables = CompositeDisposable()
     private val adapter = ReminderListAdapter()
     private val viewModel: MainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -67,6 +69,11 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
 
         bindViewModel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     private fun setupRecyclerview() {
@@ -93,7 +100,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         viewModel.showDeleteConfirmationEvent.observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
-        viewModel.reminderListRx.subscribeOn(Schedulers.io())
+        disposables.add(viewModel.reminderListRx.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     // onNext
@@ -102,7 +109,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
                     fab.show()  // make sure the fab is always showing when the list is updated
                 }, {
                     // onError
-                })
+                }))
     }
 
     @OnClick(R.id.reminder_list_fab)
