@@ -13,7 +13,7 @@ import io.reactivex.Flowable
 @Dao
 interface ReminderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertReminder(reminder: Reminder): Completable
+    fun insertReminder(reminder: Reminder)
 
     @Update
     fun updateReminder(reminder: Reminder)
