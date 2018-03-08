@@ -1,7 +1,6 @@
 package com.physphil.android.remindme
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
@@ -47,7 +46,7 @@ class MainActivityViewModelTest {
     @Test
     fun testEmptyReminderListUpdated() {
         val reminders = emptyList<Reminder>()
-        `when`(repo.getActiveRemindersRx()).thenReturn(Flowable.just(reminders))
+        `when`(repo.getActiveReminders()).thenReturn(Flowable.just(reminders))
 
         viewModel = MainActivityViewModel(repo, scheduler)
         viewModel.reminderListUpdated(reminders)
@@ -58,7 +57,7 @@ class MainActivityViewModelTest {
     @Test
     fun testReminderListUpdated() {
         val reminders = listOf(Reminder(), Reminder())
-        `when`(repo.getActiveRemindersRx()).thenReturn(Flowable.just(reminders))
+        `when`(repo.getActiveReminders()).thenReturn(Flowable.just(reminders))
 
         viewModel = MainActivityViewModel(repo, scheduler)
         viewModel.reminderListUpdated(reminders)

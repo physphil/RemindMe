@@ -54,7 +54,7 @@ class ReminderDaoTest {
 
     @Test
     fun testGetEmptyReminderList() {
-        dao.getAllRemindersRx()
+        dao.getAllReminders()
                 .test()
                 .assertValue({ it.isEmpty() })
     }
@@ -65,7 +65,7 @@ class ReminderDaoTest {
         time.timeInMillis = System.currentTimeMillis() + 60000 * 5  // set each reminder 5 minutes in future
         dao.insertReminder(Reminder(time = time))
         dao.insertReminder(Reminder(time = time))
-        dao.getAllRemindersRx()
+        dao.getAllReminders()
                 .test()
                 .assertValue({ it.size == 2 })
     }
@@ -101,12 +101,12 @@ class ReminderDaoTest {
         dao.insertReminder(Reminder(time = time))
         dao.insertReminder(Reminder(time = time))
 
-        dao.getAllRemindersRx()
+        dao.getAllReminders()
                 .test()
                 .assertValue({ it.size == 3 })
 
         dao.deleteAllReminders()
-        dao.getAllRemindersRx()
+        dao.getAllReminders()
                 .test()
                 .assertValue( { it.isEmpty() })
     }

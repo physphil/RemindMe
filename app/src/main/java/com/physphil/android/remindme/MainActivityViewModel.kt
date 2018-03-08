@@ -13,7 +13,7 @@ import com.physphil.android.remindme.util.SingleLiveEvent
  */
 class MainActivityViewModel(private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
 
-    val reminderListRx = repo.getActiveRemindersRx()
+    val reminderListRx = repo.getActiveReminders()
     val clearNotificationEvent = SingleLiveEvent<Int?>()
     val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
     val showDeleteAllConfirmationEvent = SingleLiveEvent<Void>()
