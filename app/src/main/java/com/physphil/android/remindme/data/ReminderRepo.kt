@@ -31,15 +31,7 @@ class ReminderRepo(private val dao: ReminderDao) {
         }
     }
 
-    fun getActiveReminders() = dao.getAllReminders()
-
     fun getActiveRemindersRx() = dao.getAllRemindersRx()
-
-    fun insertReminder(reminder: Reminder) {
-        Thread(Runnable {
-            dao.insertReminder(reminder)
-        }).start()
-    }
 
     /**
      * Insert a new reminder into the database. Returns a [Disposable] that can be used to cancel the subscription.

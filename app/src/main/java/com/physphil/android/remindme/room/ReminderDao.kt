@@ -24,11 +24,6 @@ interface ReminderDao {
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_TIME > :time " +
             "ORDER BY $REMINDER_COLUMN_TIME ASC")
-    fun getAllReminders(time: Long = System.currentTimeMillis()): LiveData<List<Reminder>>
-
-    @Query("SELECT * FROM $TABLE_REMINDERS " +
-            "WHERE $REMINDER_COLUMN_TIME > :time " +
-            "ORDER BY $REMINDER_COLUMN_TIME ASC")
     fun getAllRemindersRx(time: Long = System.currentTimeMillis()): Flowable<List<Reminder>>
 
     @Query("SELECT * FROM $TABLE_REMINDERS " +

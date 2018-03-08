@@ -13,6 +13,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import org.junit.Rule
+
+
 
 private const val TITLE = "Watch The Wire"
 private const val NEW_TITLE = "Watch Seinfeld"
@@ -32,6 +36,9 @@ class ReminderDaoTest {
     private lateinit var dao: ReminderDao
     private lateinit var db: AppDatabase
 
+    @get: Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
     @Before
     fun createDb() {
         db = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getTargetContext(), AppDatabase::class.java)
@@ -47,8 +54,9 @@ class ReminderDaoTest {
 
     @Test
     fun testGetEmptyReminderList() {
-        val reminders = LiveDataTestUtil.getValue(dao.getAllReminders())
-        assertTrue(reminders.isEmpty())
+        dao.getAllRemindersRx()
+                .test()
+                .assertValue({ it.isEmpty() })
     }
 
     @Test
@@ -57,8 +65,9 @@ class ReminderDaoTest {
         time.timeInMillis = System.currentTimeMillis() + 60000 * 5  // set each reminder 5 minutes in future
         dao.insertReminder(Reminder(time = time))
         dao.insertReminder(Reminder(time = time))
-        val reminders = LiveDataTestUtil.getValue(dao.getAllReminders())
-        assertTrue(reminders.size == 2)
+        dao.getAllRemindersRx()
+                .test()
+                .assertValue({ it.size == 2 })
     }
 
     @Test
@@ -92,12 +101,14 @@ class ReminderDaoTest {
         dao.insertReminder(Reminder(time = time))
         dao.insertReminder(Reminder(time = time))
 
-        val reminders = LiveDataTestUtil.getValue(dao.getAllReminders())
-        assertTrue(reminders.size == 3)
+        dao.getAllRemindersRx()
+                .test()
+                .assertValue({ it.size == 3 })
 
         dao.deleteAllReminders()
-        val updatedReminders = LiveDataTestUtil.getValue(dao.getAllReminders())
-        assertTrue(updatedReminders.isEmpty())
+        dao.getAllRemindersRx()
+                .test()
+                .assertValue( { it.isEmpty() })
     }
 
     @Test
