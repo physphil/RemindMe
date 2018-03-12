@@ -100,7 +100,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         viewModel.showDeleteConfirmationEvent.observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
-        disposables.add(viewModel.reminderListRx.subscribeOn(Schedulers.io())
+        disposables.add(viewModel.reminderList.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     // onNext
@@ -140,14 +140,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
     private val emptyVisibilityObserver = Observer<Boolean> {
         it?.let { empty.setVisibility(it) }
-    }
-
-    private val reminderListObserver = Observer<List<Reminder>> {
-        it?.let {
-            //            adapter.setReminderList(it)
-//            viewModel.reminderListUpdated()
-//            fab.show()  // make sure the fab is always showing when the list is updated
-        }
     }
 
     private val deleteNotificationsObserver = Observer<Int?> {
