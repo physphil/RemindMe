@@ -1,11 +1,11 @@
 package com.physphil.android.remindme
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.room.entities.Reminder
+import io.reactivex.Flowable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,24 +45,22 @@ class MainActivityViewModelTest {
 
     @Test
     fun testEmptyReminderListUpdated() {
-        val reminderList = MutableLiveData<List<Reminder>>()
-        reminderList.value = listOf()
-        `when`(repo.getActiveReminders()).thenReturn(reminderList)
+        val reminders = emptyList<Reminder>()
+        `when`(repo.getActiveReminders()).thenReturn(Flowable.just(reminders))
 
         viewModel = MainActivityViewModel(repo, scheduler)
-        viewModel.reminderListUpdated()
+        viewModel.reminderListUpdated(reminders)
         assert(viewModel.getSpinnerVisibility().value == false)
         assert(viewModel.getEmptyVisibility().value == true)
     }
 
     @Test
     fun testReminderListUpdated() {
-        val reminderList = MutableLiveData<List<Reminder>>()
-        reminderList.value = listOf(Reminder(), Reminder())
-        `when`(repo.getActiveReminders()).thenReturn(reminderList)
+        val reminders = listOf(Reminder(), Reminder())
+        `when`(repo.getActiveReminders()).thenReturn(Flowable.just(reminders))
 
         viewModel = MainActivityViewModel(repo, scheduler)
-        viewModel.reminderListUpdated()
+        viewModel.reminderListUpdated(reminders)
         assert(viewModel.getSpinnerVisibility().value == false)
         assert(viewModel.getEmptyVisibility().value == false)
     }

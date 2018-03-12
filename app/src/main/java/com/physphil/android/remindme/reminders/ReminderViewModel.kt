@@ -11,6 +11,7 @@ import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
+import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
 /**

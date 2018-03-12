@@ -4,6 +4,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.physphil.android.remindme.room.ReminderDao
 import com.physphil.android.remindme.room.entities.Reminder
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Repository to handle fetching and saving Reminder data
@@ -22,18 +26,25 @@ class ReminderRepo(private val dao: ReminderDao) {
             val data = MutableLiveData<Reminder>()
             data.value = Reminder()
             data
-        }
-        else {
+        } else {
             dao.getReminderById(id)
         }
     }
 
     fun getActiveReminders() = dao.getAllReminders()
 
-    fun insertReminder(reminder: Reminder) {
-        Thread(Runnable {
+    /**
+     * Insert a new reminder into the database. Returns a [Disposable] that can be used to cancel the subscription.
+     * @param reminder the Reminder to insert.
+     * @return a disposable for the subscription
+     */
+    fun insertReminder(reminder: Reminder): Disposable {
+        return Completable.fromAction {
             dao.insertReminder(reminder)
-        }).start()
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
     }
 
     fun updateReminder(reminder: Reminder) {

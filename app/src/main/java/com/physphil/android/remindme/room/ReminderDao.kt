@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.physphil.android.remindme.*
 import com.physphil.android.remindme.room.entities.Reminder
+import io.reactivex.Completable
+import io.reactivex.Flowable
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -22,7 +24,7 @@ interface ReminderDao {
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_TIME > :time " +
             "ORDER BY $REMINDER_COLUMN_TIME ASC")
-    fun getAllReminders(time: Long = System.currentTimeMillis()): LiveData<List<Reminder>>
+    fun getAllReminders(time: Long = System.currentTimeMillis()): Flowable<List<Reminder>>
 
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_ID = :id")
