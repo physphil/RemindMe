@@ -11,17 +11,20 @@ import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
-import io.reactivex.disposables.CompositeDisposable
-import java.util.*
+import io.reactivex.Flowable
+import java.util.Calendar
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
 class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
 
+    /** Reminder object retrieved from database, so it can be updated later */
+    lateinit var reminder: Reminder
     private val isNewReminder = (id == null)
 
-    val reminder: LiveData<Reminder> = repo.getReminderByIdOrNew(id)
+    /** Flowable containing Reminder saved in database */
+    val observableReminder: Flowable<Reminder> = repo.getReminderByIdOrNew(id)
     val clearNotificationEvent = SingleLiveEvent<Int>()
     val confirmDeleteEvent = SingleLiveEvent<Void>()
     val closeActivityEvent = SingleLiveEvent<Void>()
@@ -35,51 +38,50 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
         toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
     }
 
-    fun getReminderValue() = reminder.value!!
     fun getReminderTime(): LiveData<String> = reminderTime
     fun getReminderDate(): LiveData<String> = reminderDate
     fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
     fun getToolbarTitle(): LiveData<Int> = toolbarTitle
 
     fun updateTitle(title: String) {
-        getReminderValue().title = title
+        reminder.title = title
     }
 
     fun updateBody(body: String) {
-        getReminderValue().body = body
+        reminder.body = body
     }
 
     fun updateTime(context: Context, hourOfDay: Int, minute: Int) {
-        getReminderValue().time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        getReminderValue().time.set(Calendar.MINUTE, minute)
-        reminderTime.value = getReminderValue().getDisplayTime(context)
+        reminder.time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        reminder.time.set(Calendar.MINUTE, minute)
+        reminderTime.value = reminder.getDisplayTime(context)
     }
 
     fun updateDate(context: Context, year: Int, month: Int, dayOfMonth: Int) {
-        getReminderValue().time.set(Calendar.YEAR, year)
-        getReminderValue().time.set(Calendar.MONTH, month)
-        getReminderValue().time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        reminderDate.value = getReminderValue().getDisplayDate(context)
+        reminder.time.set(Calendar.YEAR, year)
+        reminder.time.set(Calendar.MONTH, month)
+        reminder.time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        reminderDate.value = reminder.getDisplayDate(context)
     }
 
     fun updateRecurrence(recurrence: Recurrence) {
-        getReminderValue().recurrence = recurrence
+        reminder.recurrence = recurrence
         reminderRecurrence.value = recurrence.displayString
     }
 
     fun saveReminder() {
         // Set all second fields to 0 before saving, so alarm happens at exactly the specified time
-        getReminderValue().time.set(Calendar.SECOND, 0)
-        getReminderValue().time.set(Calendar.MILLISECOND, 0)
+        reminder.time.set(Calendar.SECOND, 0)
+        reminder.time.set(Calendar.MILLISECOND, 0)
 
         if (isNewReminder) {
-            getReminderValue().externalId = scheduleNotification(getReminderValue())
-            repo.insertReminder(getReminderValue())
+            reminder.externalId = scheduleNotification(reminder)
+            repo.insertReminder(reminder)
         }
         else {
-            scheduler.cancelJob(getReminderValue().externalId)
-            getReminderValue().externalId = scheduleNotification(getReminderValue())
-            repo.updateReminder(getReminderValue())
+            scheduler.cancelJob(reminder.externalId)
+            reminder.externalId = scheduleNotification(reminder)
+            repo.updateReminder(reminder)
         }
     }
 
@@ -88,9 +90,9 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
     }
 
     fun deleteReminder() {
-        clearNotificationEvent.value = getReminderValue().notificationId
-        scheduler.cancelJob(getReminderValue().externalId)
-        repo.deleteReminder(getReminderValue())
+        clearNotificationEvent.value = reminder.notificationId
+        scheduler.cancelJob(reminder.externalId)
+        repo.deleteReminder(reminder)
         closeActivityEvent.call()
     }
 
@@ -100,7 +102,7 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
 
     /**
      * Schedule a notification for the Reminder
-     * @param reminder the reminder to schedule a notification for
+     * @param reminder the observableReminder to schedule a notification for
      * @return the job id of the newly scheduled notification
      */
     private fun scheduleNotification(reminder: Reminder): Int {

@@ -1,22 +1,18 @@
 package com.physphil.android.remindme
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.ReminderDao
 import com.physphil.android.remindme.room.entities.Reminder
-import com.physphil.android.remindme.util.LiveDataTestUtil
-import junit.framework.Assert.*
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import org.junit.Rule
-
-
+import java.util.Calendar
 
 private const val TITLE = "Watch The Wire"
 private const val NEW_TITLE = "Watch Seinfeld"
@@ -78,9 +74,10 @@ class ReminderDaoTest {
         dao.insertReminder(Reminder())
         dao.insertReminder(Reminder())
 
-        val result = LiveDataTestUtil.getValue(dao.getReminderById(id))
-        assertTrue(result.id == id)
-        assertTrue(result.title == TITLE)
+        dao.getReminderById(id)
+                .test()
+                .assertValue({ it.id == id })
+                .assertValue({ it.title == TITLE })
     }
 
     @Test
@@ -89,8 +86,9 @@ class ReminderDaoTest {
         dao.insertReminder(Reminder())
         dao.insertReminder(Reminder())
 
-        val result = LiveDataTestUtil.getValue(dao.getReminderById("123"))
-        assertNull(result)
+        dao.getReminderById("123")
+                .test()
+                .assertNoValues()
     }
 
     @Test
@@ -116,12 +114,14 @@ class ReminderDaoTest {
         val reminder = Reminder()
         dao.insertReminder(reminder)
 
-        val result = LiveDataTestUtil.getValue(dao.getReminderById(reminder.id))
-        assertNotNull(result)
+        dao.getReminderById(reminder.id)
+                .test()
+                .assertValueCount(1)
 
         dao.deleteReminder(reminder)
-        val updatedResult = LiveDataTestUtil.getValue(dao.getReminderById(reminder.id))
-        assertNull(updatedResult)
+        dao.getReminderById(reminder.id)
+                .test()
+                .assertNoValues()
     }
 
     @Test
@@ -130,13 +130,16 @@ class ReminderDaoTest {
         val id = reminder.id
         dao.insertReminder(reminder)
 
-        val result = LiveDataTestUtil.getValue(dao.getReminderById(id))
-        assertTrue(result.title == TITLE)
-        result.title = NEW_TITLE
-        dao.updateReminder(result)
+        dao.getReminderById(id)
+                .test()
+                .assertValue({ it.title == TITLE })
 
-        val updated = LiveDataTestUtil.getValue(dao.getReminderById(id))
-        assertTrue(updated.title == NEW_TITLE)
+        reminder.title = NEW_TITLE
+        dao.updateReminder(reminder)
+
+        dao.getReminderById(id)
+                .test()
+                .assertValue({ it.title == NEW_TITLE })
     }
 
     @Test
@@ -147,10 +150,11 @@ class ReminderDaoTest {
         dao.insertReminder(reminder)
 
         dao.updateRecurringReminder(reminder.id, NEW_EXTERNAL_ID, NEW_TIME)
-        val result = LiveDataTestUtil.getValue(dao.getReminderById(reminder.id))
-        assertNotNull(result)
-        assertTrue(result.externalId == NEW_EXTERNAL_ID)
-        assertTrue(result.time.timeInMillis == NEW_TIME)
+        dao.getReminderById(reminder.id)
+                .test()
+                .assertValueCount(1)
+                .assertValue({ it.externalId == NEW_EXTERNAL_ID })
+                .assertValue({ it.time.timeInMillis == NEW_TIME })
     }
 
     @Test
@@ -159,8 +163,9 @@ class ReminderDaoTest {
         dao.insertReminder(reminder)
 
         dao.updateNotificationId(reminder.id, NEW_NOTIFICATION_ID)
-        val result = LiveDataTestUtil.getValue(dao.getReminderById(reminder.id))
-        assertNotNull(result)
-        assertTrue(result.notificationId == NEW_NOTIFICATION_ID)
+        dao.getReminderById(reminder.id)
+                .test()
+                .assertValueCount(1)
+                .assertValue({ it.notificationId == NEW_NOTIFICATION_ID })
     }
 }
