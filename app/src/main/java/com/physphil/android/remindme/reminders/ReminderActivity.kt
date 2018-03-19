@@ -96,41 +96,14 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
                 }, {
                     // on error
                 }))
-        viewModel.getReminderTime().observe(this, timeObserver)
-        viewModel.getReminderDate().observe(this, dateObserver)
-        viewModel.getReminderRecurrence().observe(this, recurrenceObserver)
-        viewModel.getToolbarTitle().observe(this, toolbarTitleObserver)
-        viewModel.clearNotificationEvent.observe(this, clearNotificationEventObserver)
-        viewModel.confirmDeleteEvent.observe(this, confirmDeleteObserver)
-        viewModel.closeActivityEvent.observe(this, closeActivityObserver)
-    }
 
-    private val timeObserver = Observer<String> {
-        it?.let { timeText.text = it }
-    }
-
-    private val dateObserver = Observer<String> {
-        it?.let { dateText.text = it }
-    }
-
-    private val recurrenceObserver = Observer<Int> {
-        it?.let { repeatText.setText(it) }
-    }
-
-    private val toolbarTitleObserver = Observer<Int> {
-        it?.let { setToolbarTitle(it) }
-    }
-
-    private val clearNotificationEventObserver = Observer<Int> {
-        it?.let { notificationManager.cancel(it) }
-    }
-
-    private val confirmDeleteObserver = Observer<Void> {
-        DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
-    }
-
-    private val closeActivityObserver = Observer<Void> {
-        finish()
+        viewModel.getReminderTime().observe(this, Observer { it?.let { timeText.text = it } })
+        viewModel.getReminderDate().observe(this, Observer { it?.let { dateText.text = it } })
+        viewModel.getReminderRecurrence().observe(this, Observer { it?.let { repeatText.setText(it) } })
+        viewModel.getToolbarTitle().observe(this, Observer { it?.let { setToolbarTitle(it) } })
+        viewModel.clearNotificationEvent.observe(this, Observer { it?.let { notificationManager.cancel(it) } })
+        viewModel.confirmDeleteEvent.observe(this, Observer { DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG) })
+        viewModel.closeActivityEvent.observe(this, Observer { finish() })
     }
 
     @OnTextChanged(R.id.reminder_title_text)
@@ -194,17 +167,23 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         }
     }
 
+    // region OnTimeSetListener implementation
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         viewModel.updateTime(this, hourOfDay, minute)
     }
+    // endregion
 
+    // region OnDateSetListener implementation
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         viewModel.updateDate(this, year, month, dayOfMonth)
     }
+    // endregion
 
+    // region OnRecurrenceSetListener implementation
     override fun onRecurrenceSet(recurrence: Recurrence) {
         viewModel.updateRecurrence(recurrence)
     }
+    // endregion
 
     // region DeleteReminderDialogFragment.Listener implementation
     override fun onDeleteReminder() {
