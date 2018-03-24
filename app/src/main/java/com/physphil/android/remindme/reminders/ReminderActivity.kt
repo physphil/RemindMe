@@ -24,6 +24,8 @@ import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
+import com.physphil.android.remindme.util.getDisplayDate
+import com.physphil.android.remindme.util.getDisplayTime
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

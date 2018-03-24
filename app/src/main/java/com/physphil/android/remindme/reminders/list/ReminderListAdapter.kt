@@ -11,6 +11,8 @@ import butterknife.ButterKnife
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.util.getDisplayDate
+import com.physphil.android.remindme.util.getDisplayTime
 import com.physphil.android.remindme.util.setVisibility
 
 private const val HEADER_ID = "header_id"
