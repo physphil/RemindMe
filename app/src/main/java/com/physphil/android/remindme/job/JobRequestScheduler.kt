@@ -15,7 +15,7 @@ const val EXTRA_TIME = "com.physphil.android.remindme.EXTRA_TIME"
 /**
  * Offset (in ms) for any reminder to be scheduled immediately
  */
-private const val DEFAULT_OFFSET = 3000
+private const val DEFAULT_OFFSET = 3000L
 
 /**
  * Handles all interactions with Job library to schedule and manage jobs
@@ -26,10 +26,10 @@ object JobRequestScheduler {
     /**
      * Schedule a ShowNotificationJob to display a notification to the user at the specified time.
      * @param time the time (in ms) when the notification should be shown
-     * @param id the id of the Reminder in the local database
+     * @param id the id of the [Reminder] in the local database
      * @param title the title of the notification
      * @param text the body of the notification
-     * @param recurrence the id of the notification's recurrence
+     * @param recurrence the id of the notification's [Recurrence]
      * @return the id of the newly scheduled job
      */
     fun scheduleShowNotificationJob(time: Long, id: String, title: String = "", text: String = "", recurrence: Int = Recurrence.NONE.id): Int {
@@ -62,7 +62,7 @@ object JobRequestScheduler {
 
     /**
      * Calculate the time offset required by the JobRequest. If the time supplied is in the past, this function
-     * will return [DEFAULT_OFFSET]. This will allow the reminder to be shown immediately.
+     * will return [DEFAULT_OFFSET]. This will allow the [Reminder] to be shown immediately.
      * @param time the time at which the reminder is scheduled
      * @return the offset between the supplied time and the current time
      */
@@ -72,7 +72,7 @@ object JobRequestScheduler {
             time - now
         }
         else {
-            DEFAULT_OFFSET.toLong()
+            DEFAULT_OFFSET
         }
     }
 }
