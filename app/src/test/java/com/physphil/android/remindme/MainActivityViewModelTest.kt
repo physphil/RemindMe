@@ -6,6 +6,7 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.room.entities.Reminder
 import io.reactivex.Flowable
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,8 +51,9 @@ class MainActivityViewModelTest {
 
         viewModel = MainActivityViewModel(repo, scheduler)
         viewModel.reminderListUpdated(reminders)
-        assert(viewModel.getSpinnerVisibility().value == false)
-        assert(viewModel.getEmptyVisibility().value == true)
+
+        viewModel.getSpinnerVisibility().observeForever({ assertEquals(it, false) })
+        viewModel.getEmptyVisibility().observeForever({ assertEquals(it, true) })
     }
 
     @Test
@@ -61,8 +63,24 @@ class MainActivityViewModelTest {
 
         viewModel = MainActivityViewModel(repo, scheduler)
         viewModel.reminderListUpdated(reminders)
-        assert(viewModel.getSpinnerVisibility().value == false)
-        assert(viewModel.getEmptyVisibility().value == false)
+
+        viewModel.getSpinnerVisibility().observeForever({ assertEquals(it, false) })
+        viewModel.getEmptyVisibility().observeForever({ assertEquals(it, false) })
+    }
+
+    @Test
+    fun testShowReminderList() {
+        val reminder1 = Reminder(title = "Reminder 1")
+        val reminder2 = Reminder(title = "Reminder 2")
+        val reminders = listOf(reminder1, reminder2)
+        `when`(repo.getActiveReminders()).thenReturn(Flowable.just(reminders))
+
+        viewModel = MainActivityViewModel(repo, scheduler)
+        viewModel.reminderList
+                .test()
+                .assertValue({ it.size == 2 })
+                .assertValue({ it[0].id == reminder1.id })
+                .assertValue({ it[1].id == reminder2.id })
     }
 
     @Test
