@@ -1,12 +1,12 @@
 package com.physphil.android.remindme
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.Observer
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.room.entities.Reminder
 import io.reactivex.Flowable
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,9 +32,6 @@ class MainActivityViewModelTest {
 
     @Mock
     private lateinit var scheduler: JobRequestScheduler
-
-    @Mock
-    private lateinit var observer: Observer<Any>
 
     private lateinit var viewModel: MainActivityViewModel
 
@@ -64,8 +61,12 @@ class MainActivityViewModelTest {
         viewModel = MainActivityViewModel(repo, scheduler)
         viewModel.reminderListUpdated(reminders)
 
-        viewModel.getSpinnerVisibility().observeForever({ assertEquals(it, false) })
-        viewModel.getEmptyVisibility().observeForever({ assertEquals(it, false) })
+        viewModel.getSpinnerVisibility().observeForever({
+            assertEquals(it, false)
+        })
+        viewModel.getEmptyVisibility().observeForever({
+            assertEquals(it, false)
+        })
     }
 
     @Test
@@ -85,39 +86,39 @@ class MainActivityViewModelTest {
 
     @Test
     fun testConfirmDeleteAllReminders() {
-        viewModel.showDeleteAllConfirmationEvent.observeForever(observer as Observer<Void>)
+        viewModel.showDeleteAllConfirmationEvent.observeForever({ assertNull(it) })
 
         viewModel.confirmDeleteAllReminders()
-        verify(observer).onChanged(null)
     }
 
     @Test
     fun testDeleteAllReminders() {
-        viewModel.clearNotificationEvent.observeForever(observer as Observer<Int?>)
+        viewModel.clearNotificationEvent.observeForever({
+            assertNull(it)
+        })
 
         viewModel.deleteAllReminders()
         verify(scheduler).cancelAllJobs()
         verify(repo).deleteAllReminders()
-        verify(observer).onChanged(null)
     }
 
     @Test
     fun testConfirmDeleteReminder() {
-        viewModel.showDeleteConfirmationEvent.observeForever(observer as Observer<Void>)
+        viewModel.showDeleteConfirmationEvent.observeForever({ assertNull(it) })
 
         viewModel.confirmDeleteReminder(Reminder())
-        verify(observer).onChanged(null)
     }
 
     @Test
     fun testDeleteReminder() {
-        viewModel.clearNotificationEvent.observeForever(observer as Observer<Int?>)
         val reminder = Reminder()
+        viewModel.clearNotificationEvent.observeForever({ id ->
+            assertEquals(id, reminder.notificationId)
+        })
 
         viewModel.confirmDeleteReminder(reminder)
         viewModel.deleteReminder()
         verify(scheduler).cancelJob(reminder.externalId)
         verify(repo).deleteReminder(reminder)
-        verify(observer).onChanged(reminder.notificationId)
     }
 }
