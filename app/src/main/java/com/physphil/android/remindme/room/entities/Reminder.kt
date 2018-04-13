@@ -4,7 +4,6 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.physphil.android.remindme.REMINDER_COLUMN_EXTERNAL_ID
-import com.physphil.android.remindme.REMINDER_COLUMN_ID
 import com.physphil.android.remindme.REMINDER_COLUMN_NOTIFICATION_ID
 import com.physphil.android.remindme.REMINDER_COLUMN_RECURRENCE
 import com.physphil.android.remindme.REMINDER_COLUMN_TEXT
@@ -21,14 +20,10 @@ import java.util.UUID
  * Copyright (c) 2017 Phil Shadlyn
  */
 @Entity(tableName = TABLE_REMINDERS)
-data class Reminder(@ColumnInfo(name = REMINDER_COLUMN_TITLE) var title: String = "",
-                    @ColumnInfo(name = REMINDER_COLUMN_TEXT) var body: String = "",
-                    @ColumnInfo(name = REMINDER_COLUMN_TIME) var time: Calendar = Calendar.getInstance(),
-                    @ColumnInfo(name = REMINDER_COLUMN_RECURRENCE) var recurrence: Recurrence = Recurrence.NONE,
-                    @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID) var externalId: Int = 0,
-                    @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID) var notificationId: Int = 0) {
-
-    @PrimaryKey
-    @ColumnInfo(name = REMINDER_COLUMN_ID)
-    var id: String = UUID.randomUUID().toString()
-}
+data class Reminder(@PrimaryKey @ColumnInfo var id: String = UUID.randomUUID().toString(),
+        @ColumnInfo(name = REMINDER_COLUMN_TITLE) var title: String = "",
+        @ColumnInfo(name = REMINDER_COLUMN_TEXT) var body: String = "",
+        @ColumnInfo(name = REMINDER_COLUMN_TIME) var time: Calendar = Calendar.getInstance(),
+        @ColumnInfo(name = REMINDER_COLUMN_RECURRENCE) var recurrence: Recurrence = Recurrence.NONE,
+        @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID) var externalId: Int = 0,
+        @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID) var notificationId: Int = 0)
