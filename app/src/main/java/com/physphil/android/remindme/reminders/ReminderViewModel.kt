@@ -11,67 +11,67 @@ import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
-import java.util.*
+import com.physphil.android.remindme.util.getDisplayDate
+import com.physphil.android.remindme.util.getDisplayTime
+import io.reactivex.Flowable
+import java.util.Calendar
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
-class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
 
+    /** Reminder object retrieved from database, so it can be updated later */
+    lateinit var reminder: Reminder
     private val isNewReminder = (id == null)
 
-    private val reminder = repo.getReminderById(id)
+    /** Flowable containing Reminder saved in database */
+    val observableReminder: Flowable<Reminder> = repo.getReminderByIdOrNew(id)
+    val clearNotificationEvent = SingleLiveEvent<Int>()
+    val confirmDeleteEvent = SingleLiveEvent<Void>()
+    val closeActivityEvent = SingleLiveEvent<Void>()
+
     private val reminderTime = MutableLiveData<String>()
     private val reminderDate = MutableLiveData<String>()
     private val reminderRecurrence = MutableLiveData<Int>()
     private val toolbarTitle = MutableLiveData<Int>()
-    private val clearNotificationEvent = SingleLiveEvent<Int>()
-    private val confirmDeleteEvent = SingleLiveEvent<Void>()
-    private val closeActivityEvent = SingleLiveEvent<Void>()
 
     init {
         toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
     }
 
-    fun getReminderValue() = reminder.value!!
-    fun getReminder(): LiveData<Reminder> = reminder
     fun getReminderTime(): LiveData<String> = reminderTime
     fun getReminderDate(): LiveData<String> = reminderDate
     fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
     fun getToolbarTitle(): LiveData<Int> = toolbarTitle
-    fun getClearNotificationEvent(): LiveData<Int> = clearNotificationEvent
-    fun getConfirmDeleteEvent(): LiveData<Void> = confirmDeleteEvent
-    fun getCloseActivityEvent(): LiveData<Void> = closeActivityEvent
 
     fun updateTitle(title: String) {
-        getReminderValue().title = title
+        reminder.title = title
     }
 
     fun updateBody(body: String) {
-        getReminderValue().body = body
+        reminder.body = body
     }
 
     fun updateTime(context: Context, hourOfDay: Int, minute: Int) {
-        getReminderValue().time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        getReminderValue().time.set(Calendar.MINUTE, minute)
-        reminderTime.value = getReminderValue().getDisplayTime(context)
+        reminder.time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        reminder.time.set(Calendar.MINUTE, minute)
+        reminderTime.value = reminder.getDisplayTime(context)
     }
 
     fun updateDate(context: Context, year: Int, month: Int, dayOfMonth: Int) {
-        getReminderValue().time.set(Calendar.YEAR, year)
-        getReminderValue().time.set(Calendar.MONTH, month)
-        getReminderValue().time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        reminderDate.value = getReminderValue().getDisplayDate(context)
+        reminder.time.set(Calendar.YEAR, year)
+        reminder.time.set(Calendar.MONTH, month)
+        reminder.time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        reminderDate.value = reminder.getDisplayDate(context)
     }
 
     fun updateRecurrence(recurrence: Recurrence) {
-        getReminderValue().recurrence = recurrence
-        reminderRecurrence.value = recurrence.getDisplayString()
+        reminder.recurrence = recurrence
+        reminderRecurrence.value = recurrence.displayString
     }
 
     fun saveReminder() {
-        val reminder = getReminderValue()
-
         // Set all second fields to 0 before saving, so alarm happens at exactly the specified time
         reminder.time.set(Calendar.SECOND, 0)
         reminder.time.set(Calendar.MILLISECOND, 0)
@@ -92,9 +92,9 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
     }
 
     fun deleteReminder() {
-        clearNotificationEvent.value = getReminderValue().notificationId
-        scheduler.cancelJob(getReminderValue().externalId)
-        repo.deleteReminder(getReminderValue())
+        clearNotificationEvent.value = reminder.notificationId
+        scheduler.cancelJob(reminder.externalId)
+        repo.deleteReminder(reminder)
         closeActivityEvent.call()
     }
 
@@ -102,6 +102,11 @@ class ReminderViewModel(id: String?, private val repo: ReminderRepo, private val
         delete.isVisible = !isNewReminder
     }
 
+    /**
+     * Schedule a notification for the Reminder
+     * @param reminder the observableReminder to schedule a notification for
+     * @return the job id of the newly scheduled notification
+     */
     private fun scheduleNotification(reminder: Reminder): Int {
         return scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id,

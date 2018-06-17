@@ -13,12 +13,13 @@ import com.physphil.android.remindme.util.SingleLiveEvent
  */
 class MainActivityViewModel(private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
 
-    private val reminderList = repo.getActiveReminders()
+    val reminderList = repo.getActiveReminders()
+    val clearNotificationEvent = SingleLiveEvent<Int?>()
+    val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
+    val showDeleteAllConfirmationEvent = SingleLiveEvent<Void>()
     private val spinnerVisibility = MutableLiveData<Boolean>()
     private val emptyVisibility = MutableLiveData<Boolean>()
-    private val clearNotificationEvent = SingleLiveEvent<Int?>()
-    private val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
-    private val showDeleteAllConfirmationEvent = SingleLiveEvent<Void>()
+
     private var reminderToDelete: Reminder? = null
 
     init {
@@ -26,16 +27,12 @@ class MainActivityViewModel(private val repo: ReminderRepo, private val schedule
         emptyVisibility.value = false
     }
 
-    fun getReminderList(): LiveData<List<Reminder>> = reminderList
     fun getSpinnerVisibility(): LiveData<Boolean> = spinnerVisibility
     fun getEmptyVisibility(): LiveData<Boolean> = emptyVisibility
-    fun getClearNotificationEvent(): LiveData<Int?> = clearNotificationEvent
-    fun getShowDeleteConfirmationEvent(): LiveData<Void> = showDeleteConfirmationEvent
-    fun getShowDeleteAllConfirmationEvent(): LiveData<Void> = showDeleteAllConfirmationEvent
 
-    fun reminderListUpdated() {
+    fun reminderListUpdated(reminders: List<Reminder>) {
         spinnerVisibility.value = false
-        emptyVisibility.value = reminderList.value?.isEmpty() ?: true
+        emptyVisibility.value = reminders.isEmpty()
     }
 
     fun confirmDeleteAllReminders() {

@@ -11,6 +11,8 @@ import butterknife.ButterKnife
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.util.getDisplayDate
+import com.physphil.android.remindme.util.getDisplayTime
 import com.physphil.android.remindme.util.setVisibility
 
 private const val HEADER_ID = "header_id"
@@ -31,11 +33,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     private val reminders = mutableListOf<Reminder>()
 
     /** Reminder object representing a header to add to the list */
-    private val headerReminder: Reminder by lazy {
-        val header = Reminder()
-        header.id = HEADER_ID
-        header
-    }
+    private val headerReminder = Reminder(id = HEADER_ID)
 
     /**
      * The text that will be displayed in the RecyclerView's header. Header will be invisible if not specified
@@ -68,7 +66,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
             // Hide recurrence if it is a single alarm
             if (reminder.recurrence != Recurrence.NONE) {
                 holder.recurrence.setVisibility(true)
-                holder.recurrence.setText(reminder.recurrence.getDisplayString())
+                holder.recurrence.setText(reminder.recurrence.displayString)
             }
             else {
                 holder.recurrence.setVisibility(false)

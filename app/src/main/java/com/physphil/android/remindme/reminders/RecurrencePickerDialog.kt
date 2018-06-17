@@ -39,13 +39,13 @@ class RecurrencePickerDialog : DialogFragment() {
         val recurrences = resources.getStringArray(R.array.recurrence_options)
         val selectedRecurrenceId = arguments?.getInt(ARGS_RECURRENCE, Recurrence.NONE.id) ?: Recurrence.NONE.id
         val selectedRecurrence = Recurrence.fromId(selectedRecurrenceId)
-        val selectedRecurrenceIndex = recurrences.indexOfFirst { it == getString(selectedRecurrence.getDisplayString()) }
+        val selectedRecurrenceIndex = recurrences.indexOfFirst { it == getString(selectedRecurrence.displayString) }
 
         return AlertDialog.Builder(activity!!)
                 .setTitle(R.string.title_select_recurrence)
                 .setSingleChoiceItems(R.array.recurrence_options, selectedRecurrenceIndex, { dialog, which ->
                     // Determine which Recurrence was selected from array index
-                    val recurrence = Recurrence.values().first { getString(it.getDisplayString()) == recurrences[which] }
+                    val recurrence = Recurrence.values().first { getString(it.displayString) == recurrences[which] }
                     listener?.onRecurrenceSet(recurrence)
                     dismiss()
                 })

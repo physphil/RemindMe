@@ -26,6 +26,9 @@ import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ProgressSpinner
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener,
@@ -47,6 +50,7 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     @BindView(R.id.reminder_list_empty)
     lateinit var empty: TextView
 
+    private val disposables = CompositeDisposable()
     private val adapter = ReminderListAdapter()
     private val viewModel: MainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -64,13 +68,12 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Observe all LiveData from ViewModel
-        viewModel.getClearNotificationEvent().observe(this, deleteNotificationsObserver)
-        viewModel.getShowDeleteAllConfirmationEvent().observe(this, showDeleteAllConfirmationObserver)
-        viewModel.getShowDeleteConfirmationEvent().observe(this, showDeleteConfirmationObserver)
-        viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
-        viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
-        viewModel.getReminderList().observe(this, reminderListObserver)
+        bindViewModel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     private fun setupRecyclerview() {
@@ -88,6 +91,25 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         val headers = resources.getStringArray(R.array.reminder_list_headers)
         val index = (Math.random() * headers.size).toInt()
         adapter.headerText = headers[index]
+    }
+
+    private fun bindViewModel() {
+        // Observe all LiveData from ViewModel
+        viewModel.clearNotificationEvent.observe(this, deleteNotificationsObserver)
+        viewModel.showDeleteAllConfirmationEvent.observe(this, showDeleteAllConfirmationObserver)
+        viewModel.showDeleteConfirmationEvent.observe(this, showDeleteConfirmationObserver)
+        viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
+        viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
+        disposables.add(viewModel.reminderList.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    // onNext
+                    adapter.setReminderList(it)
+                    viewModel.reminderListUpdated(it)
+                    fab.show()  // make sure the fab is always showing when the list is updated
+                }, {
+                    // onError
+                }))
     }
 
     @OnClick(R.id.reminder_list_fab)
@@ -120,19 +142,10 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         it?.let { empty.setVisibility(it) }
     }
 
-    private val reminderListObserver = Observer<List<Reminder>> {
-        it?.let {
-            adapter.setReminderList(it)
-            viewModel.reminderListUpdated()
-            fab.show()  // make sure the fab is always showing when the list is updated
-        }
-    }
-
     private val deleteNotificationsObserver = Observer<Int?> {
         if (it != null) {
             notificationManager.cancel(it)
-        }
-        else {
+        } else {
             notificationManager.cancelAll()
         }
     }
