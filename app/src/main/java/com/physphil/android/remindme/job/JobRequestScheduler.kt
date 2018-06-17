@@ -5,12 +5,15 @@ import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import com.physphil.android.remindme.TAG_SHOW_NOTIFICATION_JOB
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.room.entities.Reminder
 
 const val EXTRA_ID = "com.physphil.android.remindme.EXTRA_ID"
 const val EXTRA_TITLE = "com.physphil.android.remindme.EXTRA_TITLE"
 const val EXTRA_TEXT = "com.physphil.android.remindme.EXTRA_TEXT"
 const val EXTRA_RECURRENCE = "com.physphil.android.remindme.EXTRA_RECURRENCE"
 const val EXTRA_TIME = "com.physphil.android.remindme.EXTRA_TIME"
+const val EXTRA_OFFSET = "com.physphil.android.remindme.EXTRA_OFFSET"
+const val EXTRA_NOTIFICATION_ID = "com.physphil.android.remindme.EXTRA_NOTIFICATION_ID"
 
 /**
  * Offset (in ms) for any reminder to be scheduled immediately
@@ -33,18 +36,23 @@ object JobRequestScheduler {
      * @return the id of the newly scheduled job
      */
     fun scheduleShowNotificationJob(time: Long, id: String, title: String = "", text: String = "", recurrence: Int = Recurrence.NONE.id): Int {
-        val extras = PersistableBundleCompat()
-        extras.putString(EXTRA_ID, id)
-        extras.putLong(EXTRA_TIME, time)
-        extras.putString(EXTRA_TITLE, title)
-        extras.putString(EXTRA_TEXT, text)
-        extras.putInt(EXTRA_RECURRENCE, recurrence)
+        val extras = PersistableBundleCompat().apply {
+            putString(EXTRA_ID, id)
+            putLong(EXTRA_TIME, time)
+            putString(EXTRA_TITLE, title)
+            putString(EXTRA_TEXT, text)
+            putInt(EXTRA_RECURRENCE, recurrence)
+        }
 
         return JobRequest.Builder(TAG_SHOW_NOTIFICATION_JOB)
                 .setExact(calculateOffset(time))    // requires offset from current time
                 .setExtras(extras)
                 .build()
                 .schedule()
+    }
+
+    fun scheduleShowNotificationJob(reminder: Reminder): Int {
+        return scheduleShowNotificationJob(reminder.time.timeInMillis, reminder.id, reminder.title, reminder.body, reminder.recurrence.id)
     }
 
     /**
