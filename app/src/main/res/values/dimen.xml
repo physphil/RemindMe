@@ -21,6 +21,6 @@
 
     <dimen name="line_spacing_large">4dp</dimen>
 
-    <dimen name="reminder_input_margin_start">64dp</dimen>
+    <dimen name="reminder_input_margin_start">48dp</dimen>
     <dimen name="reminder_divider_margin">12dp</dimen>
 </resources>

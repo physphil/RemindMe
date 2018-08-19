@@ -12,7 +12,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.DatePicker
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import butterknife.BindView
@@ -24,6 +23,7 @@ import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
+import com.physphil.android.remindme.ui.ReminderEntryField
 import com.physphil.android.remindme.util.getDisplayDate
 import com.physphil.android.remindme.util.getDisplayTime
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,11 +40,11 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         DatePickerDialog.OnDateSetListener, RecurrencePickerDialog.OnRecurrenceSetListener,
         DeleteReminderDialogFragment.Listener {
 
-    @BindView(R.id.reminder_title_text)
-    lateinit var titleText: EditText
+    @BindView(R.id.reminder_title_title)
+    lateinit var title: ReminderEntryField
 
-    @BindView(R.id.reminder_body_text)
-    lateinit var bodyText: EditText
+    @BindView(R.id.reminder_body)
+    lateinit var body: ReminderEntryField
 
     @BindView(R.id.reminder_time_btn)
     lateinit var timeText: Button
@@ -86,9 +86,9 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
                 .subscribe({
                     // on success. Save Reminder in viewmodel and update UI
                     viewModel.reminder = it
-                    titleText.setText(it.title, TextView.BufferType.EDITABLE)
-                    titleText.setSelection(it.title.length)
-                    bodyText.setText(it.body, TextView.BufferType.EDITABLE)
+                    title.text.setText(it.title, TextView.BufferType.EDITABLE)
+                    title.text.setSelection(it.title.length)
+                    body.text.setText(it.body, TextView.BufferType.EDITABLE)
                     timeText.text = it.getDisplayTime(this)
                     dateText.text = it.getDisplayDate(this)
                     repeatText.setText(it.recurrence.displayString)
@@ -108,15 +108,16 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.closeActivityEvent.observe(this, Observer { finish() })
     }
 
-    @OnTextChanged(R.id.reminder_title_text)
-    fun onTitleChanged(text: CharSequence) {
-        viewModel.updateTitle(text.toString())
-    }
+    //todo - Move all these listeners to class of resepctive views
+//    @OnTextChanged(R.id.reminder_title_text)
+//    fun onTitleChanged(text: CharSequence) {
+//        viewModel.updateTitle(text.toString())
+//    }
 
-    @OnTextChanged(R.id.reminder_body_text)
-    fun onBodyChanged(text: CharSequence) {
-        viewModel.updateBody(text.toString())
-    }
+//    @OnTextChanged(R.id.reminder_body_text)
+//    fun onBodyChanged(text: CharSequence) {
+//        viewModel.updateBody(text.toString())
+//    }
 
     @OnClick(R.id.reminder_time_btn, R.id.reminder_time_icon)
     fun onTimeClicked() {

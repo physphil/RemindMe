@@ -3,4 +3,9 @@
     <declare-styleable name="ProgressSpinner">
         <attr name="spinner_message" format="reference|string"/>
     </declare-styleable>
+
+    <declare-styleable name="ReminderEntryField">
+        <attr name="field_title" format="reference"/>
+        <attr name="field_icon" format="reference"/>
+    </declare-styleable>
 </resources>

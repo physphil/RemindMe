@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/reminder_entry_title"
+        style="@style/Reminder.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/global_margin_large"
+        android:layout_marginStart="@dimen/reminder_input_margin_start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/reminder_title_title"/>
+
+    <EditText
+        android:id="@+id/reminder_entry_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/reminder_entry_title"
+        app:layout_constraintTop_toBottomOf="@id/reminder_entry_title"/>
+
+    <ImageView
+        android:id="@+id/reminder_entry_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/reminder_entry_title"
+        tools:srcCompat="@drawable/ic_notifications_24dp"/>
+
+</android.support.constraint.ConstraintLayout>

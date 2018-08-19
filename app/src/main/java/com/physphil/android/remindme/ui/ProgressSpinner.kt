@@ -17,7 +17,7 @@ class ProgressSpinner : ConstraintLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        val view = inflate(context, R.layout.progress_spinner, this)
+        val view = inflate(context, R.layout.view_progress_spinner, this)
         ButterKnife.bind(this, view)
 
         attrs?.let {

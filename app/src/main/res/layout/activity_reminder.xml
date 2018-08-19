@@ -11,64 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.physphil.android.remindme.ui.ReminderEntryField
             android:id="@+id/reminder_title_title"
-            style="@style/Reminder.Title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/global_margin_large"
-            android:layout_marginStart="@dimen/reminder_input_margin_start"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_xlarge"
-            android:text="@string/reminder_title_title"
-            app:layout_constraintStart_toStartOf="parent"
+            app:field_icon="@drawable/ic_notifications_24dp"
+            app:field_title="@string/reminder_title_title"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <EditText
-            android:id="@+id/reminder_title_text"
-            android:layout_width="0dp"
+        <com.physphil.android.remindme.ui.ReminderEntryField
+            android:id="@+id/reminder_body"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_xlarge"
-            android:inputType="textCapSentences"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/reminder_title_title"
+            android:layout_marginStart="@dimen/global_margin_large"
+            android:layout_marginTop="@dimen/global_margin_xlarge"
+            app:field_icon="@drawable/ic_view_headline_24dp"
+            app:field_title="@string/reminder_body_title"
             app:layout_constraintTop_toBottomOf="@id/reminder_title_title"/>
-
-        <ImageView
-            android:id="@+id/reminder_title_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/global_margin_large"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/reminder_title_title"
-            app:srcCompat="@drawable/ic_notifications_24dp"/>
-
-        <TextView
-            android:id="@+id/reminder_body_title"
-            style="@style/Reminder.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reminder_body_title"
-            app:layout_constraintStart_toStartOf="@id/reminder_title_title"
-            app:layout_constraintTop_toBottomOf="@id/reminder_title_text"/>
-
-        <EditText
-            android:id="@+id/reminder_body_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/global_margin_xlarge"
-            android:inputType="textMultiLine|textCapSentences"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/reminder_body_title"
-            app:layout_constraintTop_toBottomOf="@id/reminder_body_title"/>
-
-        <ImageView
-            android:id="@+id/reminder_body_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/global_margin_large"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/reminder_body_title"
-            app:srcCompat="@drawable/ic_view_headline_24dp"/>
 
         <Button
             android:id="@+id/reminder_time_btn"
@@ -76,8 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/global_margin_xxxlarge"
-            app:layout_constraintStart_toStartOf="@id/reminder_body_text"
-            app:layout_constraintTop_toBottomOf="@id/reminder_body_text"
+            app:layout_constraintStart_toStartOf="@id/reminder_body"
+            app:layout_constraintTop_toBottomOf="@id/reminder_body"
             tools:text="12:09pm"/>
 
         <ImageView
