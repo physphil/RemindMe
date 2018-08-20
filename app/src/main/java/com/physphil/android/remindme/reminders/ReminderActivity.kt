@@ -10,12 +10,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.DatePicker
 import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
@@ -68,13 +66,38 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
         setHomeArrowBackNavigation()
-        ButterKnife.bind(this)
+        bindViews()
         bindViewModel()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
+    }
+
+    private fun bindViews() {
+        ButterKnife.bind(this)
+
+        // TODO - clean this up, send clicks directly to viewmodel
+        timeView.setOnClickListener {
+            val calendar = viewModel.reminder.time
+            TimePickerDialog(this, R.style.Pickers, this,
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE), false).show()
+        }
+
+        dateView.setOnClickListener {
+            val calendar = viewModel.reminder.time
+            DatePickerDialog(this, R.style.Pickers, this,
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        recurrenceView.setOnClickListener {
+            RecurrencePickerDialog.newInstance(viewModel.reminder.recurrence)
+                    .show(supportFragmentManager, RecurrencePickerDialog.TAG)
+        }
     }
 
     private fun bindViewModel() {
@@ -106,7 +129,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.closeActivityEvent.observe(this, Observer { finish() })
     }
 
-    //todo - Move all these listeners to class of resepctive views
+    //todo - Move all these listeners to class of respective views
 //    @OnTextChanged(R.id.reminder_title_text)
 //    fun onTitleChanged(text: CharSequence) {
 //        viewModel.updateTitle(text.toString())
@@ -116,29 +139,6 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 //    fun onBodyChanged(text: CharSequence) {
 //        viewModel.updateBody(text.toString())
 //    }
-
-    @OnClick(R.id.reminder_time)
-    fun onTimeClicked() {
-        val calendar = viewModel.reminder.time
-        TimePickerDialog(this, R.style.Pickers, this,
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE), false).show()
-    }
-
-    @OnClick(R.id.reminder_date)
-    fun onDateClicked() {
-        val calendar = viewModel.reminder.time
-        DatePickerDialog(this, R.style.Pickers, this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show()
-    }
-
-    @OnClick(R.id.reminder_recurrence)
-    fun onRecurrenceClicked() {
-        RecurrencePickerDialog.newInstance(viewModel.reminder.recurrence)
-                .show(supportFragmentManager, RecurrencePickerDialog.TAG)
-    }
     // end todo
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

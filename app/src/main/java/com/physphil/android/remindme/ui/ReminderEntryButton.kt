@@ -5,10 +5,12 @@ import android.support.annotation.DrawableRes
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.physphil.android.remindme.R
 
 class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -19,6 +21,9 @@ class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: Att
 
     @BindView(R.id.reminder_entry_button)
     lateinit var button: Button
+
+    // TODO do this better?
+    private var listener: OnClickListener? = null
 
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.view_reminder_entry_button, this)
@@ -49,5 +54,14 @@ class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: Att
 
     fun setIcon(@DrawableRes icon: Int) {
         this.icon.setImageResource(icon)
+    }
+
+    override fun setOnClickListener(l: OnClickListener?) {
+        listener = l
+    }
+
+    @OnClick(R.id.reminder_entry_button, R.id.reminder_entry_button_icon)
+    protected fun onButtonClicked(view: View) {
+        listener?.onClick(view)
     }
 }
