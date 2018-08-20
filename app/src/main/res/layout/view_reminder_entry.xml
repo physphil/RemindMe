@@ -21,7 +21,7 @@
         android:id="@+id/reminder_entry_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="textCapSentences"
+        android:inputType="textMultiLine|textCapSentences"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/reminder_entry_title"
         app:layout_constraintTop_toBottomOf="@id/reminder_entry_title"/>

@@ -56,4 +56,9 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
     fun setIcon(@DrawableRes icon: Int) {
         this.icon.setImageResource(icon)
     }
+
+    fun setText(text: String) {
+        this.text.setText(text, TextView.BufferType.EDITABLE)
+        this.text.setSelection(text.length)
+    }
 }
