@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnTextChanged
 import com.physphil.android.remindme.R
 
 /**
@@ -27,6 +28,8 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
 
     @BindView(R.id.reminder_entry_icon)
     lateinit var icon: ImageView
+
+    private var textChangedListener: ((String) -> Unit)? = null
 
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.view_reminder_entry, this)
@@ -53,12 +56,21 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
         this.title.setText(title)
     }
 
+    fun setText(text: String) {
+        this.text.setText(text)
+    }
+
     fun setIcon(@DrawableRes icon: Int) {
         this.icon.setImageResource(icon)
     }
 
-    fun setText(text: String) {
-        this.text.setText(text, TextView.BufferType.EDITABLE)
-        this.text.setSelection(text.length)
+    fun setOnTextChangedListener(listener: (String) -> Unit) {
+        textChangedListener = listener
     }
+
+    @OnTextChanged(R.id.reminder_entry_field)
+    protected fun onTextChanged(text: CharSequence) {
+        textChangedListener?.invoke(text.toString())
+    }
+
 }

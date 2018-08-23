@@ -78,25 +78,24 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     private fun bindViews() {
         ButterKnife.bind(this)
 
-        // TODO - clean this up, send clicks directly to viewmodel
+        titleView.setOnTextChangedListener {
+            viewModel.updateTitle(it)
+        }
+
+        bodyView.setOnTextChangedListener {
+            viewModel.updateBody(it)
+        }
+
         timeView.setOnClickListener {
-            val calendar = viewModel.reminder.time
-            TimePickerDialog(this, R.style.Pickers, this,
-                    calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.MINUTE), false).show()
+            viewModel.openTimePicker()
         }
 
         dateView.setOnClickListener {
-            val calendar = viewModel.reminder.time
-            DatePickerDialog(this, R.style.Pickers, this,
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+            viewModel.openDatePicker()
         }
 
         recurrenceView.setOnClickListener {
-            RecurrencePickerDialog.newInstance(viewModel.reminder.recurrence)
-                    .show(supportFragmentManager, RecurrencePickerDialog.TAG)
+            viewModel.openRecurrencePicker()
         }
     }
 
@@ -124,22 +123,51 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         viewModel.getReminderDate().observe(this, Observer { it?.let { dateView.setText(it) } })
         viewModel.getReminderRecurrence().observe(this, Observer { it?.let { recurrenceView.setText(it) } })
         viewModel.getToolbarTitle().observe(this, Observer { it?.let { setToolbarTitle(it) } })
-        viewModel.clearNotificationEvent.observe(this, Observer { it?.let { notificationManager.cancel(it) } })
-        viewModel.confirmDeleteEvent.observe(this, Observer { DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG) })
-        viewModel.closeActivityEvent.observe(this, Observer { finish() })
+
+        viewModel.clearNotificationEvent.observe(this, Observer {
+            it?.let {
+                notificationManager.cancel(it)
+            }
+        })
+
+        viewModel.confirmDeleteEvent.observe(this, Observer {
+            DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
+        })
+
+        viewModel.closeActivityEvent.observe(this, Observer {
+            finish()
+        })
+
+        viewModel.openTimePickerEvent.observe(this, Observer {
+            it?.let {
+                TimePickerDialog(this,
+                        R.style.Pickers,
+                        this,
+                        it.hour,
+                        it.minute,
+                        false).show()
+            }
+        })
+
+        viewModel.openDatePickerEvent.observe(this, Observer {
+            it?.let {
+                DatePickerDialog(this,
+                        R.style.Pickers,
+                        this,
+                        it.year,
+                        it.month,
+                        it.day).show()
+
+            }
+        })
+
+        viewModel.openRecurrencePickerEvent.observe(this, Observer {
+            it?.let {
+                RecurrencePickerDialog.newInstance(it)
+                        .show(supportFragmentManager, RecurrencePickerDialog.TAG)
+            }
+        })
     }
-
-    //todo - Move all these listeners to class of respective views
-//    @OnTextChanged(R.id.reminder_title_text)
-//    fun onTitleChanged(text: CharSequence) {
-//        viewModel.updateTitle(text.toString())
-//    }
-
-//    @OnTextChanged(R.id.reminder_body_text)
-//    fun onBodyChanged(text: CharSequence) {
-//        viewModel.updateBody(text.toString())
-//    }
-    // end todo
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)

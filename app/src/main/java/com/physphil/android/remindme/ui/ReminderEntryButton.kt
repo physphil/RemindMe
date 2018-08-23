@@ -22,7 +22,6 @@ class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: Att
     @BindView(R.id.reminder_entry_button)
     lateinit var button: Button
 
-    // TODO do this better?
     private var listener: OnClickListener? = null
 
     init {
