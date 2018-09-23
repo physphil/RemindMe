@@ -76,11 +76,11 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return if (viewType == VIEW_TYPE_HEADER) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.header_reminder_list, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.view_header_reminder_list, parent, false)
             HeaderViewHolder(view)
         }
         else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.row_reminder_list, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.view_row_reminder_list, parent, false)
             ReminderViewHolder(view)
         }
     }

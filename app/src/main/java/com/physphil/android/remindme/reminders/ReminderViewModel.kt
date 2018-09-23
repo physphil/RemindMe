@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.view.MenuItem
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
@@ -30,6 +31,9 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
     val clearNotificationEvent = SingleLiveEvent<Int>()
     val confirmDeleteEvent = SingleLiveEvent<Void>()
     val closeActivityEvent = SingleLiveEvent<Void>()
+    val openTimePickerEvent = SingleLiveEvent<Time>()
+    val openDatePickerEvent = SingleLiveEvent<Date>()
+    val openRecurrencePickerEvent = SingleLiveEvent<Recurrence>()
 
     private val reminderTime = MutableLiveData<String>()
     private val reminderDate = MutableLiveData<String>()
@@ -69,6 +73,29 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
     fun updateRecurrence(recurrence: Recurrence) {
         reminder.recurrence = recurrence
         reminderRecurrence.value = recurrence.displayString
+    }
+
+    fun openTimePicker() {
+        with(reminder.time) {
+            openTimePickerEvent.postValue(Time(
+                    hour = get(Calendar.HOUR_OF_DAY),
+                    minute = get(Calendar.MINUTE)
+            ))
+        }
+    }
+
+    fun openDatePicker() {
+        with(reminder.time) {
+            openDatePickerEvent.postValue(Date(
+                    year = get(Calendar.YEAR),
+                    month = get(Calendar.MONTH),
+                    day = get(Calendar.DAY_OF_MONTH)
+            ))
+        }
+    }
+
+    fun openRecurrencePicker() {
+        openRecurrencePickerEvent.postValue(reminder.recurrence)
     }
 
     fun saveReminder() {
@@ -114,4 +141,7 @@ class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, priv
                 reminder.body,
                 reminder.recurrence.id)
     }
+
+    data class Time(val hour: Int, val minute: Int)
+    data class Date(val year: Int, val month: Int, val day: Int)
 }
