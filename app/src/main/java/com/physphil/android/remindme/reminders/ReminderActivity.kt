@@ -26,10 +26,9 @@ import com.physphil.android.remindme.util.getDisplayTime
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.util.Calendar
 
 /**
- * Create a new observableReminder or edit and existing one.
+ * Create a new [Reminder] or edit and existing one.
  *
  * Copyright (c) 2017 Phil Shadlyn
  */
