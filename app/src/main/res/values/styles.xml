@@ -16,7 +16,6 @@
         <item name="android:paddingEnd">@dimen/global_margin_small</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginTop">@dimen/global_margin_xxlarge</item>
     </style>
 
     <style name="ReminderListTime">
