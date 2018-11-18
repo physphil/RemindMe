@@ -1,8 +1,8 @@
 package com.physphil.android.remindme.room
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.physphil.android.remindme.DATABASE_VERSION
 import com.physphil.android.remindme.room.entities.Reminder
 

@@ -3,8 +3,8 @@ package com.physphil.android.remindme.reminders
 import android.app.DatePickerDialog
 import android.app.NotificationManager
 import android.app.TimePickerDialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle

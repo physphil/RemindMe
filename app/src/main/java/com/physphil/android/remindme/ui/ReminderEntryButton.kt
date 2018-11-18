@@ -1,8 +1,8 @@
 package com.physphil.android.remindme.ui
 
 import android.content.Context
-import android.support.annotation.DrawableRes
-import android.support.constraint.ConstraintLayout
+import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View

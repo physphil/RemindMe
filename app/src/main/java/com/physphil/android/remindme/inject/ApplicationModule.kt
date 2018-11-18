@@ -1,6 +1,6 @@
 package com.physphil.android.remindme.inject
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import com.physphil.android.remindme.DATABASE_NAME
 import com.physphil.android.remindme.MainActivityViewModelFactory
