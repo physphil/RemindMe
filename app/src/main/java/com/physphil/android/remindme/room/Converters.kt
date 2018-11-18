@@ -1,6 +1,6 @@
 package com.physphil.android.remindme.room
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import com.physphil.android.remindme.models.Recurrence
 import java.util.*
 
