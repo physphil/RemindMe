@@ -1,18 +1,16 @@
 package com.physphil.android.remindme.ui
 
 import android.content.Context
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.constraint.ConstraintLayout
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnTextChanged
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.physphil.android.remindme.R
+import com.physphil.android.remindme.util.setTextMoveCursorToEnd
+import kotlinx.android.synthetic.main.view_reminder_entry.view.*
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
@@ -20,20 +18,10 @@ import com.physphil.android.remindme.R
 class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    @BindView(R.id.reminder_entry_title)
-    lateinit var title: TextView
-
-    @BindView(R.id.reminder_entry_field)
-    lateinit var text: EditText
-
-    @BindView(R.id.reminder_entry_icon)
-    lateinit var icon: ImageView
-
     private var textChangedListener: ((String) -> Unit)? = null
 
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.view_reminder_entry, this)
-        ButterKnife.bind(this, view)
 
         attrs?.let {
             val ta = context.obtainStyledAttributes(attrs, R.styleable.ReminderEntryField)
@@ -50,27 +38,34 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
 
             ta.recycle()
         }
+
+        view.reminderEntryContentView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(text: Editable?) {
+                textChangedListener?.invoke(text.toString())
+            }
+
+            override fun beforeTextChanged(text: CharSequence?, s: Int, c: Int, a: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     fun setTitle(@StringRes title: Int) {
-        this.title.setText(title)
+        reminderEntryTitleView.setText(title)
     }
 
-    fun setText(text: String) {
-        this.text.setText(text)
+    fun setText(text: String, moveCursorToEnd: Boolean = false) {
+        when(moveCursorToEnd) {
+            true -> reminderEntryContentView.setTextMoveCursorToEnd(text)
+            false -> reminderEntryContentView.setText(text)
+        }
     }
 
     fun setIcon(@DrawableRes icon: Int) {
-        this.icon.setImageResource(icon)
+        reminderEntryIconView.setImageResource(icon)
     }
 
     fun setOnTextChangedListener(listener: (String) -> Unit) {
         textChangedListener = listener
     }
-
-    @OnTextChanged(R.id.reminder_entry_field)
-    protected fun onTextChanged(text: CharSequence) {
-        textChangedListener?.invoke(text.toString())
-    }
-
 }

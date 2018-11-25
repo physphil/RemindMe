@@ -1,10 +1,10 @@
 package com.physphil.android.remindme.reminders
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.content.Context
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import android.view.MenuItem
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo

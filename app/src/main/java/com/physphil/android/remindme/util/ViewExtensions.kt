@@ -3,6 +3,7 @@ package com.physphil.android.remindme.util
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.EditText
 
 /**
  * View-related extension methods
@@ -16,4 +17,12 @@ import android.view.View.VISIBLE
  */
 fun View.setVisibility(visible: Boolean) {
     visibility = if (visible) VISIBLE else GONE
+}
+
+/**
+ * Sets the text on the [EditText], then moves the cursor to the end of the field.
+ */
+fun EditText.setTextMoveCursorToEnd(text: CharSequence) {
+    setText(text)
+    setSelection(text.length)
 }

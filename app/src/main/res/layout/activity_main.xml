@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,31 +7,31 @@
     android:layout_height="match_parent"
     tools:context="com.physphil.android.remindme.MainActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/reminder_list_recyclerview_container"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/reminderListRecyclerViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/reminder_list_recyclerview"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reminderListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/reminder_list_fab"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/reminderListFabView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/global_margin_large"
             android:src="@drawable/ic_add_24dp"
             app:backgroundTint="@color/colorPrimary"
-            app:layout_anchor="@id/reminder_list_recyclerview"
+            app:layout_anchor="@id/reminderListRecyclerView"
             app:layout_anchorGravity="bottom|end"
             app:layout_behavior="com.physphil.android.remindme.ui.ScrollAwareFabBehaviour"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.physphil.android.remindme.ui.ProgressSpinner
-        android:id="@+id/reminder_list_spinner"
+        android:id="@+id/reminderListSpinnerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -39,7 +39,7 @@
         tools:visibility="visible"/>
 
     <TextView
-        android:id="@+id/reminder_list_empty"
+        android:id="@+id/reminderListEmptyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/global_margin_xlarge"
@@ -57,4 +57,4 @@
         app:layout_constraintVertical_bias="0.3"
         tools:visibility="visible"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
