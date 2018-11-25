@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/reminder_entry_button_icon"
+        android:id="@+id/reminderEntryButtonIconView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,12 +16,12 @@
         tools:srcCompat="@drawable/ic_time_24dp"/>
 
     <Button
-        android:id="@+id/reminder_entry_button"
+        android:id="@+id/reminderEntryButtonView"
         style="@style/Button.Large.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/global_margin_xlarge"
-        app:layout_constraintStart_toEndOf="@id/reminder_entry_button_icon"
+        app:layout_constraintStart_toEndOf="@id/reminderEntryButtonIconView"
         tools:text="12:09pm"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

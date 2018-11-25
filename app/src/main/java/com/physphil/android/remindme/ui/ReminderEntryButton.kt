@@ -1,32 +1,20 @@
 package com.physphil.android.remindme.ui
 
 import android.content.Context
-import androidx.annotation.DrawableRes
-import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.physphil.android.remindme.R
+import kotlinx.android.synthetic.main.view_reminder_entry_button.view.*
 
 class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
-
-    @BindView(R.id.reminder_entry_button_icon)
-    lateinit var icon: ImageView
-
-    @BindView(R.id.reminder_entry_button)
-    lateinit var button: Button
 
     private var listener: OnClickListener? = null
 
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.view_reminder_entry_button, this)
-        ButterKnife.bind(this, view)
 
         attrs?.let {
             val ta = context.obtainStyledAttributes(attrs, R.styleable.ReminderEntryButton)
@@ -41,10 +29,18 @@ class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: Att
 
             ta.recycle()
         }
+
+        view.reminderEntryButtonView.setOnClickListener {
+            listener?.onClick(it)
+        }
+
+        view.reminderEntryButtonIconView.setOnClickListener {
+            listener?.onClick(it)
+        }
     }
 
     fun setText(text: String) {
-        this.button.text = text
+        reminderEntryButtonView.text = text
     }
 
     fun setText(res: Int) {
@@ -52,15 +48,10 @@ class ReminderEntryButton @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     fun setIcon(@DrawableRes icon: Int) {
-        this.icon.setImageResource(icon)
+        reminderEntryButtonIconView.setImageResource(icon)
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
         listener = l
-    }
-
-    @OnClick(R.id.reminder_entry_button, R.id.reminder_entry_button_icon)
-    protected fun onButtonClicked(view: View) {
-        listener?.onClick(view)
     }
 }

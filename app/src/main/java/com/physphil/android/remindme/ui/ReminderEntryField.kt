@@ -37,17 +37,17 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
             }
 
             ta.recycle()
-
-            view.reminderEntryContentView.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(text: Editable?) {
-                    textChangedListener?.invoke(text.toString())
-                }
-
-                override fun beforeTextChanged(text: CharSequence?, s: Int, c: Int, a: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            })
         }
+
+        view.reminderEntryContentView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(text: Editable?) {
+                textChangedListener?.invoke(text.toString())
+            }
+
+            override fun beforeTextChanged(text: CharSequence?, s: Int, c: Int, a: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     fun setTitle(@StringRes title: Int) {
