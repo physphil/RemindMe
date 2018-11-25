@@ -3,8 +3,6 @@ package com.physphil.android.remindme.reminders
 import android.app.DatePickerDialog
 import android.app.NotificationManager
 import android.app.TimePickerDialog
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,15 +10,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
-import butterknife.BindView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.ButterKnife
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
-import com.physphil.android.remindme.ui.ReminderEntryButton
-import com.physphil.android.remindme.ui.ReminderEntryField
 import com.physphil.android.remindme.util.getDisplayDate
 import com.physphil.android.remindme.util.getDisplayTime
 import io.reactivex.android.schedulers.AndroidSchedulers
