@@ -13,6 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
 import com.physphil.android.remindme.R
+import com.physphil.android.remindme.util.setTextMoveCursorToEnd
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
@@ -56,8 +57,11 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
         this.title.setText(title)
     }
 
-    fun setText(text: String) {
-        this.text.setText(text)
+    fun setText(text: String, moveCursorToEnd: Boolean = false) {
+        when(moveCursorToEnd) {
+            true -> this.text.setTextMoveCursorToEnd(text)
+            false -> this.text.setText(text)
+        }
     }
 
     fun setIcon(@DrawableRes icon: Int) {
