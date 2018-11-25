@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <com.physphil.android.remindme.ui.ReminderEntryField
-            android:id="@+id/reminder_title"
+            android:id="@+id/reminderTitleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_xlarge"
@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <com.physphil.android.remindme.ui.ReminderEntryField
-            android:id="@+id/reminder_body"
+            android:id="@+id/reminderBodyView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_xlarge"
@@ -34,7 +34,7 @@
             app:field_title="@string/reminder_body_title"/>
 
         <com.physphil.android.remindme.ui.ReminderEntryButton
-            android:id="@+id/reminder_time"
+            android:id="@+id/reminderTimeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_large"
@@ -43,7 +43,7 @@
             app:button_icon="@drawable/ic_time_24dp"/>
 
         <com.physphil.android.remindme.ui.ReminderEntryButton
-            android:id="@+id/reminder_date"
+            android:id="@+id/reminderDateView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/global_margin_large"
@@ -53,7 +53,7 @@
             tools:button_text="Jan 26, 2018"/>
 
         <com.physphil.android.remindme.ui.ReminderEntryButton
-            android:id="@+id/reminder_recurrence"
+            android:id="@+id/reminderRecurrenceView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/global_margin_xlarge"

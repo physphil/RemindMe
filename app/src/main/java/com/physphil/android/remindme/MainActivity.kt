@@ -2,33 +2,27 @@ package com.physphil.android.remindme
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.room.entities.Reminder
-import com.physphil.android.remindme.ui.ProgressSpinner
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClickListener,
@@ -37,18 +31,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
     @Inject
     lateinit var viewModelFactory: MainActivityViewModelFactory
-
-    @BindView(R.id.reminder_list_recyclerview)
-    lateinit var recyclerView: RecyclerView
-
-    @BindView(R.id.reminder_list_fab)
-    lateinit var fab: FloatingActionButton
-
-    @BindView(R.id.reminder_list_spinner)
-    lateinit var spinner: ProgressSpinner
-
-    @BindView(R.id.reminder_list_empty)
-    lateinit var empty: TextView
 
     private val disposables = CompositeDisposable()
     private val adapter = ReminderListAdapter()
@@ -59,7 +41,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         (application as RemindMeApplication).applicationComponent.inject(this)
-        ButterKnife.bind(this)
         setupRecyclerview()
 
         // Create required notification channel on Android 8.0+
@@ -69,6 +50,10 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
 
         bindViewModel()
+
+        reminderListFabView.setOnClickListener {
+            startActivity(ReminderActivity.intent(this))
+        }
     }
 
     override fun onDestroy() {
@@ -78,14 +63,14 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
     private fun setupRecyclerview() {
         adapter.setOnClickListener(this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.itemAnimator = DefaultItemAnimator()
+        reminderListRecyclerView.adapter = adapter
+        reminderListRecyclerView.layoutManager = LinearLayoutManager(this)
+        reminderListRecyclerView.itemAnimator = DefaultItemAnimator()
 
         // Setup list divider
         val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
         val divider = ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
-        recyclerView.addItemDecoration(divider)
+        reminderListRecyclerView.addItemDecoration(divider)
 
         // Setup random list header
         val headers = resources.getStringArray(R.array.reminder_list_headers)
@@ -106,15 +91,10 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
                     // onNext
                     adapter.setReminderList(it)
                     viewModel.reminderListUpdated(it)
-                    fab.show()  // make sure the fab is always showing when the list is updated
+                    reminderListFabView.show()  // make sure the fab is always showing when the list is updated
                 }, {
                     // onError
                 }))
-    }
-
-    @OnClick(R.id.reminder_list_fab)
-    fun onAddReminderClick() {
-        startActivity(ReminderActivity.intent(this))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -135,11 +115,11 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
 
     // region ViewModel observers
     private val spinnerVisibilityObserver = Observer<Boolean> {
-        it?.let { spinner.setVisibility(it) }
+        it?.let { reminderListSpinnerView.setVisibility(it) }
     }
 
     private val emptyVisibilityObserver = Observer<Boolean> {
-        it?.let { empty.setVisibility(it) }
+        it?.let { reminderListEmptyView.setVisibility(it) }
     }
 
     private val deleteNotificationsObserver = Observer<Int?> {

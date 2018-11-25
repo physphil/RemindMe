@@ -2,7 +2,7 @@ package com.physphil.android.remindme.ui
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Copyright (c) 2018 Phil Shadlyn

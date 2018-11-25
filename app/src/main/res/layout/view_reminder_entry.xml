@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/reminder_entry_title"
+        android:id="@+id/reminderEntryTitleView"
         style="@style/Reminder.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,20 +18,20 @@
         tools:text="@string/reminder_title_title"/>
 
     <EditText
-        android:id="@+id/reminder_entry_field"
+        android:id="@+id/reminderEntryContentView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine|textCapSentences"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/reminder_entry_title"
-        app:layout_constraintTop_toBottomOf="@id/reminder_entry_title"/>
+        app:layout_constraintStart_toStartOf="@id/reminderEntryTitleView"
+        app:layout_constraintTop_toBottomOf="@id/reminderEntryTitleView"/>
 
     <ImageView
-        android:id="@+id/reminder_entry_icon"
+        android:id="@+id/reminderEntryIconView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/reminder_entry_title"
+        app:layout_constraintTop_toTopOf="@id/reminderEntryTitleView"
         tools:srcCompat="@drawable/ic_notifications_24dp"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
