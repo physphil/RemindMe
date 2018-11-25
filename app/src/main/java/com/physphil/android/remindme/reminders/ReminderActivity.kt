@@ -12,7 +12,6 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import butterknife.ButterKnife
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
@@ -58,8 +57,6 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     }
 
     private fun bindViews() {
-        ButterKnife.bind(this)
-
         reminderTitleView.setOnTextChangedListener {
             viewModel.updateTitle(it)
         }

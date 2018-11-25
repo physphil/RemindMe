@@ -12,8 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
@@ -43,7 +41,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         (application as RemindMeApplication).applicationComponent.inject(this)
-        ButterKnife.bind(this)
         setupRecyclerview()
 
         // Create required notification channel on Android 8.0+
@@ -53,6 +50,10 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         }
 
         bindViewModel()
+
+        reminderListFabView.setOnClickListener {
+            startActivity(ReminderActivity.intent(this))
+        }
     }
 
     override fun onDestroy() {
@@ -94,11 +95,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
                 }, {
                     // onError
                 }))
-    }
-
-    @OnClick(R.id.reminderListFabView)
-    fun onAddReminderClick() {
-        startActivity(ReminderActivity.intent(this))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
