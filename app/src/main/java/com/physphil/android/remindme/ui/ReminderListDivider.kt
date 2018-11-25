@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class ReminderListDivider(private val divider: Drawable) : RecyclerView.ItemDecoration() {
 
-    override fun onDraw(c: Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val dividerLeft = parent.paddingLeft
         val dividerRight = parent.width - parent.paddingRight
 
@@ -21,7 +21,7 @@ class ReminderListDivider(private val divider: Drawable) : RecyclerView.ItemDeco
 
             // Also, don't draw the divider for the entry in the first position
             if (position > 0) {
-                val params: androidx.recyclerview.widget.RecyclerView.LayoutParams = child.layoutParams as androidx.recyclerview.widget.RecyclerView.LayoutParams
+                val params: RecyclerView.LayoutParams = child.layoutParams as RecyclerView.LayoutParams
                 val dividerTop = child.bottom + params.bottomMargin
                 val dividerBottom = dividerTop + divider.intrinsicHeight
 
