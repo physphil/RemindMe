@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/global_margin_xlarge">
 
     <Button
-        android:id="@+id/reminder_list_delete"
+        android:id="@+id/reminderItemDeleteView"
         style="@style/Button.Small.Accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,43 +21,43 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/reminder_list_date"
+        android:id="@+id/reminderItemDateView"
         style="@style/ReminderListTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_large"
         android:drawableStart="@drawable/ic_date_range_24dp"
-        app:layout_constraintEnd_toStartOf="@id/reminder_list_delete"
+        app:layout_constraintEnd_toStartOf="@id/reminderItemDeleteView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Tuesday January 16, 2018"/>
 
     <TextView
-        android:id="@+id/reminder_list_time"
+        android:id="@+id/reminderItemTimeView"
         style="@style/ReminderListTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_typical"
         android:drawableStart="@drawable/ic_time_24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminder_list_date"
+        app:layout_constraintTop_toBottomOf="@+id/reminderItemDateView"
         tools:text="9:30 AM"/>
 
     <TextView
-        android:id="@+id/reminder_list_recurrence"
+        android:id="@+id/reminderItemRecurrenceView"
         style="@style/ReminderListTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_xlarge"
         android:drawableStart="@drawable/ic_repeat_24dp"
-        app:layout_constraintEnd_toStartOf="@id/reminder_list_delete"
-        app:layout_constraintStart_toEndOf="@id/reminder_list_time"
-        app:layout_constraintTop_toTopOf="@id/reminder_list_time"
+        app:layout_constraintEnd_toStartOf="@id/reminderItemDeleteView"
+        app:layout_constraintStart_toEndOf="@id/reminderItemTimeView"
+        app:layout_constraintTop_toTopOf="@id/reminderItemTimeView"
         tools:text="Yearly"/>
 
     <TextView
-        android:id="@+id/reminder_list_title"
+        android:id="@+id/reminderItemTitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_large"
@@ -65,11 +65,11 @@
         android:textSize="@dimen/text_size_reminder_list_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminder_list_time"
+        app:layout_constraintTop_toBottomOf="@+id/reminderItemTimeView"
         tools:text="Remind me to do this!!"/>
 
     <TextView
-        android:id="@+id/reminder_list_body"
+        android:id="@+id/reminderItemBodyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_typical"
@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminder_list_title"
+        app:layout_constraintTop_toBottomOf="@+id/reminderItemTitleView"
         tools:text="blah blah asl;dkfj eihf ojfk fuiew fs asdlj eijf iejfk jhfuehfhf"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
