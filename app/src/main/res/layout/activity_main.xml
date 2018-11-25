@@ -8,30 +8,30 @@
     tools:context="com.physphil.android.remindme.MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/reminder_list_recyclerview_container"
+        android:id="@+id/reminderListRecyclerViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reminder_list_recyclerview"
+            android:id="@+id/reminderListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/reminder_list_fab"
+            android:id="@+id/reminderListFabView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/global_margin_large"
             android:src="@drawable/ic_add_24dp"
             app:backgroundTint="@color/colorPrimary"
-            app:layout_anchor="@id/reminder_list_recyclerview"
+            app:layout_anchor="@id/reminderListRecyclerView"
             app:layout_anchorGravity="bottom|end"
             app:layout_behavior="com.physphil.android.remindme.ui.ScrollAwareFabBehaviour"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.physphil.android.remindme.ui.ProgressSpinner
-        android:id="@+id/reminder_list_spinner"
+        android:id="@+id/reminderListSpinnerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -39,7 +39,7 @@
         tools:visibility="visible"/>
 
     <TextView
-        android:id="@+id/reminder_list_empty"
+        android:id="@+id/reminderListEmptyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/global_margin_xlarge"
