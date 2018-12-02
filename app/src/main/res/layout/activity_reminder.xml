@@ -21,7 +21,11 @@
             android:layout_marginTop="@dimen/global_margin_xlarge"
             app:field_icon="@drawable/ic_notifications_24dp"
             app:field_title="@string/reminder_title_title"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <requestFocus/>
+
+        </com.physphil.android.remindme.ui.ReminderEntryField>
 
         <com.physphil.android.remindme.ui.ReminderEntryField
             android:id="@+id/reminderBodyView"
