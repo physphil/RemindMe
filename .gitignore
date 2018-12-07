@@ -1,8 +1,10 @@
 *.iml
+*.aab
 .gradle
 /local.properties
 /.idea/workspace.xml
 /.idea/vcs.xml
+/.idea/assetWizardSettings.xml
 /.idea/libraries
 /.idea/markdown-navigator.xml
 /.idea/markdown-navigator
