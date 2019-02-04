@@ -14,6 +14,7 @@ import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.ReminderActivity
+import com.physphil.android.remindme.util.Notification
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -41,7 +42,7 @@ class ShowNotificationJob : Job() {
 
             // Create backstack when opening Reminder details, after user clicks on notification
             // PendingIntent requires a unique ID, so that the notifications can be cleared individually by ID
-            val notificationId = System.currentTimeMillis().toInt()
+            val notificationId = Notification.nextId
             val intent = ReminderActivity.intent(context, id)
             val pi = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(intent)
@@ -109,7 +110,7 @@ class ShowNotificationJob : Job() {
         }
 
         // Request codes must be unique in order to create unique PendingIntents
-        return PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(context, Notification.nextId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private enum class SnoozeDuration(val offset: Long) {
