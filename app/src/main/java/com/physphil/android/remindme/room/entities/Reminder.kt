@@ -20,10 +20,48 @@ import java.util.UUID
  * Copyright (c) 2017 Phil Shadlyn
  */
 @Entity(tableName = TABLE_REMINDERS)
-data class Reminder(@PrimaryKey @ColumnInfo var id: String = UUID.randomUUID().toString(),
-        @ColumnInfo(name = REMINDER_COLUMN_TITLE) var title: String = "",
-        @ColumnInfo(name = REMINDER_COLUMN_TEXT) var body: String = "",
-        @ColumnInfo(name = REMINDER_COLUMN_TIME) var time: Calendar = Calendar.getInstance(),
-        @ColumnInfo(name = REMINDER_COLUMN_RECURRENCE) var recurrence: Recurrence = Recurrence.NONE,
-        @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID) var externalId: Int = 0,
-        @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID) var notificationId: Int = 0)
+data class Reminder(
+    /**
+     * The unique id of the Reminder.
+     */
+    @PrimaryKey
+    @ColumnInfo
+    var id: String = UUID.randomUUID().toString(),
+
+    /**
+     * The Reminder's title.
+     */
+    @ColumnInfo(name = REMINDER_COLUMN_TITLE)
+    var title: String = "",
+
+    /**
+     * The Reminder's body content.
+     */
+    @ColumnInfo(name = REMINDER_COLUMN_TEXT)
+    var body: String = "",
+
+    /**
+     * A [Calendar] instance representing the Reminder's time.
+     */
+    @ColumnInfo(name = REMINDER_COLUMN_TIME)
+    var time: Calendar = Calendar.getInstance(),
+
+    /**
+     * The [Recurrence] of the Reminder (hourly, weekly, etc).
+     */
+    @ColumnInfo(name = REMINDER_COLUMN_RECURRENCE)
+    var recurrence: Recurrence = Recurrence.NONE,
+
+    /**
+     * The id of the [ShowNotificationJob] responsible for displaying an Android notification for this Reminder.
+     */
+    @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID)
+    var externalId: Int = 0,
+
+    /**
+     * The id of the Android notfication that was displayed to the user for this Reminder. If this field
+     * equals 0 a notification has not yet been shown for this Reminder.
+     */
+    @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID)
+    var notificationId: Int = 0
+)

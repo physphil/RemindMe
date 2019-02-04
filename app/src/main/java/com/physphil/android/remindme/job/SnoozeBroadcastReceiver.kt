@@ -4,13 +4,16 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.room.entities.Reminder
 import java.util.Calendar
 import javax.inject.Inject
 
+/**
+ * A [BroadcastReceiver] implementation that is run when a user selects a snooze duration for a
+ * displayed [Reminder].
+ */
 class SnoozeBroadcastReceiver : BroadcastReceiver() {
 
     @Inject
@@ -32,7 +35,7 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
             timeInMillis += offset
         }
         val snoozedReminder = Reminder(title = title, body = text, time = calendar)
-        snoozedReminder.notificationId = scheduler.scheduleShowNotificationJob(snoozedReminder)
+        snoozedReminder.externalId = scheduler.scheduleShowNotificationJob(snoozedReminder)
         repo.insertReminder(snoozedReminder)
 
         // Dismiss existing notification
