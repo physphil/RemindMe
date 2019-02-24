@@ -1,5 +1,6 @@
 package com.physphil.android.remindme.data
 
+import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.room.ReminderDao
 import com.physphil.android.remindme.room.entities.Reminder
 import io.reactivex.Completable
@@ -7,6 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.Calendar
 
 /**
  * Repository to handle fetching and saving Reminder data
@@ -18,11 +20,16 @@ class ReminderRepo(private val dao: ReminderDao) {
     /**
      * Return a [Reminder] with the given id, wrapped in a [Flowable] object to observe
      * @param id of the Reminder to return
+     * @param presetTime the [PresetTime] to initially set the for the Reminder (optional)
      * @return the Reminder wrapped in a [Flowable], or a new empty Reminder if no id is supplied
      */
-    fun getReminderByIdOrNew(id: String? = null): Flowable<Reminder> {
+    fun getReminderByIdOrNew(id: String? = null, presetTime: PresetTime? = null): Flowable<Reminder> {
         return if (id == null) {
-            Flowable.just(Reminder())
+            Flowable.just(
+                Reminder(
+                    time = presetTime?.time ?: Calendar.getInstance()
+                )
+            )
         } else {
             dao.getReminderById(id)
         }

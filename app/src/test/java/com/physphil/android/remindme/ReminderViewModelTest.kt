@@ -65,7 +65,7 @@ class ReminderViewModelTest {
         `when`(scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id, reminder.title, reminder.body, reminder.recurrence.id)).thenReturn(NEW_EXTERNAL_ID)
 
-        viewModel = ReminderViewModel(reminder.id, repo, scheduler)
+        viewModel = ReminderViewModel(reminder.id, null, repo, scheduler)
         viewModel.reminder = reminder
     }
 

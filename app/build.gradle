@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -8,8 +9,8 @@ android {
         applicationId "com.physphil.android.remindme"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 9060
-        versionName "0.9.6"
+        versionCode 9070
+        versionName "0.9.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -58,5 +59,3 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestImplementation 'androidx.arch.core:core-testing:2.0.0'
 }
-
-apply plugin: 'kotlin-android-extensions'

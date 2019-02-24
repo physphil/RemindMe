@@ -36,6 +36,9 @@
     <string name="spinner_loading_reminders">Grabbing Your Reminders…</string>
 
     <string name="shortcut_new_reminder_title">New Reminder</string>
+    <string name="shortcut_eod_title">End of day</string>
+    <string name="shortcut_tonight_title">Tonight</string>
+    <string name="shortcut_tomorrow_morning_title">Tomorrow morning</string>
 
     <string name="dialog_title_delete_all_reminders">Delete All Reminders?</string>
     <string name="dialog_message_delete_all_reminders">Are you sure you want to delete all your saved reminders?</string>

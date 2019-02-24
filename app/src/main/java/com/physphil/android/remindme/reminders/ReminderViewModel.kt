@@ -1,14 +1,14 @@
 package com.physphil.android.remindme.reminders
 
+import android.content.Context
+import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.content.Context
-import androidx.annotation.VisibleForTesting
-import android.view.MenuItem
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
+import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
@@ -20,14 +20,19 @@ import java.util.Calendar
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
-class ReminderViewModel(id: String? = null, private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+class ReminderViewModel(
+    id: String? = null,
+    time: PresetTime? = null,
+    private val repo: ReminderRepo,
+    private val scheduler: JobRequestScheduler
+) : ViewModel() {
 
     /** Reminder object retrieved from database, so it can be updated later */
     lateinit var reminder: Reminder
     private val isNewReminder = (id == null)
 
     /** Flowable containing Reminder saved in database */
-    val observableReminder: Flowable<Reminder> = repo.getReminderByIdOrNew(id)
+    val observableReminder: Flowable<Reminder> = repo.getReminderByIdOrNew(id, time)
     val clearNotificationEvent = SingleLiveEvent<Int>()
     val confirmDeleteEvent = SingleLiveEvent<Void>()
     val closeActivityEvent = SingleLiveEvent<Void>()
