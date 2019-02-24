@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
+import com.physphil.android.remindme.models.PresetTime
 import javax.inject.Inject
 
 /**
@@ -12,7 +13,11 @@ import javax.inject.Inject
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderViewModelFactory(private val application: RemindMeApplication, private val id: String? = null) : ViewModelProvider.Factory {
+class ReminderViewModelFactory(
+    private val application: RemindMeApplication,
+    private val id: String? = null,
+    private val time: PresetTime? = null
+) : ViewModelProvider.Factory {
 
     // Do injection here as we require the id when creating the factory, and it is unknown at compile time
     @Inject
@@ -24,7 +29,7 @@ class ReminderViewModelFactory(private val application: RemindMeApplication, pri
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
             application.applicationComponent.inject(this)
-            return ReminderViewModel(id, repo, scheduler) as T
+            return ReminderViewModel(id, time, repo, scheduler) as T
         }
 
         throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")

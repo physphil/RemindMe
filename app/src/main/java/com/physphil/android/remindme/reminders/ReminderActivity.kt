@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
+import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.util.getDisplayDate
@@ -38,8 +39,14 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     private val viewModel: ReminderViewModel by lazy {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID)
-        ViewModelProviders.of(this, ReminderViewModelFactory(application as RemindMeApplication, id))
-                .get(ReminderViewModel::class.java)
+        val presetTime = PresetTime.fromId(
+            intent.getIntExtra(EXTRA_REMINDER_PRESET_TIME, PresetTime.ID_UNKNOWN)
+        )
+        ViewModelProviders.of(
+            this,
+            ReminderViewModelFactory(application as RemindMeApplication, id, presetTime)
+        )
+            .get(ReminderViewModel::class.java)
     }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
@@ -206,6 +213,7 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     companion object {
         private const val EXTRA_REMINDER_ID = "com.physphil.android.remindme.EXTRA_REMINDER_ID"
+        private const val EXTRA_REMINDER_PRESET_TIME = "com.physphil.android.remindme.EXTRA_REMINDER_PRESET_TIME"
 
         fun intent(context: Context, reminderId: String? = null): Intent {
             val intent = Intent(context, ReminderActivity::class.java)
