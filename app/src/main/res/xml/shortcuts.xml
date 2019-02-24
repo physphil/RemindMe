@@ -17,7 +17,7 @@
             android:targetPackage="com.physphil.android.remindme"/>
     </shortcut>
     <shortcut
-        android:icon="@drawable/ic_shortcut_new_reminder"
+        android:icon="@drawable/ic_shortcut_eod"
         android:shortcutId="shortcut_eod"
         android:shortcutLongLabel="@string/shortcut_eod_title"
         android:shortcutShortLabel="@string/shortcut_eod_title">
@@ -35,7 +35,7 @@
         </intent>
     </shortcut>
     <shortcut
-        android:icon="@drawable/ic_shortcut_new_reminder"
+        android:icon="@drawable/ic_shortcut_tonight"
         android:shortcutId="shortcut_tonight"
         android:shortcutLongLabel="@string/shortcut_tonight_title"
         android:shortcutShortLabel="@string/shortcut_tonight_title">
@@ -53,7 +53,7 @@
         </intent>
     </shortcut>
     <shortcut
-        android:icon="@drawable/ic_shortcut_new_reminder"
+        android:icon="@drawable/ic_shortcut_tomorrow_morning"
         android:shortcutId="shortcut_tomorrow_morning"
         android:shortcutLongLabel="@string/shortcut_tomorrow_morning_title"
         android:shortcutShortLabel="@string/shortcut_tomorrow_morning_title">
