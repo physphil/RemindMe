@@ -20,7 +20,7 @@ class DeleteAllDialogFragment : DialogFragment() {
 
     private var listener: Listener? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Listener) {
             listener = context
@@ -36,13 +36,13 @@ class DeleteAllDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(activity!!)
-                .setTitle(R.string.dialog_title_delete_all_reminders)
-                .setMessage(R.string.dialog_message_delete_all_reminders)
-                .setPositiveButton(R.string.btn_yes, { _, _ ->
-                    listener?.onDeleteAllReminders()
-                })
-                .setNegativeButton(R.string.btn_no, null)
-                .show()
+            .setTitle(R.string.dialog_title_delete_all_reminders)
+            .setMessage(R.string.dialog_message_delete_all_reminders)
+            .setPositiveButton(R.string.btn_yes) { _, _ ->
+                listener?.onDeleteAllReminders()
+            }
+            .setNegativeButton(R.string.btn_no, null)
+            .show()
     }
 
     companion object {

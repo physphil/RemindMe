@@ -3,8 +3,8 @@ package com.physphil.android.remindme.reminders
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
 
@@ -19,12 +19,11 @@ class RecurrencePickerDialog : DialogFragment() {
 
     private var listener: OnRecurrenceSetListener? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnRecurrenceSetListener) {
             listener = context
-        }
-        else {
+        } else {
             throw ClassCastException("Hosting Activity must implement OnRecurrenceSetListener interface")
         }
     }
@@ -37,19 +36,22 @@ class RecurrencePickerDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Determine the index of the string corresponding to the currently selected recurrence
         val recurrences = resources.getStringArray(R.array.recurrence_options)
-        val selectedRecurrenceId = arguments?.getInt(ARGS_RECURRENCE, Recurrence.NONE.id) ?: Recurrence.NONE.id
+        val selectedRecurrenceId =
+            arguments?.getInt(ARGS_RECURRENCE, Recurrence.NONE.id) ?: Recurrence.NONE.id
         val selectedRecurrence = Recurrence.fromId(selectedRecurrenceId)
-        val selectedRecurrenceIndex = recurrences.indexOfFirst { it == getString(selectedRecurrence.displayString) }
+        val selectedRecurrenceIndex =
+            recurrences.indexOfFirst { it == getString(selectedRecurrence.displayString) }
 
         return AlertDialog.Builder(activity!!)
-                .setTitle(R.string.title_select_recurrence)
-                .setSingleChoiceItems(R.array.recurrence_options, selectedRecurrenceIndex, { dialog, which ->
-                    // Determine which Recurrence was selected from array index
-                    val recurrence = Recurrence.values().first { getString(it.displayString) == recurrences[which] }
-                    listener?.onRecurrenceSet(recurrence)
-                    dismiss()
-                })
-                .show()
+            .setTitle(R.string.title_select_recurrence)
+            .setSingleChoiceItems(R.array.recurrence_options, selectedRecurrenceIndex) { _, which ->
+                // Determine which Recurrence was selected from array index
+                val recurrence =
+                    Recurrence.values().first { getString(it.displayString) == recurrences[which] }
+                listener?.onRecurrenceSet(recurrence)
+                dismiss()
+            }
+            .show()
     }
 
     companion object {

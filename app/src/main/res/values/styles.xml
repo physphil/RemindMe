@@ -1,11 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.MaterialComponents">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnPrimary">@color/material_white</item>
+        <item name="colorOnSecondary">@color/material_white</item>
         <item name="android:colorBackground">@color/theme_background</item>
     </style>
 
@@ -39,10 +41,6 @@
         <item name="android:textSize">@dimen/text_size_button_primary</item>
     </style>
 
-    <style name="Button.Large.Primary">
-        <item name="android:background">@drawable/bg_button_primary</item>
-    </style>
-
     <style name="Button.Small">
         <item name="android:minHeight">0dp</item>
         <item name="android:paddingTop">@dimen/global_margin_small</item>
@@ -51,12 +49,8 @@
         <item name="android:paddingEnd">@dimen/global_margin_typical</item>
     </style>
 
-    <style name="Button.Small.Primary">
-        <item name="android:background">@drawable/bg_button_primary</item>
-    </style>
-
     <style name="Button.Small.Accent">
-        <item name="android:background">@drawable/bg_button_accent</item>
+        <item name="backgroundTint">@color/colorSecondary</item>
     </style>
 
 </resources>
