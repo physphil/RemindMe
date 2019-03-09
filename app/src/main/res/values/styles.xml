@@ -32,6 +32,13 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="Chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/colorPrimary</item>
+        <item name="textStartPadding">@dimen/global_margin_large</item>
+        <item name="textEndPadding">@dimen/global_margin_large</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="Button">
         <item name="android:paddingStart">@dimen/global_margin_xxlarge</item>
         <item name="android:paddingEnd">@dimen/global_margin_xxlarge</item>
