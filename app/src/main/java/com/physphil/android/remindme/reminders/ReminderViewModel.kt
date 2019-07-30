@@ -57,18 +57,18 @@ class ReminderViewModel(
     // - clear notification id event on loading
 
     private val _reminderTimeLiveData = MutableLiveData<ViewString>()
-    fun getReminderTime(): LiveData<ViewString> = _reminderTimeLiveData
+    val reminderTimeLiveData: LiveData<ViewString> = _reminderTimeLiveData
 
     private val _reminderDateLiveData = MutableLiveData<ViewString>()
-    fun getReminderDate(): LiveData<ViewString> = _reminderDateLiveData
+    val reminderDateLiveData: LiveData<ViewString> = _reminderDateLiveData
 
     private val _reminderRecurrenceLiveData = MutableLiveData<Int>()
-    fun getReminderRecurrence(): LiveData<Int> = _reminderRecurrenceLiveData
+    val reminderRecurrenceLiveData: LiveData<Int> = _reminderRecurrenceLiveData
 
     private val _toolbarTitleLiveData = MutableLiveData<Int>().apply {
         postValue(if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder)
     }
-    fun getToolbarTitle(): LiveData<Int> = _toolbarTitleLiveData
+    val toolbarTitleLiveData: LiveData<Int> = _toolbarTitleLiveData
 
     fun updateTitle(title: String) {
         reminder = reminder.copy(title = title)

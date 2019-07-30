@@ -71,12 +71,12 @@ class ReminderViewModelTest {
     @Test
     fun testToolbarTitleNewReminder() {
         viewModel = ReminderViewModel(repo = repo, scheduler = scheduler)
-        assert(viewModel.getToolbarTitle().value == R.string.title_add_reminder)
+        assert(viewModel.toolbarTitleLiveData().value == R.string.title_add_reminder)
     }
 
     @Test
     fun testToolbarTitleEditReminder() {
-        assert(viewModel.getToolbarTitle().value == R.string.title_edit_reminder)
+        assert(viewModel.toolbarTitleLiveData().value == R.string.title_edit_reminder)
     }
 
     @Test
@@ -96,7 +96,7 @@ class ReminderViewModelTest {
         val recurrence = Recurrence.fromId(RECURRENCE)
         viewModel.updateRecurrence(recurrence)
         assert(viewModel.reminder.recurrence == recurrence)
-        assert(viewModel.getReminderRecurrence().value == recurrence.displayString)
+        assert(viewModel.reminderRecurrenceLiveData().value == recurrence.displayString)
     }
 
     @Test

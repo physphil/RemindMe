@@ -95,21 +95,21 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 //            notificationManager.cancel(state.notificationId)
         })
 
-        viewModel.getReminderTime().observe(this, Observer { time ->
+        viewModel.reminderTimeLiveData.observe(this, Observer { time ->
             when (time) {
                 is ViewString.Integer -> reminderTimeView.setText(time.resId)
                 is ViewString.String -> reminderTimeView.setText(time.value)            }
         })
 
-        viewModel.getReminderDate().observe(this, Observer { date ->
+        viewModel.reminderDateLiveData.observe(this, Observer { date ->
             when (date) {
                 is ViewString.Integer -> reminderDateView.setText(date.resId)
                 is ViewString.String -> reminderDateView.setText(date.value)
             }
         })
 
-        viewModel.getReminderRecurrence().observe(this, Observer { it?.let { reminderRecurrenceView.setText(it) } })
-        viewModel.getToolbarTitle().observe(this, Observer { it?.let { setToolbarTitle(it) } })
+        viewModel.reminderRecurrenceLiveData.observe(this, Observer { it?.let { reminderRecurrenceView.setText(it) } })
+        viewModel.toolbarTitleLiveData.observe(this, Observer { it?.let { setToolbarTitle(it) } })
 
         viewModel.clearNotificationEvent.observe(this, Observer {
             it?.let {
