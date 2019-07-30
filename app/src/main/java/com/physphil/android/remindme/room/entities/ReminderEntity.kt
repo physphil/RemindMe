@@ -11,6 +11,7 @@ import com.physphil.android.remindme.REMINDER_COLUMN_TIME
 import com.physphil.android.remindme.REMINDER_COLUMN_TITLE
 import com.physphil.android.remindme.TABLE_REMINDERS
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.Reminder
 import java.util.Calendar
 import java.util.UUID
 
@@ -20,7 +21,7 @@ import java.util.UUID
  * Copyright (c) 2017 Phil Shadlyn
  */
 @Entity(tableName = TABLE_REMINDERS)
-data class Reminder(
+data class ReminderEntity(
     /**
      * The unique id of the Reminder.
      */
@@ -64,4 +65,14 @@ data class Reminder(
      */
     @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID)
     var notificationId: Int = 0
-)
+) {
+    fun toReminderModel(): Reminder = Reminder(
+        id = id,
+        title = title,
+        body = body,
+        time = time,
+        recurrence = recurrence,
+        externalId = externalId,
+        notificationId = notificationId
+    )
+}

@@ -5,9 +5,8 @@ import androidx.lifecycle.Observer
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderViewModel
-import com.physphil.android.remindme.room.entities.Reminder
-import io.reactivex.Flowable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
 
 /**

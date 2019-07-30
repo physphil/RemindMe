@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import java.util.Calendar
 import javax.inject.Inject
 

@@ -3,8 +3,7 @@ package com.physphil.android.remindme
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
-import com.physphil.android.remindme.room.entities.Reminder
-import io.reactivex.Flowable
+import com.physphil.android.remindme.models.Reminder
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
 import org.junit.Before

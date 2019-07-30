@@ -5,7 +5,7 @@ import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import com.physphil.android.remindme.TAG_SHOW_NOTIFICATION_JOB
 import com.physphil.android.remindme.models.Recurrence
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 
 const val EXTRA_ID = "com.physphil.android.remindme.EXTRA_ID"
 const val EXTRA_TITLE = "com.physphil.android.remindme.EXTRA_TITLE"

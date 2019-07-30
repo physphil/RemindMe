@@ -2,9 +2,10 @@ package com.physphil.android.remindme.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.physphil.android.remindme.models.PresetTime
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.room.ReminderDao
-import com.physphil.android.remindme.room.entities.Reminder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,22 +35,25 @@ class ReminderRepo(private val dao: ReminderDao) {
                 value = Reminder(time = presetTime?.time ?: Calendar.getInstance())
             }
         } else {
-            dao.getReminderById(id)
+            Transformations.map(dao.getReminderById(id)) {
+                it.toReminderModel()
+            }
         }
     }
 
-    fun getActiveReminders() = dao.getAllReminders()
+    fun getActiveReminders(): LiveData<List<Reminder>> =
+        Transformations.map(dao.getAllReminders()) { entities ->
+            entities.map {
+                it.toReminderModel()
+            }
+        }
 
-    /**
-     * Insert a new [Reminder] into the database.
-     * @param reminder the Reminder to insert.
-     */
     fun insertReminder(reminder: Reminder) {
-        dbScope.launch { dao.insertReminder(reminder) }
+        dbScope.launch { dao.insertReminder(reminder.toReminderEntity()) }
     }
 
     fun updateReminder(reminder: Reminder) {
-        dbScope.launch { dao.updateReminder(reminder) }
+        dbScope.launch { dao.updateReminder(reminder.toReminderEntity()) }
     }
 
     /**
@@ -68,7 +72,7 @@ class ReminderRepo(private val dao: ReminderDao) {
     }
 
     fun deleteReminder(reminder: Reminder) {
-        dbScope.launch { dao.deleteReminder(reminder) }
+        dbScope.launch { dao.deleteReminder(reminder.toReminderEntity()) }
     }
 
     fun deleteAllReminders() {

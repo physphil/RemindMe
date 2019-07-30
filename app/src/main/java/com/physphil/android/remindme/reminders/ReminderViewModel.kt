@@ -10,7 +10,7 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
 import com.physphil.android.remindme.util.getDisplayDate
 import com.physphil.android.remindme.util.getDisplayTime
@@ -30,7 +30,6 @@ class ReminderViewModel(
     lateinit var reminder: Reminder
     private val isNewReminder = (id == null)
 
-    /** Flowable containing Reminder saved in database */
     val observableReminder: LiveData<Reminder> = repo.getReminderByIdOrNew(id, time)
     val clearNotificationEvent = SingleLiveEvent<Int>()
     val confirmDeleteEvent = SingleLiveEvent<Void>()

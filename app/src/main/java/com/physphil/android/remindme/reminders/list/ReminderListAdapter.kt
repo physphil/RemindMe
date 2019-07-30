@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.util.getDisplayDate
 import com.physphil.android.remindme.util.getDisplayTime
 import com.physphil.android.remindme.util.setVisibility
@@ -31,6 +31,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     private val reminders = mutableListOf<Reminder>()
 
     /** Reminder object representing a header to add to the list */
+    // TODO replace with sealed class
     private val headerReminder = Reminder(id = HEADER_ID)
 
     /**
