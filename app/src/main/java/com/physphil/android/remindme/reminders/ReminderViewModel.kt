@@ -50,6 +50,10 @@ class ReminderViewModel(
     val openRecurrencePickerEvent = SingleLiveEvent<Recurrence>()
 
     // FIXME add clearNotificationEvent(id)
+    // TODO:
+    // - refactor/clean up this ViewModel
+    // - refactor/clean up ReminderActivity
+    // - clear notification id event on loading
 
     private val _reminderTimeLiveData = MutableLiveData<ViewString>()
     fun getReminderTime(): LiveData<ViewString> = _reminderTimeLiveData
