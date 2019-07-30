@@ -53,11 +53,11 @@ class ReminderViewModel(
     fun getToolbarTitle(): LiveData<Int> = toolbarTitle
 
     fun updateTitle(title: String) {
-        reminder.title = title
+        reminder = reminder.copy(title = title)
     }
 
     fun updateBody(body: String) {
-        reminder.body = body
+        reminder = reminder.copy(body = body)
     }
 
     fun updateTime(context: Context, hourOfDay: Int, minute: Int) {
@@ -74,7 +74,7 @@ class ReminderViewModel(
     }
 
     fun updateRecurrence(recurrence: Recurrence) {
-        reminder.recurrence = recurrence
+        reminder = reminder.copy(recurrence = recurrence)
         reminderRecurrence.value = recurrence.displayString
     }
 
@@ -107,12 +107,12 @@ class ReminderViewModel(
         reminder.time.set(Calendar.MILLISECOND, 0)
 
         if (isNewReminder) {
-            reminder.externalId = scheduleNotification(reminder)
+            reminder = reminder.copy(externalId = scheduleNotification(reminder))
             repo.insertReminder(reminder)
         }
         else {
             scheduler.cancelJob(reminder.externalId)
-            reminder.externalId = scheduleNotification(reminder)
+            reminder = reminder.copy(externalId = scheduleNotification(reminder))
             repo.updateReminder(reminder)
         }
     }

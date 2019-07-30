@@ -31,7 +31,6 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     private val reminders = mutableListOf<Reminder>()
 
     /** Reminder object representing a header to add to the list */
-    // TODO replace with sealed class
     private val headerReminder = Reminder(id = HEADER_ID)
 
     /**
