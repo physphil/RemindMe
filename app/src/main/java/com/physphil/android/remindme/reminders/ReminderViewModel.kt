@@ -52,6 +52,7 @@ class ReminderViewModel(
     // FIXME add clearNotificationEvent(id)
     // TODO:
     // - refactor/clean up this ViewModel
+    // - Clean up ViewState class. Make hierarchy consistent.
     // - refactor/clean up ReminderActivity
     // - clear notification id event on loading
 
