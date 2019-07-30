@@ -1,9 +1,10 @@
 package com.physphil.android.remindme.reminders
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
@@ -12,8 +13,12 @@ import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
-import com.physphil.android.remindme.util.getDisplayDate
-import com.physphil.android.remindme.util.getDisplayTime
+import com.physphil.android.remindme.util.ViewString
+import com.physphil.android.remindme.util.isNow
+import com.physphil.android.remindme.util.isToday
+import com.physphil.android.remindme.util.isTomorrow
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 /**
@@ -26,11 +31,17 @@ class ReminderViewModel(
     private val scheduler: JobRequestScheduler
 ) : ViewModel() {
 
-    /** Reminder object retrieved from database, so it can be updated later */
-    lateinit var reminder: Reminder
     private val isNewReminder = (id == null)
 
-    val observableReminder: LiveData<Reminder> = repo.getReminderByIdOrNew(id, time)
+    // Internal variable to keep track of Reminder state. LiveData should be updated whenever this
+    // value changes, so it can provide the proper value on a config change.
+    private lateinit var reminder: Reminder
+
+    val reminderLiveData: LiveData<ReminderViewState> = Transformations.map(repo.getReminderByIdOrNew(id, time)) { reminder ->
+        this.reminder = reminder
+        reminder.toViewState()
+    }
+
     val clearNotificationEvent = SingleLiveEvent<Int>()
     val confirmDeleteEvent = SingleLiveEvent<Void>()
     val closeActivityEvent = SingleLiveEvent<Void>()
@@ -38,19 +49,21 @@ class ReminderViewModel(
     val openDatePickerEvent = SingleLiveEvent<Date>()
     val openRecurrencePickerEvent = SingleLiveEvent<Recurrence>()
 
-    private val reminderTime = MutableLiveData<String>()
-    private val reminderDate = MutableLiveData<String>()
-    private val reminderRecurrence = MutableLiveData<Int>()
-    private val toolbarTitle = MutableLiveData<Int>()
+    // FIXME add clearNotificationEvent(id)
 
-    init {
-        toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
+    private val _reminderTimeLiveData = MutableLiveData<ViewString>()
+    fun getReminderTime(): LiveData<ViewString> = _reminderTimeLiveData
+
+    private val _reminderDateLiveData = MutableLiveData<ViewString>()
+    fun getReminderDate(): LiveData<ViewString> = _reminderDateLiveData
+
+    private val _reminderRecurrenceLiveData = MutableLiveData<Int>()
+    fun getReminderRecurrence(): LiveData<Int> = _reminderRecurrenceLiveData
+
+    private val _toolbarTitleLiveData = MutableLiveData<Int>().apply {
+        postValue(if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder)
     }
-
-    fun getReminderTime(): LiveData<String> = reminderTime
-    fun getReminderDate(): LiveData<String> = reminderDate
-    fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
-    fun getToolbarTitle(): LiveData<Int> = toolbarTitle
+    fun getToolbarTitle(): LiveData<Int> = _toolbarTitleLiveData
 
     fun updateTitle(title: String) {
         reminder = reminder.copy(title = title)
@@ -60,22 +73,22 @@ class ReminderViewModel(
         reminder = reminder.copy(body = body)
     }
 
-    fun updateTime(context: Context, hourOfDay: Int, minute: Int) {
+    fun updateTime(hourOfDay: Int, minute: Int) {
         reminder.time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         reminder.time.set(Calendar.MINUTE, minute)
-        reminderTime.value = reminder.getDisplayTime(context)
+        _reminderTimeLiveData.postValue(reminder.displayTime)
     }
 
-    fun updateDate(context: Context, year: Int, month: Int, dayOfMonth: Int) {
+    fun updateDate(year: Int, month: Int, dayOfMonth: Int) {
         reminder.time.set(Calendar.YEAR, year)
         reminder.time.set(Calendar.MONTH, month)
         reminder.time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        reminderDate.value = reminder.getDisplayDate(context)
+        _reminderDateLiveData.postValue(reminder.displayDate)
     }
 
     fun updateRecurrence(recurrence: Recurrence) {
         reminder = reminder.copy(recurrence = recurrence)
-        reminderRecurrence.value = recurrence.displayString
+        _reminderRecurrenceLiveData.postValue(recurrence.displayString)
     }
 
     fun openTimePicker() {
@@ -145,6 +158,36 @@ class ReminderViewModel(
                 reminder.recurrence.id)
     }
 
+    private fun Reminder.toViewState(): ReminderViewState = ReminderViewState(
+        title = title,
+        body = body,
+        time = displayTime,
+        date = displayDate,
+        recurrence = recurrence.displayString
+    )
+
+    private val Reminder.displayTime: ViewString
+        get() = when {
+            time.isNow() -> ViewString.Integer(R.string.reminder_time_now)
+            else -> ViewString.String(SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(time.time))
+        }
+
+    private val Reminder.displayDate: ViewString
+        @SuppressLint("SimpleDateFormat")
+        get() = when {
+            time.isToday() -> ViewString.Integer(R.string.reminder_repeat_today)
+            time.isTomorrow() -> ViewString.Integer(R.string.reminder_repeat_tomorrow)
+            else -> ViewString.String(SimpleDateFormat("EEE MMM d, yyyy").format(time.time))
+        }
+
     data class Time(val hour: Int, val minute: Int)
     data class Date(val year: Int, val month: Int, val day: Int)
 }
+
+data class ReminderViewState(
+    val title: String,
+    val body: String,
+    val time: ViewString,
+    val date: ViewString,
+    val recurrence: Int
+)

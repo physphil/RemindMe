@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
@@ -18,8 +19,7 @@ import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
-import com.physphil.android.remindme.util.getDisplayDate
-import com.physphil.android.remindme.util.getDisplayTime
+import com.physphil.android.remindme.util.ViewString
 import kotlinx.android.synthetic.main.activity_reminder.*
 
 /**
@@ -76,20 +76,38 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     private fun bindViewModel() {
         // Will either be called immediately with stored value, or will be updated upon successful read from database
-        viewModel.observableReminder.observe(this, Observer {
-            viewModel.reminder = it
-            reminderTitleView.setText(it.title, true)
-            reminderBodyView.setText(it.body)
-            reminderTimeView.setText(it.getDisplayTime(this))
-            reminderDateView.setText(it.getDisplayDate(this))
-            reminderRecurrenceView.setText(it.recurrence.displayString)
+        viewModel.reminderLiveData.observe(this, Observer { state ->
+            Log.d("phil", "In updated state callback!")
+            reminderTitleView.setText(state.title, true)
+            reminderBodyView.setText(state.body)
+            when (state.time) {
+                is ViewString.Integer -> reminderTimeView.setText(state.time.resId)
+                is ViewString.String -> reminderTimeView.setText(state.time.value)
+            }
+            when (state.date) {
+                is ViewString.Integer -> reminderDateView.setText(state.date.resId)
+                is ViewString.String -> reminderDateView.setText(state.date.value)
+            }
+            reminderRecurrenceView.setText(state.recurrence)
 
             // Clear any notifications for this Reminder
-            notificationManager.cancel(it.notificationId)
+            // FIXME move this to subscription from LiveEvent
+//            notificationManager.cancel(state.notificationId)
         })
 
-        viewModel.getReminderTime().observe(this, Observer { it?.let { reminderTimeView.setText(it) } })
-        viewModel.getReminderDate().observe(this, Observer { it?.let { reminderDateView.setText(it) } })
+        viewModel.getReminderTime().observe(this, Observer { time ->
+            when (time) {
+                is ViewString.Integer -> reminderTimeView.setText(time.resId)
+                is ViewString.String -> reminderTimeView.setText(time.value)            }
+        })
+
+        viewModel.getReminderDate().observe(this, Observer { date ->
+            when (date) {
+                is ViewString.Integer -> reminderDateView.setText(date.resId)
+                is ViewString.String -> reminderDateView.setText(date.value)
+            }
+        })
+
         viewModel.getReminderRecurrence().observe(this, Observer { it?.let { reminderRecurrenceView.setText(it) } })
         viewModel.getToolbarTitle().observe(this, Observer { it?.let { setToolbarTitle(it) } })
 
@@ -168,13 +186,13 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     // region OnTimeSetListener implementation
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        viewModel.updateTime(this, hourOfDay, minute)
+        viewModel.updateTime(hourOfDay, minute)
     }
     // endregion
 
     // region OnDateSetListener implementation
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        viewModel.updateDate(this, year, month, dayOfMonth)
+        viewModel.updateDate(year, month, dayOfMonth)
     }
     // endregion
 

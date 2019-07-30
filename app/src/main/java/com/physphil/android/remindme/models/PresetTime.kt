@@ -14,8 +14,7 @@ sealed class PresetTime(
 ) {
     object EndOfDay : PresetTime(ID_EOD, Calendar.getInstance().endOfDay())
     object Tonight : PresetTime(ID_TONIGHT, Calendar.getInstance().tonight())
-    object TomorrowMorning :
-        PresetTime(ID_TOMORROW_MORNING, Calendar.getInstance().tomorrowMorning())
+    object TomorrowMorning : PresetTime(ID_TOMORROW_MORNING, Calendar.getInstance().tomorrowMorning())
 
     companion object {
         const val ID_UNKNOWN = -1
