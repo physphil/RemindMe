@@ -14,7 +14,6 @@ import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
 import com.physphil.android.remindme.util.getDisplayDate
 import com.physphil.android.remindme.util.getDisplayTime
-import io.reactivex.Flowable
 import java.util.Calendar
 
 /**
@@ -32,7 +31,7 @@ class ReminderViewModel(
     private val isNewReminder = (id == null)
 
     /** Flowable containing Reminder saved in database */
-    val observableReminder: Flowable<Reminder> = repo.getReminderByIdOrNew(id, time)
+    val observableReminder: LiveData<Reminder> = repo.getReminderByIdOrNew(id, time)
     val clearNotificationEvent = SingleLiveEvent<Int>()
     val confirmDeleteEvent = SingleLiveEvent<Void>()
     val closeActivityEvent = SingleLiveEvent<Void>()

@@ -3,8 +3,8 @@ package com.physphil.android.remindme.reminders
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
 
@@ -19,7 +19,7 @@ class RecurrencePickerDialog : DialogFragment() {
 
     private var listener: OnRecurrenceSetListener? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnRecurrenceSetListener) {
             listener = context

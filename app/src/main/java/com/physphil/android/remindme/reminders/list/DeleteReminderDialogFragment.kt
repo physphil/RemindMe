@@ -3,8 +3,8 @@ package com.physphil.android.remindme.reminders.list
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.physphil.android.remindme.R
 
 /**
@@ -21,7 +21,7 @@ class DeleteReminderDialogFragment : DialogFragment() {
 
     private var listener: Listener? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is Listener) {
             listener = context

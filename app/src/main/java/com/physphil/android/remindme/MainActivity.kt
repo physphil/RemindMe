@@ -19,9 +19,6 @@ import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -32,7 +29,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
     @Inject
     lateinit var viewModelFactory: MainActivityViewModelFactory
 
-    private val disposables = CompositeDisposable()
     private val adapter = ReminderListAdapter()
     private val viewModel: MainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -54,11 +50,6 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         reminderListFabView.setOnClickListener {
             startActivity(ReminderActivity.intent(this))
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
     }
 
     private fun setupRecyclerview() {
@@ -85,16 +76,11 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         viewModel.showDeleteConfirmationEvent.observe(this, showDeleteConfirmationObserver)
         viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
         viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
-        disposables.add(viewModel.reminderList.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    // onNext
-                    adapter.setReminderList(it)
-                    viewModel.reminderListUpdated(it)
-                    reminderListFabView.show()  // make sure the fab is always showing when the list is updated
-                }, {
-                    // onError
-                }))
+        viewModel.reminderList.observe(this, Observer {
+            adapter.setReminderList(it)
+            viewModel.reminderListUpdated(it)
+            reminderListFabView.show()  // make sure the fab is always showing when the list is updated
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
