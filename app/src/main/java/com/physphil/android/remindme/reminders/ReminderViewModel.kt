@@ -42,8 +42,8 @@ class ReminderViewModel(
     private val _clearNotificationEvent = SingleLiveEvent<Int>()
     val clearNotificationEvent: LiveData<Int> = _clearNotificationEvent
 
-    private val _confirmDeleteEvent = SingleLiveEvent<Unit>()
-    val confirmDeleteEvent: LiveData<Unit> = _confirmDeleteEvent
+    private val _confirmDeleteEvent = SingleLiveEvent<Reminder>()
+    val confirmDeleteEvent: LiveData<Reminder> = _confirmDeleteEvent
 
     private val _closeActivityEvent = SingleLiveEvent<Unit>()
     val closeActivityEvent: LiveData<Unit> = _closeActivityEvent
@@ -158,7 +158,7 @@ class ReminderViewModel(
     }
 
     fun confirmDeleteReminder() {
-        _confirmDeleteEvent.postValue(Unit)
+        _confirmDeleteEvent.postValue(reminder)
     }
 
     fun deleteReminder() {

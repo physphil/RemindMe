@@ -114,7 +114,7 @@ class MainActivity : BaseActivity(),
     // endregion
 
     // region DeleteReminderDialogFragment.Listener implementation
-    override fun onDeleteReminder() {
+    override fun onConfirmDeleteReminder(reminder: Reminder) {
         viewModel.deleteReminder()
     }
 
@@ -137,7 +137,7 @@ class MainActivity : BaseActivity(),
         })
 
         showDeleteConfirmationEvent.observe(lifecycleOwner, Observer {
-            DeleteReminderDialogFragment.newInstance()
+            DeleteReminderDialogFragment.newInstance(it)
                 .show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
         })
 
@@ -151,7 +151,7 @@ class MainActivity : BaseActivity(),
 
         reminderList.observe(lifecycleOwner, Observer { reminders ->
             adapter.setReminderList(reminders)
-            viewModel.reminderListUpdated(reminders)
+            viewModel.reminderListUpdated(reminders.size)
             reminderListFabView.show()  // make sure the fab is always showing when the list is updated
         })
     }

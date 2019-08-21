@@ -21,8 +21,8 @@ class MainActivityViewModel(
     private val _clearNotificationEvent = SingleLiveEvent<Delete>()
     val clearNotificationEvent: LiveData<Delete> = _clearNotificationEvent
 
-    private val _showDeleteConfirmationEvent = SingleLiveEvent<Unit>()
-    val showDeleteConfirmationEvent: LiveData<Unit> = _showDeleteConfirmationEvent
+    private val _showDeleteConfirmationEvent = SingleLiveEvent<Reminder>()
+    val showDeleteConfirmationEvent: LiveData<Reminder> = _showDeleteConfirmationEvent
 
     private val _showDeleteAllConfirmationEvent = SingleLiveEvent<Unit>()
     val showDeleteAllConfirmationEvent: LiveData<Unit> = _showDeleteAllConfirmationEvent
@@ -40,9 +40,9 @@ class MainActivityViewModel(
         _emptyVisibilityLiveData.postValue(false)
     }
 
-    fun reminderListUpdated(reminders: List<Reminder>) {
+    fun reminderListUpdated(size: Int) {
         _spinnerVisibilityLiveData.postValue(false)
-        _emptyVisibilityLiveData.postValue(reminders.isEmpty())
+        _emptyVisibilityLiveData.postValue(size == 0)
     }
 
     fun confirmDeleteAllReminders() {
@@ -57,7 +57,7 @@ class MainActivityViewModel(
 
     fun confirmDeleteReminder(reminder: Reminder) {
         reminderToDelete = reminder
-        _showDeleteConfirmationEvent.postValue(Unit)
+        _showDeleteConfirmationEvent.postValue(reminder)
     }
 
     fun deleteReminder() {
