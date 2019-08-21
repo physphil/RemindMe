@@ -58,8 +58,8 @@ class ReminderViewModelTest {
         reminder.body = BODY
         reminder.externalId = EXTERNAL_ID
         reminder.notificationId = NOTIFICATION_ID
-        `when`(repo.getReminderByIdOrNew(reminder.id)).thenReturn(Flowable.just(reminder))
-        `when`(repo.getReminderByIdOrNew()).thenReturn(Flowable.just(reminder))
+//        `when`(repo.getReminderByIdOrNew(reminder.id)).thenReturn(Flowable.just(reminder))
+//        `when`(repo.getReminderByIdOrNew()).thenReturn(Flowable.just(reminder))
 
         `when`(scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id, reminder.title, reminder.body, reminder.recurrence.id)).thenReturn(NEW_EXTERNAL_ID)

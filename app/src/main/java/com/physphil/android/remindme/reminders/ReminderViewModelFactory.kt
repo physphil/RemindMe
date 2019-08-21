@@ -29,7 +29,7 @@ class ReminderViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
             application.applicationComponent.inject(this)
-            return ReminderViewModel(id, time, repo, scheduler) as T
+            return ReminderViewModel(repo, scheduler, id, time) as T
         }
 
         throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")

@@ -6,7 +6,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
@@ -77,7 +76,6 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     private fun bindViewModel() {
         // Will either be called immediately with stored value, or will be updated upon successful read from database
         viewModel.reminderLiveData.observe(this, Observer { state ->
-            Log.d("phil", "In updated state callback!")
             reminderTitleView.setText(state.title, true)
             reminderBodyView.setText(state.body)
             when (state.time) {
