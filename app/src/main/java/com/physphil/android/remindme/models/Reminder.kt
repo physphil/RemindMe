@@ -1,12 +1,15 @@
 package com.physphil.android.remindme.models
 
+import android.os.Parcelable
 import com.physphil.android.remindme.room.entities.ReminderEntity
+import kotlinx.android.parcel.Parcelize
 import java.util.Calendar
 import java.util.UUID
 
 /**
  * Represents a Reminder to be shown to the user.
  */
+@Parcelize
 data class Reminder(
     /**
      * The unique id of the Reminder.
@@ -43,7 +46,7 @@ data class Reminder(
      * equals 0 a notification has not yet been shown for this Reminder.
      */
     val notificationId: Int = 0
-) {
+) : Parcelable {
     fun toReminderEntity(): ReminderEntity = ReminderEntity(
         id = id,
         title = title,

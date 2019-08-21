@@ -18,6 +18,7 @@ import com.physphil.android.remindme.R
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.util.ViewString
 import kotlinx.android.synthetic.main.activity_reminder.*
@@ -120,7 +121,7 @@ class ReminderActivity : BaseActivity(),
     // endregion
 
     // region DeleteReminderDialogFragment.Listener implementation
-    override fun onDeleteReminder() {
+    override fun onConfirmDeleteReminder(reminder: Reminder) {
         viewModel.deleteReminder()
     }
 
@@ -172,8 +173,8 @@ class ReminderActivity : BaseActivity(),
             }
         })
 
-        confirmDeleteEvent.observe(lifecycleOwner, Observer {
-            DeleteReminderDialogFragment.newInstance()
+        confirmDeleteEvent.observe(lifecycleOwner, Observer { reminder ->
+            DeleteReminderDialogFragment.newInstance(reminder)
                 .show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
         })
 
