@@ -11,55 +11,70 @@ import com.physphil.android.remindme.util.SingleLiveEvent
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
-class MainActivityViewModel(private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) : ViewModel() {
+class MainActivityViewModel(
+    private val repo: ReminderRepo,
+    private val scheduler: JobRequestScheduler
+) : ViewModel() {
 
     val reminderList = repo.getActiveReminders()
-    val clearNotificationEvent = SingleLiveEvent<Int?>()
-    val showDeleteConfirmationEvent = SingleLiveEvent<Void>()
-    val showDeleteAllConfirmationEvent = SingleLiveEvent<Void>()
-    private val spinnerVisibility = MutableLiveData<Boolean>()
-    private val emptyVisibility = MutableLiveData<Boolean>()
+
+    private val _clearNotificationEvent = SingleLiveEvent<Delete>()
+    val clearNotificationEvent: LiveData<Delete> = _clearNotificationEvent
+
+    private val _showDeleteConfirmationEvent = SingleLiveEvent<Unit>()
+    val showDeleteConfirmationEvent: LiveData<Unit> = _showDeleteConfirmationEvent
+
+    private val _showDeleteAllConfirmationEvent = SingleLiveEvent<Unit>()
+    val showDeleteAllConfirmationEvent: LiveData<Unit> = _showDeleteAllConfirmationEvent
+
+    private val _spinnerVisibilityLiveData = MutableLiveData<Boolean>()
+    val spinnerVisibilityLiveData: LiveData<Boolean> = _spinnerVisibilityLiveData
+
+    private val _emptyVisibilityLiveData = MutableLiveData<Boolean>()
+    val emptyVisibilityLiveData: LiveData<Boolean> = _emptyVisibilityLiveData
 
     private var reminderToDelete: Reminder? = null
 
     init {
-        spinnerVisibility.value = true
-        emptyVisibility.value = false
+        _spinnerVisibilityLiveData.postValue(true)
+        _emptyVisibilityLiveData.postValue(false)
     }
 
-    fun getSpinnerVisibility(): LiveData<Boolean> = spinnerVisibility
-    fun getEmptyVisibility(): LiveData<Boolean> = emptyVisibility
-
     fun reminderListUpdated(reminders: List<Reminder>) {
-        spinnerVisibility.value = false
-        emptyVisibility.value = reminders.isEmpty()
+        _spinnerVisibilityLiveData.postValue(false)
+        _emptyVisibilityLiveData.postValue(reminders.isEmpty())
     }
 
     fun confirmDeleteAllReminders() {
-        showDeleteAllConfirmationEvent.call()
+        _showDeleteAllConfirmationEvent.postValue(Unit)
     }
 
     fun deleteAllReminders() {
         scheduler.cancelAllJobs()
         repo.deleteAllReminders()
-        clearNotificationEvent.call()
+        _clearNotificationEvent.postValue(Delete.All)
     }
 
     fun confirmDeleteReminder(reminder: Reminder) {
         reminderToDelete = reminder
-        showDeleteConfirmationEvent.call()
+        _showDeleteConfirmationEvent.postValue(Unit)
     }
 
     fun deleteReminder() {
         reminderToDelete?.let {
             scheduler.cancelJob(it.externalId)
             repo.deleteReminder(it)
-            clearNotificationEvent.value = it.notificationId
+            _clearNotificationEvent.postValue(Delete.Single(it.notificationId))
             reminderToDelete = null
         }
     }
 
     fun cancelDeleteReminder() {
         reminderToDelete = null
+    }
+
+    sealed class Delete {
+        object All : Delete()
+        data class Single(val id: Int) : Delete()
     }
 }

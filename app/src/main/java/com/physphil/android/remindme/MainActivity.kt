@@ -74,8 +74,8 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         viewModel.clearNotificationEvent.observe(this, deleteNotificationsObserver)
         viewModel.showDeleteAllConfirmationEvent.observe(this, showDeleteAllConfirmationObserver)
         viewModel.showDeleteConfirmationEvent.observe(this, showDeleteConfirmationObserver)
-        viewModel.getSpinnerVisibility().observe(this, spinnerVisibilityObserver)
-        viewModel.getEmptyVisibility().observe(this, emptyVisibilityObserver)
+        viewModel.spinnerVisibilityLiveData.observe(this, spinnerVisibilityObserver)
+        viewModel.emptyVisibilityLiveData.observe(this, emptyVisibilityObserver)
         viewModel.reminderList.observe(this, Observer {
             adapter.setReminderList(it)
             viewModel.reminderListUpdated(it)
@@ -108,19 +108,18 @@ class MainActivity : BaseActivity(), ReminderListAdapter.ReminderListAdapterClic
         it?.let { reminderListEmptyView.setVisibility(it) }
     }
 
-    private val deleteNotificationsObserver = Observer<Int?> {
-        if (it != null) {
-            notificationManager.cancel(it)
-        } else {
-            notificationManager.cancelAll()
+    private val deleteNotificationsObserver = Observer<MainActivityViewModel.Delete> {
+        when (it) {
+            is MainActivityViewModel.Delete.All -> notificationManager.cancelAll()
+            is MainActivityViewModel.Delete.Single -> notificationManager.cancel(it.id)
         }
     }
 
-    private val showDeleteAllConfirmationObserver = Observer<Void> {
+    private val showDeleteAllConfirmationObserver = Observer<Unit> {
         DeleteAllDialogFragment.newInstance().show(supportFragmentManager, DeleteAllDialogFragment.TAG)
     }
 
-    private val showDeleteConfirmationObserver = Observer<Void> {
+    private val showDeleteConfirmationObserver = Observer<Unit> {
         DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
     }
     // endregion
