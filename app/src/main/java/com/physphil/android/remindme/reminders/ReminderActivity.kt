@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.physphil.android.remindme.BaseActivity
@@ -26,29 +27,28 @@ import kotlinx.android.synthetic.main.activity_reminder.*
  *
  * Copyright (c) 2017 Phil Shadlyn
  */
-class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
-        DatePickerDialog.OnDateSetListener, RecurrencePickerDialog.OnRecurrenceSetListener,
-        DeleteReminderDialogFragment.Listener {
+class ReminderActivity : BaseActivity(),
+    TimePickerDialog.OnTimeSetListener,
+    DatePickerDialog.OnDateSetListener,
+    RecurrencePickerDialog.OnRecurrenceSetListener,
+    DeleteReminderDialogFragment.Listener {
 
-    private val viewModel: ReminderViewModel by lazy {
-        val id = intent.getStringExtra(EXTRA_REMINDER_ID)
-        val presetTime = PresetTime.fromId(
-            intent.getIntExtra(EXTRA_REMINDER_PRESET_TIME, PresetTime.ID_UNKNOWN)
-        )
-        ViewModelProviders.of(
-            this,
-            ReminderViewModelFactory(application as RemindMeApplication, id, presetTime)
-        )
-            .get(ReminderViewModel::class.java)
-    }
-    private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+    private lateinit var viewModel: ReminderViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
         setHomeArrowBackNavigation()
         bindViews()
-        bindViewModel()
+
+        // Setup ViewModel
+        val id = intent.getStringExtra(EXTRA_REMINDER_ID)
+        val presetTime = PresetTime.fromId(
+            intent.getIntExtra(EXTRA_REMINDER_PRESET_TIME, PresetTime.ID_UNKNOWN)
+        )
+        val factory = ReminderViewModelFactory(application as RemindMeApplication, id, presetTime)
+        viewModel = ViewModelProviders.of(this, factory).get(ReminderViewModel::class.java)
+        viewModel.bind(this)
     }
 
     private fun bindViews() {
@@ -71,87 +71,6 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         reminderRecurrenceView.setOnClickListener {
             viewModel.openRecurrencePicker()
         }
-    }
-
-    private fun bindViewModel() {
-        // Will either be called immediately with stored value, or will be updated upon successful read from database
-        viewModel.reminderLiveData.observe(this, Observer { state ->
-            reminderTitleView.setText(state.title, true)
-            reminderBodyView.setText(state.body)
-            when (state.time) {
-                is ViewString.Integer -> reminderTimeView.setText(state.time.resId)
-                is ViewString.String -> reminderTimeView.setText(state.time.value)
-            }
-            when (state.date) {
-                is ViewString.Integer -> reminderDateView.setText(state.date.resId)
-                is ViewString.String -> reminderDateView.setText(state.date.value)
-            }
-            reminderRecurrenceView.setText(state.recurrence)
-
-            // Clear any notifications for this Reminder
-            // FIXME move this to subscription from LiveEvent
-//            notificationManager.cancel(state.notificationId)
-        })
-
-        viewModel.reminderTimeLiveData.observe(this, Observer { time ->
-            when (time) {
-                is ViewString.Integer -> reminderTimeView.setText(time.resId)
-                is ViewString.String -> reminderTimeView.setText(time.value)            }
-        })
-
-        viewModel.reminderDateLiveData.observe(this, Observer { date ->
-            when (date) {
-                is ViewString.Integer -> reminderDateView.setText(date.resId)
-                is ViewString.String -> reminderDateView.setText(date.value)
-            }
-        })
-
-        viewModel.reminderRecurrenceLiveData.observe(this, Observer { it?.let { reminderRecurrenceView.setText(it) } })
-        viewModel.toolbarTitleLiveData.observe(this, Observer { it?.let { setToolbarTitle(it) } })
-
-        viewModel.clearNotificationEvent.observe(this, Observer {
-            it?.let {
-                notificationManager.cancel(it)
-            }
-        })
-
-        viewModel.confirmDeleteEvent.observe(this, Observer {
-            DeleteReminderDialogFragment.newInstance().show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
-        })
-
-        viewModel.closeActivityEvent.observe(this, Observer {
-            finish()
-        })
-
-        viewModel.openTimePickerEvent.observe(this, Observer {
-            it?.let {
-                TimePickerDialog(this,
-                        R.style.Pickers,
-                        this,
-                        it.hour,
-                        it.minute,
-                        false).show()
-            }
-        })
-
-        viewModel.openDatePickerEvent.observe(this, Observer {
-            it?.let {
-                DatePickerDialog(this,
-                        R.style.Pickers,
-                        this,
-                        it.year,
-                        it.month,
-                        it.day).show()
-
-            }
-        })
-
-        viewModel.openRecurrencePickerEvent.observe(this, Observer {
-            it?.let {
-                RecurrencePickerDialog.newInstance(it)
-                        .show(supportFragmentManager, RecurrencePickerDialog.TAG)
-            }
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -210,14 +129,93 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
     }
     // endregion
 
+    private fun ReminderViewModel.bind(lifecycleOwner: LifecycleOwner) {
+        reminderLiveData.observe(lifecycleOwner, Observer { state ->
+            reminderTitleView.setText(state.title, true)
+            reminderBodyView.setText(state.body)
+            when (state.time) {
+                is ViewString.Integer -> reminderTimeView.setText(state.time.resId)
+                is ViewString.String -> reminderTimeView.setText(state.time.value)
+            }
+            when (state.date) {
+                is ViewString.Integer -> reminderDateView.setText(state.date.resId)
+                is ViewString.String -> reminderDateView.setText(state.date.value)
+            }
+            reminderRecurrenceView.setText(state.recurrence)
+        })
+
+        reminderTimeLiveData.observe(lifecycleOwner, Observer { time ->
+            when (time) {
+                is ViewString.Integer -> reminderTimeView.setText(time.resId)
+                is ViewString.String -> reminderTimeView.setText(time.value)
+            }
+        })
+
+        reminderDateLiveData.observe(lifecycleOwner, Observer { date ->
+            when (date) {
+                is ViewString.Integer -> reminderDateView.setText(date.resId)
+                is ViewString.String -> reminderDateView.setText(date.value)
+            }
+        })
+
+        reminderRecurrenceLiveData.observe(lifecycleOwner, Observer { recurrence ->
+            reminderRecurrenceView.setText(recurrence)
+        })
+
+        toolbarTitleLiveData.observe(lifecycleOwner, Observer { title ->
+            setToolbarTitle(title)
+        })
+
+        clearNotificationEvent.observe(lifecycleOwner, Observer { id ->
+            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+                cancel(id)
+            }
+        })
+
+        confirmDeleteEvent.observe(lifecycleOwner, Observer {
+            DeleteReminderDialogFragment.newInstance()
+                .show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
+        })
+
+        closeActivityEvent.observe(lifecycleOwner, Observer {
+            finish()
+        })
+
+        openTimePickerEvent.observe(lifecycleOwner, Observer { time ->
+            TimePickerDialog(
+                this@ReminderActivity,
+                R.style.Pickers,
+                this@ReminderActivity,
+                time.hour,
+                time.minute,
+                false
+            ).show()
+        })
+
+        openDatePickerEvent.observe(lifecycleOwner, Observer { date ->
+            DatePickerDialog(
+                this@ReminderActivity,
+                R.style.Pickers,
+                this@ReminderActivity,
+                date.year,
+                date.month,
+                date.day
+            ).show()
+        })
+
+        openRecurrencePickerEvent.observe(lifecycleOwner, Observer { recurrence ->
+            RecurrencePickerDialog.newInstance(recurrence)
+                .show(supportFragmentManager, RecurrencePickerDialog.TAG)
+        })
+    }
+
     companion object {
         private const val EXTRA_REMINDER_ID = "com.physphil.android.remindme.EXTRA_REMINDER_ID"
         private const val EXTRA_REMINDER_PRESET_TIME = "com.physphil.android.remindme.EXTRA_REMINDER_PRESET_TIME"
 
-        fun intent(context: Context, reminderId: String? = null): Intent {
-            val intent = Intent(context, ReminderActivity::class.java)
-            intent.putExtra(EXTRA_REMINDER_ID, reminderId)
-            return intent
-        }
+        fun intent(context: Context, reminderId: String? = null): Intent =
+            Intent(context, ReminderActivity::class.java).apply {
+                putExtra(EXTRA_REMINDER_ID, reminderId)
+            }
     }
 }

@@ -74,13 +74,16 @@ class ReminderViewModel(
     init {
         reminderLiveData = if (id == null) {
             MutableLiveData<ViewState>().apply {
+                // Create new reminder and save
                 val newReminder = Reminder(time = presetTime?.time ?: Calendar.getInstance())
                 reminder = newReminder
                 value = newReminder.toViewState()
             }
         } else {
             Transformations.map(repo.getReminder(id)) {
+                // Pull existing reminder from DB, save locally, and clear its notification
                 reminder = it
+                _clearNotificationEvent.postValue(reminder.notificationId)
                 it.toViewState()
             }
         }
