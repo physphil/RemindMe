@@ -20,9 +20,6 @@ import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.util.getDisplayDate
 import com.physphil.android.remindme.util.getDisplayTime
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_reminder.*
 
 /**
@@ -33,9 +30,6 @@ import kotlinx.android.synthetic.main.activity_reminder.*
 class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         DatePickerDialog.OnDateSetListener, RecurrencePickerDialog.OnRecurrenceSetListener,
         DeleteReminderDialogFragment.Listener {
-
-    /** A [CompositeDisposable] to contain all active subscriptions. Should be cleared when Activity is destroyed */
-    private val disposables = CompositeDisposable()
 
     private val viewModel: ReminderViewModel by lazy {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID)
@@ -56,11 +50,6 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
         setHomeArrowBackNavigation()
         bindViews()
         bindViewModel()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
     }
 
     private fun bindViews() {
@@ -87,23 +76,17 @@ class ReminderActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener,
 
     private fun bindViewModel() {
         // Will either be called immediately with stored value, or will be updated upon successful read from database
-        disposables.add(viewModel.observableReminder
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    // on success. Save Reminder in viewmodel and update UI
-                    viewModel.reminder = it
-                    reminderTitleView.setText(it.title, true)
-                    reminderBodyView.setText(it.body)
-                    reminderTimeView.setText(it.getDisplayTime(this))
-                    reminderDateView.setText(it.getDisplayDate(this))
-                    reminderRecurrenceView.setText(it.recurrence.displayString)
+        viewModel.observableReminder.observe(this, Observer {
+            viewModel.reminder = it
+            reminderTitleView.setText(it.title, true)
+            reminderBodyView.setText(it.body)
+            reminderTimeView.setText(it.getDisplayTime(this))
+            reminderDateView.setText(it.getDisplayDate(this))
+            reminderRecurrenceView.setText(it.recurrence.displayString)
 
-                    // Clear any notifications for this Reminder
-                    notificationManager.cancel(it.notificationId)
-                }, {
-                    // on error
-                }))
+            // Clear any notifications for this Reminder
+            notificationManager.cancel(it.notificationId)
+        })
 
         viewModel.getReminderTime().observe(this, Observer { it?.let { reminderTimeView.setText(it) } })
         viewModel.getReminderDate().observe(this, Observer { it?.let { reminderDateView.setText(it) } })
