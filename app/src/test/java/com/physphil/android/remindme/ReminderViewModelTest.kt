@@ -5,9 +5,8 @@ import androidx.lifecycle.Observer
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderViewModel
-import com.physphil.android.remindme.room.entities.Reminder
-import io.reactivex.Flowable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,8 +58,8 @@ class ReminderViewModelTest {
         reminder.body = BODY
         reminder.externalId = EXTERNAL_ID
         reminder.notificationId = NOTIFICATION_ID
-        `when`(repo.getReminderByIdOrNew(reminder.id)).thenReturn(Flowable.just(reminder))
-        `when`(repo.getReminderByIdOrNew()).thenReturn(Flowable.just(reminder))
+//        `when`(repo.getReminderByIdOrNew(reminder.id)).thenReturn(Flowable.just(reminder))
+//        `when`(repo.getReminderByIdOrNew()).thenReturn(Flowable.just(reminder))
 
         `when`(scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
                 reminder.id, reminder.title, reminder.body, reminder.recurrence.id)).thenReturn(NEW_EXTERNAL_ID)
@@ -72,12 +71,12 @@ class ReminderViewModelTest {
     @Test
     fun testToolbarTitleNewReminder() {
         viewModel = ReminderViewModel(repo = repo, scheduler = scheduler)
-        assert(viewModel.getToolbarTitle().value == R.string.title_add_reminder)
+        assert(viewModel.toolbarTitleLiveData().value == R.string.title_add_reminder)
     }
 
     @Test
     fun testToolbarTitleEditReminder() {
-        assert(viewModel.getToolbarTitle().value == R.string.title_edit_reminder)
+        assert(viewModel.toolbarTitleLiveData().value == R.string.title_edit_reminder)
     }
 
     @Test
@@ -97,7 +96,7 @@ class ReminderViewModelTest {
         val recurrence = Recurrence.fromId(RECURRENCE)
         viewModel.updateRecurrence(recurrence)
         assert(viewModel.reminder.recurrence == recurrence)
-        assert(viewModel.getReminderRecurrence().value == recurrence.displayString)
+        assert(viewModel.reminderRecurrenceLiveData().value == recurrence.displayString)
     }
 
     @Test

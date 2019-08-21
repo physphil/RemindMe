@@ -1,14 +1,12 @@
 package com.physphil.android.remindme.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.physphil.android.remindme.models.PresetTime
+import androidx.lifecycle.Transformations
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.room.ReminderDao
-import com.physphil.android.remindme.room.entities.Reminder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 /**
  * Repository to handle fetching and saving Reminder data
@@ -22,34 +20,27 @@ class ReminderRepo(private val dao: ReminderDao) {
     /**
      * Return a [Reminder] with the given id, wrapped in a [LiveData] object to observe
      * @param id of the Reminder to return
-     * @param presetTime the [PresetTime] to initially set the for the Reminder (optional)
-     * @return the Reminder wrapped in a [LiveData], or a new empty Reminder if no id is supplied
+     * @return the Reminder wrapped in a [LiveData], or a new empty Reminder if no reminder with the
+     * supplied id can be found.
      */
-    fun getReminderByIdOrNew(
-        id: String? = null,
-        presetTime: PresetTime? = null
-    ): LiveData<Reminder> {
-        return if (id == null) {
-            MutableLiveData<Reminder>().apply {
-                value = Reminder(time = presetTime?.time ?: Calendar.getInstance())
-            }
-        } else {
-            dao.getReminderById(id)
+    fun getReminder(id: String): LiveData<Reminder> =
+        Transformations.map(dao.getReminderById(id)) { entity ->
+            entity?.toReminderModel() ?: Reminder()
         }
-    }
 
-    fun getActiveReminders() = dao.getAllReminders()
+    fun getActiveReminders(): LiveData<List<Reminder>> =
+        Transformations.map(dao.getAllReminders()) { entities ->
+            entities.map {
+                it.toReminderModel()
+            }
+        }
 
-    /**
-     * Insert a new [Reminder] into the database.
-     * @param reminder the Reminder to insert.
-     */
     fun insertReminder(reminder: Reminder) {
-        dbScope.launch { dao.insertReminder(reminder) }
+        dbScope.launch { dao.insertReminder(reminder.toReminderEntity()) }
     }
 
     fun updateReminder(reminder: Reminder) {
-        dbScope.launch { dao.updateReminder(reminder) }
+        dbScope.launch { dao.updateReminder(reminder.toReminderEntity()) }
     }
 
     /**
@@ -68,7 +59,7 @@ class ReminderRepo(private val dao: ReminderDao) {
     }
 
     fun deleteReminder(reminder: Reminder) {
-        dbScope.launch { dao.deleteReminder(reminder) }
+        dbScope.launch { dao.deleteReminder(reminder.toReminderEntity()) }
     }
 
     fun deleteAllReminders() {

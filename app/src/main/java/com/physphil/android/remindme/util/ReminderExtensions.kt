@@ -3,7 +3,7 @@ package com.physphil.android.remindme.util
 import android.annotation.SuppressLint
 import android.content.Context
 import com.physphil.android.remindme.R
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 

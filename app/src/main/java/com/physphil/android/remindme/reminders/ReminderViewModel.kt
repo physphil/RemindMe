@@ -1,105 +1,145 @@
 package com.physphil.android.remindme.reminders
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
-import com.physphil.android.remindme.util.getDisplayDate
-import com.physphil.android.remindme.util.getDisplayTime
+import com.physphil.android.remindme.util.ViewString
+import com.physphil.android.remindme.util.isNow
+import com.physphil.android.remindme.util.isToday
+import com.physphil.android.remindme.util.isTomorrow
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
  */
 class ReminderViewModel(
-    id: String? = null,
-    time: PresetTime? = null,
     private val repo: ReminderRepo,
-    private val scheduler: JobRequestScheduler
+    private val scheduler: JobRequestScheduler,
+    id: String? = null,
+    presetTime: PresetTime? = null
 ) : ViewModel() {
 
-    /** Reminder object retrieved from database, so it can be updated later */
-    lateinit var reminder: Reminder
     private val isNewReminder = (id == null)
 
-    /** Flowable containing Reminder saved in database */
-    val observableReminder: LiveData<Reminder> = repo.getReminderByIdOrNew(id, time)
-    val clearNotificationEvent = SingleLiveEvent<Int>()
-    val confirmDeleteEvent = SingleLiveEvent<Void>()
-    val closeActivityEvent = SingleLiveEvent<Void>()
-    val openTimePickerEvent = SingleLiveEvent<Time>()
-    val openDatePickerEvent = SingleLiveEvent<Date>()
-    val openRecurrencePickerEvent = SingleLiveEvent<Recurrence>()
+    // Internal variable to keep track of Reminder state. LiveData should be updated whenever this
+    // value changes, so it can provide the proper value on a config change.
+    private lateinit var reminder: Reminder
 
-    private val reminderTime = MutableLiveData<String>()
-    private val reminderDate = MutableLiveData<String>()
-    private val reminderRecurrence = MutableLiveData<Int>()
-    private val toolbarTitle = MutableLiveData<Int>()
+    val reminderLiveData: LiveData<ViewState>
+
+    private val _clearNotificationEvent = SingleLiveEvent<Int>()
+    val clearNotificationEvent: LiveData<Int> = _clearNotificationEvent
+
+    private val _confirmDeleteEvent = SingleLiveEvent<Unit>()
+    val confirmDeleteEvent: LiveData<Unit> = _confirmDeleteEvent
+
+    private val _closeActivityEvent = SingleLiveEvent<Unit>()
+    val closeActivityEvent: LiveData<Unit> = _closeActivityEvent
+
+    private val _openTimePickerEvent = SingleLiveEvent<Time>()
+    val openTimePickerEvent: LiveData<Time> = _openTimePickerEvent
+
+    private val _openDatePickerEvent = SingleLiveEvent<Date>()
+    val openDatePickerEvent: LiveData<Date> = _openDatePickerEvent
+
+    private val _openRecurrencePickerEvent = SingleLiveEvent<Recurrence>()
+    val openRecurrencePickerEvent: LiveData<Recurrence> = _openRecurrencePickerEvent
+
+    private val _reminderTimeLiveData = MutableLiveData<ViewString>()
+    val reminderTimeLiveData: LiveData<ViewString> = _reminderTimeLiveData
+
+    private val _reminderDateLiveData = MutableLiveData<ViewString>()
+    val reminderDateLiveData: LiveData<ViewString> = _reminderDateLiveData
+
+    private val _reminderRecurrenceLiveData = MutableLiveData<Int>()
+    val reminderRecurrenceLiveData: LiveData<Int> = _reminderRecurrenceLiveData
+
+    private val _toolbarTitleLiveData = MutableLiveData<Int>().apply {
+        postValue(if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder)
+    }
+    val toolbarTitleLiveData: LiveData<Int> = _toolbarTitleLiveData
 
     init {
-        toolbarTitle.value = if (isNewReminder) R.string.title_add_reminder else R.string.title_edit_reminder
+        reminderLiveData = if (id == null) {
+            MutableLiveData<ViewState>().apply {
+                // Create new reminder and save
+                val newReminder = Reminder(time = presetTime?.time ?: Calendar.getInstance())
+                reminder = newReminder
+                value = newReminder.toViewState()
+            }
+        } else {
+            Transformations.map(repo.getReminder(id)) {
+                // Pull existing reminder from DB, save locally, and clear its notification
+                reminder = it
+                _clearNotificationEvent.postValue(reminder.notificationId)
+                it.toViewState()
+            }
+        }
     }
 
-    fun getReminderTime(): LiveData<String> = reminderTime
-    fun getReminderDate(): LiveData<String> = reminderDate
-    fun getReminderRecurrence(): LiveData<Int> = reminderRecurrence
-    fun getToolbarTitle(): LiveData<Int> = toolbarTitle
-
     fun updateTitle(title: String) {
-        reminder.title = title
+        reminder = reminder.copy(title = title)
     }
 
     fun updateBody(body: String) {
-        reminder.body = body
+        reminder = reminder.copy(body = body)
     }
 
-    fun updateTime(context: Context, hourOfDay: Int, minute: Int) {
+    fun updateTime(hourOfDay: Int, minute: Int) {
         reminder.time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         reminder.time.set(Calendar.MINUTE, minute)
-        reminderTime.value = reminder.getDisplayTime(context)
+        _reminderTimeLiveData.postValue(reminder.displayTime)
     }
 
-    fun updateDate(context: Context, year: Int, month: Int, dayOfMonth: Int) {
+    fun updateDate(year: Int, month: Int, dayOfMonth: Int) {
         reminder.time.set(Calendar.YEAR, year)
         reminder.time.set(Calendar.MONTH, month)
         reminder.time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        reminderDate.value = reminder.getDisplayDate(context)
+        _reminderDateLiveData.postValue(reminder.displayDate)
     }
 
     fun updateRecurrence(recurrence: Recurrence) {
-        reminder.recurrence = recurrence
-        reminderRecurrence.value = recurrence.displayString
+        reminder = reminder.copy(recurrence = recurrence)
+        _reminderRecurrenceLiveData.postValue(recurrence.displayString)
     }
 
     fun openTimePicker() {
         with(reminder.time) {
-            openTimePickerEvent.postValue(Time(
+            _openTimePickerEvent.postValue(
+                Time(
                     hour = get(Calendar.HOUR_OF_DAY),
                     minute = get(Calendar.MINUTE)
-            ))
+                )
+            )
         }
     }
 
     fun openDatePicker() {
         with(reminder.time) {
-            openDatePickerEvent.postValue(Date(
+            _openDatePickerEvent.postValue(
+                Date(
                     year = get(Calendar.YEAR),
                     month = get(Calendar.MONTH),
                     day = get(Calendar.DAY_OF_MONTH)
-            ))
+                )
+            )
         }
     }
 
     fun openRecurrencePicker() {
-        openRecurrencePickerEvent.postValue(reminder.recurrence)
+        _openRecurrencePickerEvent.postValue(reminder.recurrence)
     }
 
     fun saveReminder() {
@@ -108,25 +148,24 @@ class ReminderViewModel(
         reminder.time.set(Calendar.MILLISECOND, 0)
 
         if (isNewReminder) {
-            reminder.externalId = scheduleNotification(reminder)
+            reminder = reminder.copy(externalId = scheduleNotification(reminder))
             repo.insertReminder(reminder)
-        }
-        else {
+        } else {
             scheduler.cancelJob(reminder.externalId)
-            reminder.externalId = scheduleNotification(reminder)
+            reminder = reminder.copy(externalId = scheduleNotification(reminder))
             repo.updateReminder(reminder)
         }
     }
 
     fun confirmDeleteReminder() {
-        confirmDeleteEvent.call()
+        _confirmDeleteEvent.postValue(Unit)
     }
 
     fun deleteReminder() {
-        clearNotificationEvent.value = reminder.notificationId
+        _clearNotificationEvent.postValue(reminder.notificationId)
         scheduler.cancelJob(reminder.externalId)
         repo.deleteReminder(reminder)
-        closeActivityEvent.call()
+        _closeActivityEvent.postValue(Unit)
     }
 
     fun prepareOptionsMenuItems(delete: MenuItem) {
@@ -135,17 +174,48 @@ class ReminderViewModel(
 
     /**
      * Schedule a notification for the Reminder
-     * @param reminder the observableReminder to schedule a notification for
+     * @param reminder the reminder to schedule a notification for
      * @return the job id of the newly scheduled notification
      */
-    private fun scheduleNotification(reminder: Reminder): Int {
-        return scheduler.scheduleShowNotificationJob(reminder.time.timeInMillis,
-                reminder.id,
-                reminder.title,
-                reminder.body,
-                reminder.recurrence.id)
-    }
+    private fun scheduleNotification(reminder: Reminder): Int =
+        scheduler.scheduleShowNotificationJob(
+            time = reminder.time.timeInMillis,
+            id = reminder.id,
+            title = reminder.title,
+            text = reminder.body,
+            recurrence = reminder.recurrence.id
+        )
+
+    private fun Reminder.toViewState(): ViewState = ViewState(
+        title = title,
+        body = body,
+        time = displayTime,
+        date = displayDate,
+        recurrence = recurrence.displayString
+    )
+
+    private val Reminder.displayTime: ViewString
+        get() = when {
+            time.isNow() -> ViewString.Integer(R.string.reminder_time_now)
+            else -> ViewString.String(SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(time.time))
+        }
+
+    private val Reminder.displayDate: ViewString
+        @SuppressLint("SimpleDateFormat")
+        get() = when {
+            time.isToday() -> ViewString.Integer(R.string.reminder_repeat_today)
+            time.isTomorrow() -> ViewString.Integer(R.string.reminder_repeat_tomorrow)
+            else -> ViewString.String(SimpleDateFormat("EEE MMM d, yyyy").format(time.time))
+        }
 
     data class Time(val hour: Int, val minute: Int)
     data class Date(val year: Int, val month: Int, val day: Int)
+
+    data class ViewState(
+        val title: String,
+        val body: String,
+        val time: ViewString,
+        val date: ViewString,
+        val recurrence: Int
+    )
 }

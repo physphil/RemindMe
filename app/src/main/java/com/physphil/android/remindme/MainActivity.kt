@@ -12,11 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
-import com.physphil.android.remindme.room.entities.Reminder
 import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.util.setVisibility
 import kotlinx.android.synthetic.main.activity_main.*

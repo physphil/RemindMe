@@ -11,8 +11,8 @@ import com.physphil.android.remindme.REMINDER_COLUMN_TIME
 import com.physphil.android.remindme.REMINDER_COLUMN_TITLE
 import com.physphil.android.remindme.TABLE_REMINDERS
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.Reminder
 import java.util.Calendar
-import java.util.UUID
 
 /**
  * Entity to store Reminder objects in Room
@@ -20,48 +20,60 @@ import java.util.UUID
  * Copyright (c) 2017 Phil Shadlyn
  */
 @Entity(tableName = TABLE_REMINDERS)
-data class Reminder(
+data class ReminderEntity(
     /**
      * The unique id of the Reminder.
      */
     @PrimaryKey
     @ColumnInfo
-    var id: String = UUID.randomUUID().toString(),
+    var id: String,
 
     /**
      * The Reminder's title.
      */
     @ColumnInfo(name = REMINDER_COLUMN_TITLE)
-    var title: String = "",
+    var title: String,
 
     /**
      * The Reminder's body content.
      */
     @ColumnInfo(name = REMINDER_COLUMN_TEXT)
-    var body: String = "",
+    var body: String,
 
     /**
-     * A [Calendar] instance representing the Reminder's time.
+     * The Reminder's time in millis.
      */
     @ColumnInfo(name = REMINDER_COLUMN_TIME)
-    var time: Calendar = Calendar.getInstance(),
+    var time: Long,
 
     /**
-     * The [Recurrence] of the Reminder (hourly, weekly, etc).
+     * The [id]][Recurrence.id] of the Reminder's recurrence (hourly, weekly, etc).
      */
     @ColumnInfo(name = REMINDER_COLUMN_RECURRENCE)
-    var recurrence: Recurrence = Recurrence.NONE,
+    var recurrence: Int,
 
     /**
      * The id of the [ShowNotificationJob] responsible for displaying an Android notification for this Reminder.
      */
     @ColumnInfo(name = REMINDER_COLUMN_EXTERNAL_ID)
-    var externalId: Int = 0,
+    var externalId: Int,
 
     /**
      * The id of the Android notfication that was displayed to the user for this Reminder. If this field
      * equals 0 a notification has not yet been shown for this Reminder.
      */
     @ColumnInfo(name = REMINDER_COLUMN_NOTIFICATION_ID)
-    var notificationId: Int = 0
-)
+    var notificationId: Int
+) {
+    fun toReminderModel(): Reminder = Reminder(
+        id = id,
+        title = title,
+        body = body,
+        time = Calendar.getInstance().apply {
+            timeInMillis = this@ReminderEntity.time
+        },
+        recurrence = Recurrence.fromId(recurrence),
+        externalId = externalId,
+        notificationId = notificationId
+    )
+}

@@ -12,7 +12,7 @@ import com.physphil.android.remindme.REMINDER_COLUMN_ID
 import com.physphil.android.remindme.REMINDER_COLUMN_NOTIFICATION_ID
 import com.physphil.android.remindme.REMINDER_COLUMN_TIME
 import com.physphil.android.remindme.TABLE_REMINDERS
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.room.entities.ReminderEntity
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -20,22 +20,22 @@ import com.physphil.android.remindme.room.entities.Reminder
 @Dao
 interface ReminderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReminder(reminder: Reminder)
+    suspend fun insertReminder(reminder: ReminderEntity)
 
     @Update
-    suspend fun updateReminder(reminder: Reminder)
+    suspend fun updateReminder(reminder: ReminderEntity)
 
     @Delete
-    suspend fun deleteReminder(reminder: Reminder)
+    suspend fun deleteReminder(reminder: ReminderEntity)
 
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_TIME > :time " +
             "ORDER BY $REMINDER_COLUMN_TIME ASC")
-    fun getAllReminders(time: Long = System.currentTimeMillis()): LiveData<List<Reminder>>
+    fun getAllReminders(time: Long = System.currentTimeMillis()): LiveData<List<ReminderEntity>>
 
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_ID = :id")
-    fun getReminderById(id: String): LiveData<Reminder>
+    fun getReminderById(id: String): LiveData<ReminderEntity>
 
     @Query("UPDATE $TABLE_REMINDERS " +
             "SET $REMINDER_COLUMN_EXTERNAL_ID = :newExternalId, $REMINDER_COLUMN_TIME = :newTime " +

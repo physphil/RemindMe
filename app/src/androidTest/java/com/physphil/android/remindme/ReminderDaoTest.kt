@@ -6,7 +6,7 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.physphil.android.remindme.room.AppDatabase
 import com.physphil.android.remindme.room.ReminderDao
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.room.entities.ReminderEntity
 import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertNull
 import junit.framework.Assert.assertTrue
@@ -62,19 +62,19 @@ class ReminderDaoTest {
     fun testGetReminderList() = runBlocking {
         val time = Calendar.getInstance()
         time.timeInMillis = System.currentTimeMillis() + 60000 * 5  // set each reminder 5 minutes in future
-        dao.insertReminder(Reminder(time = time))
-        dao.insertReminder(Reminder(time = time))
+        dao.insertReminder(ReminderEntity(time = time))
+        dao.insertReminder(ReminderEntity(time = time))
         val reminders = dao.getAllReminders()
         assertTrue(reminders.value!!.size == 2)
     }
 
     @Test
     fun testGetReminderById() = runBlocking {
-        val reminder = Reminder(title = TITLE)
+        val reminder = ReminderEntity(title = TITLE)
         val id = reminder.id
         dao.insertReminder(reminder)
-        dao.insertReminder(Reminder())
-        dao.insertReminder(Reminder())
+        dao.insertReminder(ReminderEntity())
+        dao.insertReminder(ReminderEntity())
 
         val actual = dao.getReminderById(id)
         assertTrue(actual.value!!.id == id)
@@ -83,9 +83,9 @@ class ReminderDaoTest {
 
     @Test
     fun testGetReminderByInvalidId() = runBlocking {
-        dao.insertReminder(Reminder())
-        dao.insertReminder(Reminder())
-        dao.insertReminder(Reminder())
+        dao.insertReminder(ReminderEntity())
+        dao.insertReminder(ReminderEntity())
+        dao.insertReminder(ReminderEntity())
 
         val reminder = dao.getReminderById("123")
         assertNull(reminder.value)
@@ -95,9 +95,9 @@ class ReminderDaoTest {
     fun testDeleteAllReminders() = runBlocking {
         val time = Calendar.getInstance()
         time.timeInMillis = System.currentTimeMillis() + 60000 * 5  // set each reminder 5 minutes in future
-        dao.insertReminder(Reminder(time = time))
-        dao.insertReminder(Reminder(time = time))
-        dao.insertReminder(Reminder(time = time))
+        dao.insertReminder(ReminderEntity(time = time))
+        dao.insertReminder(ReminderEntity(time = time))
+        dao.insertReminder(ReminderEntity(time = time))
 
         val firstList = dao.getAllReminders()
         assertTrue(firstList.value!!.size == 3)
@@ -109,7 +109,7 @@ class ReminderDaoTest {
 
     @Test
     fun testDeleteReminder() = runBlocking {
-        val reminder = Reminder()
+        val reminder = ReminderEntity()
         dao.insertReminder(reminder)
 
         val actual = dao.getReminderById(reminder.id)
@@ -122,7 +122,7 @@ class ReminderDaoTest {
 
     @Test
     fun testUpdateReminder() = runBlocking {
-        val reminder = Reminder(title = TITLE)
+        val reminder = ReminderEntity(title = TITLE)
         val id = reminder.id
         dao.insertReminder(reminder)
 
@@ -140,7 +140,7 @@ class ReminderDaoTest {
     fun testUpdateRecurringReminder() = runBlocking {
         val time = Calendar.getInstance()
         time.timeInMillis = TIME
-        val reminder = Reminder(time = time, externalId = EXTERNAL_ID)
+        val reminder = ReminderEntity(time = time, externalId = EXTERNAL_ID)
         dao.insertReminder(reminder)
 
         dao.updateRecurringReminder(reminder.id, NEW_EXTERNAL_ID, NEW_TIME)
@@ -153,7 +153,7 @@ class ReminderDaoTest {
 
     @Test
     fun testUpdateNotificationId() = runBlocking {
-        val reminder = Reminder(notificationId = NOTIFICATION_ID)
+        val reminder = ReminderEntity(notificationId = NOTIFICATION_ID)
         dao.insertReminder(reminder)
 
         dao.updateNotificationId(reminder.id, NEW_NOTIFICATION_ID)

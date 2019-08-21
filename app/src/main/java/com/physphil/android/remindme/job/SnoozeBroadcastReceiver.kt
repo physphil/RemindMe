@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
-import com.physphil.android.remindme.room.entities.Reminder
+import com.physphil.android.remindme.models.Reminder
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -34,8 +34,8 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
         val calendar = Calendar.getInstance().apply {
             timeInMillis += offset
         }
-        val snoozedReminder = Reminder(title = title, body = text, time = calendar)
-        snoozedReminder.externalId = scheduler.scheduleShowNotificationJob(snoozedReminder)
+        val reminder = Reminder(title = title, body = text, time = calendar)
+        val snoozedReminder = reminder.copy(externalId = scheduler.scheduleShowNotificationJob(reminder))
         repo.insertReminder(snoozedReminder)
 
         // Dismiss existing notification
