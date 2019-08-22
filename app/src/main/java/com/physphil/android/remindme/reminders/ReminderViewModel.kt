@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
@@ -218,4 +219,21 @@ class ReminderViewModel(
         val date: ViewString,
         val recurrence: Int
     )
+
+    class Factory(
+        private val repo: ReminderRepo,
+        private val scheduler: JobRequestScheduler,
+        private val id: String?,
+        private val presetTime: PresetTime?
+    ) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
+                return ReminderViewModel(repo, scheduler, id, presetTime) as T
+            }
+
+            throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")
+
+        }
+    }
 }
