@@ -4,11 +4,9 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.physphil.android.remindme.RemindMeApplication
-import com.physphil.android.remindme.data.ReminderRepo
+import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import java.util.Calendar
-import javax.inject.Inject
 
 /**
  * A [BroadcastReceiver] implementation that is run when a user selects a snooze duration for a
@@ -16,14 +14,9 @@ import javax.inject.Inject
  */
 class SnoozeBroadcastReceiver : BroadcastReceiver() {
 
-    @Inject
-    lateinit var scheduler: JobRequestScheduler
-
-    @Inject
-    lateinit var repo: ReminderRepo
-
     override fun onReceive(context: Context, intent: Intent) {
-        RemindMeApplication.instance.applicationComponent.inject(this)
+        val repo = Injector.provideReminderRepo(context)
+        val scheduler = Injector.provideJobRequestScheduler()
 
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0)
         val offset = intent.getLongExtra(EXTRA_OFFSET, 0)
