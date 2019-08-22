@@ -10,11 +10,11 @@ import java.util.Calendar
  */
 sealed class PresetTime(
     val id: Int,
-    val time: Calendar = Calendar.getInstance()
+    val time: Calendar
 ) {
-    object EndOfDay : PresetTime(ID_EOD, Calendar.getInstance().endOfDay())
-    object Tonight : PresetTime(ID_TONIGHT, Calendar.getInstance().tonight())
-    object TomorrowMorning : PresetTime(ID_TOMORROW_MORNING, Calendar.getInstance().tomorrowMorning())
+    class EndOfDay : PresetTime(ID_EOD, Calendar.getInstance().endOfDay())
+    class Tonight : PresetTime(ID_TONIGHT, Calendar.getInstance().tonight())
+    class TomorrowMorning : PresetTime(ID_TOMORROW_MORNING, Calendar.getInstance().tomorrowMorning())
 
     companion object {
         const val ID_UNKNOWN = -1
@@ -24,9 +24,9 @@ sealed class PresetTime(
 
         fun fromId(id: Int): PresetTime? =
             when (id) {
-                ID_EOD -> EndOfDay
-                ID_TONIGHT -> Tonight
-                ID_TOMORROW_MORNING -> TomorrowMorning
+                ID_EOD -> EndOfDay()
+                ID_TONIGHT -> Tonight()
+                ID_TOMORROW_MORNING -> TomorrowMorning()
                 else -> null
             }
     }

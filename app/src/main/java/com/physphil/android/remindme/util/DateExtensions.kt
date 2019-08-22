@@ -1,6 +1,7 @@
 package com.physphil.android.remindme.util
 
 import java.util.Calendar
+import kotlin.math.abs
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
@@ -22,7 +23,7 @@ fun Calendar.isTomorrow(): Boolean {
 
 fun Calendar.isNow(): Boolean {
     val now = System.currentTimeMillis()
-    return Math.abs(timeInMillis - now) < (1000 * 5)   // Considered "now" if within 5 seconds of current time
+    return abs(timeInMillis - now) < (1000 * 5)   // Considered "now" if within 5 seconds of current time
 }
 
 fun Calendar.isInPast(): Boolean = timeInMillis < System.currentTimeMillis()
@@ -54,6 +55,5 @@ fun Calendar.tomorrowMorning(): Calendar = this.apply {
 }
 
 private fun Calendar.advanceDay(): Calendar = this.apply {
-    val day = get(Calendar.DAY_OF_YEAR)
-    set(Calendar.DAY_OF_YEAR, day + 1)
+    add(Calendar.DATE, 1)
 }
