@@ -10,31 +10,25 @@ import androidx.core.content.ContextCompat
 import com.evernote.android.job.Job
 import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
-import com.physphil.android.remindme.RemindMeApplication
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.util.Notification
 import java.util.Calendar
-import javax.inject.Inject
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
  *
  * Subclass of Job to display a notification to the user
  */
-class ShowNotificationJob : Job() {
-
-    @Inject
-    lateinit var repo: ReminderRepo
-
-    @Inject
-    lateinit var scheduler: JobRequestScheduler
+class ShowNotificationJob(
+    private val repo: ReminderRepo,
+    private val scheduler: JobRequestScheduler
+) : Job() {
 
     override fun onRunJob(params: Params): Result {
         // Only continue if the notification being shown has a valid id attached to it
         if (params.extras.containsKey(EXTRA_ID)) {
-            RemindMeApplication.instance.applicationComponent.inject(this)
 
             val id = params.extras.getString(EXTRA_ID, "should never happen")
             val title = params.extras.getString(EXTRA_TITLE, "")

@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
@@ -21,15 +22,11 @@ import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.ui.ReminderListDivider
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 class MainActivity : BaseActivity(),
     ReminderListAdapter.ReminderListAdapterClickListener,
     DeleteAllDialogFragment.Listener,
     DeleteReminderDialogFragment.Listener {
-
-    @Inject
-    lateinit var viewModelFactory: MainActivityViewModelFactory
 
     private val adapter = ReminderListAdapter()
     private lateinit var viewModel: MainActivityViewModel
@@ -38,7 +35,6 @@ class MainActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        (application as RemindMeApplication).applicationComponent.inject(this)
         setupRecyclerview()
         bindViews()
 
@@ -53,8 +49,11 @@ class MainActivity : BaseActivity(),
         }
 
         // Setup ViewModel
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(MainActivityViewModel::class.java)
+        val factory = MainActivityViewModel.Factory(
+            repo = Injector.provideReminderRepo(this),
+            scheduler = Injector.provideJobRequestScheduler()
+        )
+        viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel::class.java)
         viewModel.bind(this)
     }
 
@@ -66,7 +65,8 @@ class MainActivity : BaseActivity(),
 
         // Setup list divider
         val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
-        val divider = ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
+        val divider =
+            ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
         reminderListRecyclerView.addItemDecoration(divider)
 
         // Setup random list header

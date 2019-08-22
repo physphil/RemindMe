@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
-import com.physphil.android.remindme.RemindMeApplication
+import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
@@ -47,7 +47,12 @@ class ReminderActivity : BaseActivity(),
         val presetTime = PresetTime.fromId(
             intent.getIntExtra(EXTRA_REMINDER_PRESET_TIME, PresetTime.ID_UNKNOWN)
         )
-        val factory = ReminderViewModelFactory(application as RemindMeApplication, id, presetTime)
+        val factory = ReminderViewModel.Factory(
+            repo = Injector.provideReminderRepo(this),
+            scheduler = Injector.provideJobRequestScheduler(),
+            id = id,
+            presetTime = presetTime
+        )
         viewModel = ViewModelProviders.of(this, factory).get(ReminderViewModel::class.java)
         viewModel.bind(this)
     }
