@@ -1,5 +1,6 @@
 package com.physphil.android.remindme.reminders.list
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,18 @@ import com.physphil.android.remindme.util.setVisibility
 import kotlinx.android.synthetic.main.view_header_reminder_list.view.*
 import kotlinx.android.synthetic.main.view_row_reminder_list.view.*
 
-private const val HEADER_ID = "header_id"
 private const val VIEW_TYPE_HEADER = 0
-private const val VIEW_TYPE_ITEM = 1
+private const val VIEW_TYPE_REMINDER = 1
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
 class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>() {
+
+    private sealed class ListItem {
+        object Header : ListItem()
+        class Entry(val reminder: Reminder) : ListItem()
+    }
 
     interface ReminderListAdapterClickListener {
         fun onReminderClicked(reminder: Reminder)
@@ -28,15 +33,7 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     }
 
     private var listener: ReminderListAdapterClickListener? = null
-    private val reminders = mutableListOf<Reminder>()
-
-    /** Reminder object representing a header to add to the list */
-    private val headerReminder = Reminder(id = HEADER_ID)
-
-    /**
-     * The text that will be displayed in the RecyclerView's header. Header will be invisible if not specified
-     */
-    var headerText = ""
+    private val reminders = mutableListOf<ListItem>()
 
     override fun getItemCount() = reminders.size
 
@@ -44,12 +41,10 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
         if (holder is ViewHolder.Header) {
             with(holder.itemView) {
-                reminderItemHeaderView.setVisibility(headerText.isNotEmpty())
-                reminderItemHeaderView.text = headerText
+                reminderItemHeaderView.text = randomHeader(context)
             }
-        }
-        else if (holder is ViewHolder.Reminder) {
-            val reminder = reminders[position]
+        } else if (holder is ViewHolder.Reminder) {
+            val reminder = (reminders[position] as ListItem.Entry).reminder
             with(holder.itemView) {
                 setOnClickListener {
                     listener?.onReminderClicked(reminder)
@@ -84,20 +79,20 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return if (viewType == VIEW_TYPE_HEADER) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.view_header_reminder_list, parent, false)
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.view_header_reminder_list, parent, false)
             ViewHolder.Header(view)
-        }
-        else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.view_row_reminder_list, parent, false)
+        } else {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.view_row_reminder_list, parent, false)
             ViewHolder.Reminder(view)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        val reminder = reminders[position]
-        return when (reminder.id) {
-            HEADER_ID -> VIEW_TYPE_HEADER
-            else -> VIEW_TYPE_ITEM
+        return when (reminders[position]) {
+            is ListItem.Header -> VIEW_TYPE_HEADER
+            is ListItem.Entry -> VIEW_TYPE_REMINDER
         }
     }
 
@@ -108,12 +103,17 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     fun setReminderList(reminders: List<Reminder>) {
         this.reminders.clear()
         if (reminders.isNotEmpty()) {
-            this.reminders.add(headerReminder)
-            this.reminders.addAll(reminders)
+            this.reminders.add(ListItem.Header)
+            this.reminders.addAll(reminders.map { ListItem.Entry(it) })
         }
         notifyDataSetChanged()
     }
 
+    private fun randomHeader(context: Context): String {
+        val headers = context.resources.getStringArray(R.array.reminder_list_headers)
+        val index = (Math.random() * headers.size).toInt()
+        return headers[index]
+    }
 
     /*
      *  The ViewHolders used for both the Header and Reminder. They both extend from RecyclerView.ViewHolder
