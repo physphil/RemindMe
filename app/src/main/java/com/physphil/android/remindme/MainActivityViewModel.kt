@@ -3,6 +3,7 @@ package com.physphil.android.remindme
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
@@ -76,5 +77,17 @@ class MainActivityViewModel(
     sealed class Delete {
         object All : Delete()
         data class Single(val id: Int) : Delete()
+    }
+
+    class Factory(private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) :
+        ViewModelProvider.Factory {
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
+                return MainActivityViewModel(repo, scheduler) as T
+            }
+
+            throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")
+        }
     }
 }
