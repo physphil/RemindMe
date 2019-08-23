@@ -99,7 +99,9 @@ class ReminderViewModel(
     }
 
     fun updateTime(hourOfDay: Int, minute: Int) {
-        val newTime = reminder.time.withHour(hourOfDay).withMinute(minute)
+        val newTime = reminder.time
+            .withHour(hourOfDay)
+            .withMinute(minute)
         reminder = reminder.copy(time = newTime)
         _reminderTimeLiveData.postValue(reminder.displayTime)
     }
@@ -147,8 +149,10 @@ class ReminderViewModel(
 
     fun saveReminder() {
         // Set all second fields to 0 before saving, so alarm happens at exactly the specified time
-        val newTime = reminder.time.withSecond(0).withNano(0)
-        reminder.copy(time = newTime)
+        val newTime = reminder.time
+            .withSecond(0)
+            .withNano(0)
+        reminder = reminder.copy(time = newTime)
 
         if (isNewReminder) {
             reminder = reminder.copy(externalId = scheduleNotification(reminder))
