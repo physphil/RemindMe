@@ -1,6 +1,5 @@
 package com.physphil.android.remindme.reminders
 
-import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,8 +19,8 @@ import com.physphil.android.remindme.util.isToday
 import com.physphil.android.remindme.util.isTomorrow
 import com.physphil.android.remindme.util.millis
 import org.threeten.bp.LocalDateTime
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -201,15 +200,14 @@ class ReminderViewModel(
     private val Reminder.displayTime: ViewString
         get() = when {
             time.isNow() -> ViewString.Integer(R.string.reminder_time_now)
-            else -> ViewString.String(SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(time.millis))
+            else -> ViewString.String(time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)))
         }
 
     private val Reminder.displayDate: ViewString
-        @SuppressLint("SimpleDateFormat")
         get() = when {
             time.isToday() -> ViewString.Integer(R.string.reminder_repeat_today)
             time.isTomorrow() -> ViewString.Integer(R.string.reminder_repeat_tomorrow)
-            else -> ViewString.String(SimpleDateFormat("EEE MMM d, yyyy").format(time.millis))
+            else -> ViewString.String(time.format(DateTimeFormatter.ofPattern("EEE MMM d, yyyy")))
         }
 
     data class Time(val hour: Int, val minute: Int)

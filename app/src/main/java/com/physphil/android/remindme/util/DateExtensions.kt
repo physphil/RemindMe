@@ -56,4 +56,4 @@ fun LocalDateTime.tomorrowMorning(): LocalDateTime =
 private fun LocalDateTime.advanceDay(): LocalDateTime = plusDays(1)
 
 val LocalDateTime.millis: Long
-    get() = ZonedDateTime.of(this, ZoneId.systemDefault()).toEpochSecond() * 1000
+    get() = ZonedDateTime.of(this, ZoneId.systemDefault()).toInstant().toEpochMilli()
