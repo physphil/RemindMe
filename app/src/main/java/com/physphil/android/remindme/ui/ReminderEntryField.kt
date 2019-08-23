@@ -4,7 +4,10 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.EditText
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,9 +22,13 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var textChangedListener: ((String) -> Unit)? = null
+    private val editText: EditText
 
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.view_reminder_entry, this)
+        val id = View.generateViewId()
+        view.reminderEntryContentView.id = id
+        editText = view.findViewById(id)
 
         attrs?.let {
             val ta = context.obtainStyledAttributes(attrs, R.styleable.ReminderEntryField)
@@ -39,8 +46,10 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
             ta.recycle()
         }
 
-        view.reminderEntryContentView.addTextChangedListener(object : TextWatcher {
+//        view.reminderEntryContentView.addTextChangedListener(object : TextWatcher {
+        editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(text: Editable?) {
+                Log.d("phil", "afterTextChanged, text = $text")
                 textChangedListener?.invoke(text.toString())
             }
 
@@ -56,8 +65,8 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
 
     fun setText(text: String, moveCursorToEnd: Boolean = false) {
         when(moveCursorToEnd) {
-            true -> reminderEntryContentView.setTextMoveCursorToEnd(text)
-            false -> reminderEntryContentView.setText(text)
+            true -> editText.setTextMoveCursorToEnd(text)
+            false -> editText.setText(text)
         }
     }
 
