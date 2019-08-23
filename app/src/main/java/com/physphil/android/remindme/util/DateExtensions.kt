@@ -1,59 +1,59 @@
 package com.physphil.android.remindme.util
 
-import java.util.Calendar
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 import kotlin.math.abs
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
 
-fun Calendar.isToday(): Boolean {
-    val today = Calendar.getInstance()
-    return (get(Calendar.ERA) == today.get(Calendar.ERA)
-        && get(Calendar.YEAR) == today.get(Calendar.YEAR)
-        && get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
+fun LocalDateTime.isToday(): Boolean {
+    val today = LocalDateTime.now()
+    return (this.year == today.year
+        && this.dayOfYear == today.dayOfYear)
 }
 
-fun Calendar.isTomorrow(): Boolean {
-    val today = Calendar.getInstance()
-    return (get(Calendar.ERA) == today.get(Calendar.ERA)
-        && get(Calendar.YEAR) == today.get(Calendar.YEAR)
-        && get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) + 1))
+fun LocalDateTime.isTomorrow(): Boolean {
+    val today = LocalDateTime.now()
+    return (this.year == today.year
+        && this.dayOfYear == today.plusDays(1).dayOfYear)
 }
 
-fun Calendar.isNow(): Boolean {
+fun LocalDateTime.isNow(): Boolean {
     val now = System.currentTimeMillis()
-    return abs(timeInMillis - now) < (1000 * 5)   // Considered "now" if within 5 seconds of current time
+    return abs(this.millis - now) < (1000 * 5)  // Considered "now" if within 5 seconds of current time
 }
 
-fun Calendar.isInPast(): Boolean = timeInMillis < System.currentTimeMillis()
+fun LocalDateTime.isInPast(): Boolean = this.millis < System.currentTimeMillis()
 
-fun Calendar.endOfDay(): Calendar = this.apply {
-    set(Calendar.HOUR_OF_DAY, 17)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
+fun LocalDateTime.endOfDay(): LocalDateTime =
+    this.withHour(17)
+        .withMinute(0)
+        .withSecond(0)
+        .withNano(0)
+        .apply {
+            if (isInPast()) advanceDay()
+        }
 
-    if (isInPast()) advanceDay()
-}
+fun LocalDateTime.tonight(): LocalDateTime =
+    this.withHour(19)
+        .withMinute(30)
+        .withSecond(0)
+        .withNano(0)
+        .apply {
+            if (isInPast()) advanceDay()
+        }
 
-fun Calendar.tonight(): Calendar = this.apply {
-    set(Calendar.HOUR_OF_DAY, 19)
-    set(Calendar.MINUTE, 30)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
+fun LocalDateTime.tomorrowMorning(): LocalDateTime =
+    this.withHour(7)
+        .withMinute(0)
+        .withSecond(0)
+        .withNano(0)
+        .advanceDay()
 
-    if (isInPast()) advanceDay()
-}
+private fun LocalDateTime.advanceDay(): LocalDateTime = plusDays(1)
 
-fun Calendar.tomorrowMorning(): Calendar = this.apply {
-    advanceDay()
-    set(Calendar.HOUR_OF_DAY, 7)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
-}
-
-private fun Calendar.advanceDay(): Calendar = this.apply {
-    add(Calendar.DATE, 1)
-}
+val LocalDateTime.millis: Long
+    get() = ZonedDateTime.of(this, ZoneId.systemDefault()).toEpochSecond() * 1000

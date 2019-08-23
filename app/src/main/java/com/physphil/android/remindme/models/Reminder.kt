@@ -2,8 +2,9 @@ package com.physphil.android.remindme.models
 
 import android.os.Parcelable
 import com.physphil.android.remindme.room.entities.ReminderEntity
+import com.physphil.android.remindme.util.millis
 import kotlinx.android.parcel.Parcelize
-import java.util.Calendar
+import org.threeten.bp.LocalDateTime
 import java.util.UUID
 
 /**
@@ -27,9 +28,9 @@ data class Reminder(
     val body: String = "",
 
     /**
-     * A [Calendar] instance representing the Reminder's time.
+     * A [LocalDateTime] instance representing the Reminder's time.
      */
-    val time: Calendar = Calendar.getInstance(),
+    val time: LocalDateTime = LocalDateTime.now(),
 
     /**
      * The [Recurrence] of the Reminder (hourly, weekly, etc).
@@ -51,7 +52,7 @@ data class Reminder(
         id = id,
         title = title,
         body = body,
-        time = time.timeInMillis,
+        time = time.millis,
         recurrence = recurrence.id,
         externalId = externalId,
         notificationId = notificationId

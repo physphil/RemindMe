@@ -14,7 +14,10 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.util.Notification
-import java.util.Calendar
+import com.physphil.android.remindme.util.millis
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -79,18 +82,23 @@ class ShowNotificationJob(
         }
     }
 
-    private fun scheduleNextNotification(time: Long, id: String, title: String, text: String, recurrence: Recurrence) {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = time
-        when (recurrence) {
-            Recurrence.HOURLY -> calendar.add(Calendar.HOUR_OF_DAY, 1)
-            Recurrence.DAILY -> calendar.add(Calendar.DATE, 1)
-            Recurrence.WEEKLY -> calendar.add(Calendar.WEEK_OF_YEAR, 1)
-            Recurrence.MONTHLY -> calendar.add(Calendar.MONTH, 1)
-            Recurrence.YEARLY -> calendar.add(Calendar.YEAR, 1)
-        }
+    private fun scheduleNextNotification(
+        time: Long,
+        id: String,
+        title: String,
+        text: String,
+        recurrence: Recurrence
+    ) {
+        val newTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()).apply {
+                when (recurrence) {
+                    Recurrence.HOURLY -> this.plusHours(1)
+                    Recurrence.DAILY -> this.plusDays(1)
+                    Recurrence.WEEKLY -> this.plusWeeks(1)
+                    Recurrence.MONTHLY -> this.plusMonths(1)
+                    Recurrence.YEARLY -> this.plusYears(1)
+                }
+            }.millis
 
-        val newTime = calendar.timeInMillis
         val newId = scheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
         repo.updateRecurringReminder(id, newId, newTime)
     }
@@ -107,9 +115,14 @@ class ShowNotificationJob(
         return PendingIntent.getBroadcast(context, Notification.nextId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
+    /**
+     *  Represents a preset Snooze option the user can pick from the notification.
+     *
+     *  @param offset the number of seconds the notification should be snoozed.
+     */
     private enum class SnoozeDuration(val offset: Long) {
-        TWENTY_MIN(1000 * 60 * 20),
-        ONE_HOUR(1000 * 60 * 60),
-        THREE_HOURS(1000 * 60 * 60 * 3)
+        TWENTY_MIN(60 * 20),
+        ONE_HOUR(60 * 60),
+        THREE_HOURS(60 * 60 * 3)
     }
 }
