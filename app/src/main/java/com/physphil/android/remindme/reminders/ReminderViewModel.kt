@@ -109,7 +109,7 @@ class ReminderViewModel(
     fun updateDate(year: Int, month: Int, dayOfMonth: Int) {
         val newTime = reminder.time
             .withYear(year)
-            .withMonth(month + 1)   // Month is 0-11
+            .withMonth(month + 1)   // Month is 0-11 in DatePicker
             .withDayOfMonth(dayOfMonth)
         reminder = reminder.copy(time = newTime)
         _reminderDateLiveData.postValue(reminder.displayDate)
@@ -136,7 +136,7 @@ class ReminderViewModel(
             _openDatePickerEvent.postValue(
                 Date(
                     year = year,
-                    month = monthValue - 1, // Month is 0-11
+                    month = monthValue - 1, // Month is 0-11 in DatePicker
                     day = dayOfMonth
                 )
             )

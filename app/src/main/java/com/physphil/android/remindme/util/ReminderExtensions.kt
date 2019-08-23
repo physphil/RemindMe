@@ -18,3 +18,4 @@ fun Reminder.getDisplayDate(context: Context): String = when {
     time.isTomorrow() -> context.getString(R.string.reminder_repeat_tomorrow)
     else -> SimpleDateFormat("EEE MMM d, yyyy").format(time.millis)
 }
+

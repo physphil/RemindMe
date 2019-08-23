@@ -14,10 +14,8 @@ import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.util.Notification
+import com.physphil.android.remindme.util.localDateTimeFromMillis
 import com.physphil.android.remindme.util.millis
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneId
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -89,7 +87,7 @@ class ShowNotificationJob(
         text: String,
         recurrence: Recurrence
     ) {
-        val newTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()).apply {
+        val newTime = localDateTimeFromMillis(time).apply {
                 when (recurrence) {
                     Recurrence.HOURLY -> this.plusHours(1)
                     Recurrence.DAILY -> this.plusDays(1)

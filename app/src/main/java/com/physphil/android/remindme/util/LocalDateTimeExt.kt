@@ -1,5 +1,6 @@
 package com.physphil.android.remindme.util
 
+import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
@@ -57,3 +58,6 @@ private fun LocalDateTime.advanceDay(): LocalDateTime = plusDays(1)
 
 val LocalDateTime.millis: Long
     get() = ZonedDateTime.of(this, ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+fun localDateTimeFromMillis(millis: Long): LocalDateTime =
+    LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
