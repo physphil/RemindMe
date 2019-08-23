@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
-import com.physphil.android.remindme.util.getDisplayDate
-import com.physphil.android.remindme.util.getDisplayTime
+import com.physphil.android.remindme.util.ViewString
+import com.physphil.android.remindme.util.displayDate
+import com.physphil.android.remindme.util.displayTime
 import com.physphil.android.remindme.util.setVisibility
 import kotlinx.android.synthetic.main.view_header_reminder_list.view.*
 import kotlinx.android.synthetic.main.view_row_reminder_list.view.*
@@ -54,8 +55,14 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
                     listener?.onDeleteReminder(reminder)
                 }
 
-                reminderItemDateView.text = reminder.getDisplayDate(context)
-                reminderItemTimeView.text = reminder.getDisplayTime(context)
+                reminderItemDateView.text = when (val date = reminder.displayDate) {
+                    is ViewString.String -> date.value
+                    is ViewString.Integer -> context.getString(date.resId)
+                }
+                reminderItemTimeView.text = when (val time = reminder.displayTime) {
+                    is ViewString.String -> time.value
+                    is ViewString.Integer -> context.getString(time.resId)
+                }
                 reminderItemTitleView.text = reminder.title
 
                 // Hide description if not entered
