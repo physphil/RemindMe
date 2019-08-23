@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
-import java.util.Calendar
+import org.threeten.bp.LocalDateTime
 
 /**
  * A [BroadcastReceiver] implementation that is run when a user selects a snooze duration for a
@@ -24,10 +24,11 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
         val text = intent.getStringExtra(EXTRA_TEXT)
 
         // Add a new reminder for the snoozed notification
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis += offset
-        }
-        val reminder = Reminder(title = title, body = text, time = calendar)
+        val reminder = Reminder(
+            title = title,
+            body = text,
+            time = LocalDateTime.now().plusSeconds(offset)
+        )
         val snoozedReminder = reminder.copy(externalId = scheduler.scheduleShowNotificationJob(reminder))
         repo.insertReminder(snoozedReminder)
 

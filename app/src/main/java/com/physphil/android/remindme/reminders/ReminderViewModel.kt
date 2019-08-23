@@ -1,6 +1,5 @@
 package com.physphil.android.remindme.reminders
 
-import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,12 +14,10 @@ import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.util.SingleLiveEvent
 import com.physphil.android.remindme.util.ViewString
-import com.physphil.android.remindme.util.isNow
-import com.physphil.android.remindme.util.isToday
-import com.physphil.android.remindme.util.isTomorrow
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import com.physphil.android.remindme.util.displayDate
+import com.physphil.android.remindme.util.displayTime
+import com.physphil.android.remindme.util.millis
+import org.threeten.bp.LocalDateTime
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -76,7 +73,7 @@ class ReminderViewModel(
         reminderLiveData = if (id == null) {
             MutableLiveData<ViewState>().apply {
                 // Create new reminder and save
-                val newReminder = Reminder(time = presetTime?.time ?: Calendar.getInstance())
+                val newReminder = Reminder(time = presetTime?.time ?: LocalDateTime.now())
                 reminder = newReminder
                 value = newReminder.toViewState()
             }
@@ -99,15 +96,19 @@ class ReminderViewModel(
     }
 
     fun updateTime(hourOfDay: Int, minute: Int) {
-        reminder.time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        reminder.time.set(Calendar.MINUTE, minute)
+        val newTime = reminder.time
+            .withHour(hourOfDay)
+            .withMinute(minute)
+        reminder = reminder.copy(time = newTime)
         _reminderTimeLiveData.postValue(reminder.displayTime)
     }
 
     fun updateDate(year: Int, month: Int, dayOfMonth: Int) {
-        reminder.time.set(Calendar.YEAR, year)
-        reminder.time.set(Calendar.MONTH, month)
-        reminder.time.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        val newTime = reminder.time
+            .withYear(year)
+            .withMonth(month + 1)   // Month is 0-11 in DatePicker
+            .withDayOfMonth(dayOfMonth)
+        reminder = reminder.copy(time = newTime)
         _reminderDateLiveData.postValue(reminder.displayDate)
     }
 
@@ -120,8 +121,8 @@ class ReminderViewModel(
         with(reminder.time) {
             _openTimePickerEvent.postValue(
                 Time(
-                    hour = get(Calendar.HOUR_OF_DAY),
-                    minute = get(Calendar.MINUTE)
+                    hour = hour,
+                    minute = minute
                 )
             )
         }
@@ -131,9 +132,9 @@ class ReminderViewModel(
         with(reminder.time) {
             _openDatePickerEvent.postValue(
                 Date(
-                    year = get(Calendar.YEAR),
-                    month = get(Calendar.MONTH),
-                    day = get(Calendar.DAY_OF_MONTH)
+                    year = year,
+                    month = monthValue - 1, // Month is 0-11 in DatePicker
+                    day = dayOfMonth
                 )
             )
         }
@@ -145,8 +146,10 @@ class ReminderViewModel(
 
     fun saveReminder() {
         // Set all second fields to 0 before saving, so alarm happens at exactly the specified time
-        reminder.time.set(Calendar.SECOND, 0)
-        reminder.time.set(Calendar.MILLISECOND, 0)
+        val newTime = reminder.time
+            .withSecond(0)
+            .withNano(0)
+        reminder = reminder.copy(time = newTime)
 
         if (isNewReminder) {
             reminder = reminder.copy(externalId = scheduleNotification(reminder))
@@ -180,7 +183,7 @@ class ReminderViewModel(
      */
     private fun scheduleNotification(reminder: Reminder): Int =
         scheduler.scheduleShowNotificationJob(
-            time = reminder.time.timeInMillis,
+            time = reminder.time.millis,
             id = reminder.id,
             title = reminder.title,
             text = reminder.body,
@@ -194,20 +197,6 @@ class ReminderViewModel(
         date = displayDate,
         recurrence = recurrence.displayString
     )
-
-    private val Reminder.displayTime: ViewString
-        get() = when {
-            time.isNow() -> ViewString.Integer(R.string.reminder_time_now)
-            else -> ViewString.String(SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(time.time))
-        }
-
-    private val Reminder.displayDate: ViewString
-        @SuppressLint("SimpleDateFormat")
-        get() = when {
-            time.isToday() -> ViewString.Integer(R.string.reminder_repeat_today)
-            time.isTomorrow() -> ViewString.Integer(R.string.reminder_repeat_tomorrow)
-            else -> ViewString.String(SimpleDateFormat("EEE MMM d, yyyy").format(time.time))
-        }
 
     data class Time(val hour: Int, val minute: Int)
     data class Date(val year: Int, val month: Int, val day: Int)
@@ -233,7 +222,6 @@ class ReminderViewModel(
             }
 
             throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")
-
         }
     }
 }

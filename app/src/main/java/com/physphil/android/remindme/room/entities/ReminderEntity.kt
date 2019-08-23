@@ -12,7 +12,7 @@ import com.physphil.android.remindme.REMINDER_COLUMN_TITLE
 import com.physphil.android.remindme.TABLE_REMINDERS
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
-import java.util.Calendar
+import com.physphil.android.remindme.util.localDateTimeFromMillis
 
 /**
  * Entity to store Reminder objects in Room
@@ -69,9 +69,7 @@ data class ReminderEntity(
         id = id,
         title = title,
         body = body,
-        time = Calendar.getInstance().apply {
-            timeInMillis = this@ReminderEntity.time
-        },
+        time = localDateTimeFromMillis(this@ReminderEntity.time),
         recurrence = Recurrence.fromId(recurrence),
         externalId = externalId,
         notificationId = notificationId

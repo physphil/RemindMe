@@ -6,6 +6,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat
 import com.physphil.android.remindme.TAG_SHOW_NOTIFICATION_JOB
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
+import com.physphil.android.remindme.util.millis
 
 const val EXTRA_ID = "com.physphil.android.remindme.EXTRA_ID"
 const val EXTRA_TITLE = "com.physphil.android.remindme.EXTRA_TITLE"
@@ -52,7 +53,7 @@ object JobRequestScheduler {
     }
 
     fun scheduleShowNotificationJob(reminder: Reminder): Int {
-        return scheduleShowNotificationJob(reminder.time.timeInMillis, reminder.id, reminder.title, reminder.body, reminder.recurrence.id)
+        return scheduleShowNotificationJob(reminder.time.millis, reminder.id, reminder.title, reminder.body, reminder.recurrence.id)
     }
 
     /**

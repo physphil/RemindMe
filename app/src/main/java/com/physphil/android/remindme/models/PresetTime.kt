@@ -3,18 +3,18 @@ package com.physphil.android.remindme.models
 import com.physphil.android.remindme.util.endOfDay
 import com.physphil.android.remindme.util.tomorrowMorning
 import com.physphil.android.remindme.util.tonight
-import java.util.Calendar
+import org.threeten.bp.LocalDateTime
 
 /**
  * Represents a common time that a user might select as their [Reminder]'s time.
  */
 sealed class PresetTime(
     val id: Int,
-    val time: Calendar
+    val time: LocalDateTime
 ) {
-    class EndOfDay : PresetTime(ID_EOD, Calendar.getInstance().endOfDay())
-    class Tonight : PresetTime(ID_TONIGHT, Calendar.getInstance().tonight())
-    class TomorrowMorning : PresetTime(ID_TOMORROW_MORNING, Calendar.getInstance().tomorrowMorning())
+    class EndOfDay : PresetTime(ID_EOD, LocalDateTime.now().endOfDay())
+    class Tonight : PresetTime(ID_TONIGHT, LocalDateTime.now().tonight())
+    class TomorrowMorning : PresetTime(ID_TOMORROW_MORNING, LocalDateTime.now().tomorrowMorning())
 
     companion object {
         const val ID_UNKNOWN = -1
