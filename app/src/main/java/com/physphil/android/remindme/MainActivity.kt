@@ -68,11 +68,6 @@ class MainActivity : BaseActivity(),
         val divider =
             ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
         reminderListRecyclerView.addItemDecoration(divider)
-
-        // Setup random list header
-        val headers = resources.getStringArray(R.array.reminder_list_headers)
-        val index = (Math.random() * headers.size).toInt()
-        adapter.headerText = headers[index]
     }
 
     private fun bindViews() {
