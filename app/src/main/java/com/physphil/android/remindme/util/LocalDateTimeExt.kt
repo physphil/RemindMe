@@ -34,8 +34,8 @@ fun LocalDateTime.endOfDay(): LocalDateTime =
         .withMinute(0)
         .withSecond(0)
         .withNano(0)
-        .apply {
-            if (isInPast()) advanceDay()
+        .run {
+            if (isInPast()) advanceDay() else this
         }
 
 fun LocalDateTime.tonight(): LocalDateTime =
@@ -43,8 +43,8 @@ fun LocalDateTime.tonight(): LocalDateTime =
         .withMinute(30)
         .withSecond(0)
         .withNano(0)
-        .apply {
-            if (isInPast()) advanceDay()
+        .run {
+            if (isInPast()) advanceDay() else this
         }
 
 fun LocalDateTime.tomorrowMorning(): LocalDateTime =

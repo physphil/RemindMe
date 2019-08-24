@@ -16,6 +16,7 @@ import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.util.Notification
 import com.physphil.android.remindme.util.localDateTimeFromMillis
 import com.physphil.android.remindme.util.millis
+import org.threeten.bp.LocalDateTime
 
 /**
  * Copyright (c) 2017 Phil Shadlyn
@@ -87,16 +88,7 @@ class ShowNotificationJob(
         text: String,
         recurrence: Recurrence
     ) {
-        val newTime = localDateTimeFromMillis(time).apply {
-                when (recurrence) {
-                    Recurrence.HOURLY -> this.plusHours(1)
-                    Recurrence.DAILY -> this.plusDays(1)
-                    Recurrence.WEEKLY -> this.plusWeeks(1)
-                    Recurrence.MONTHLY -> this.plusMonths(1)
-                    Recurrence.YEARLY -> this.plusYears(1)
-                }
-            }.millis
-
+        val newTime = localDateTimeFromMillis(time).nextScheduledTime(recurrence).millis
         val newId = scheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
         repo.updateRecurringReminder(id, newId, newTime)
     }
@@ -112,6 +104,16 @@ class ShowNotificationJob(
         // Request codes must be unique in order to create unique PendingIntents
         return PendingIntent.getBroadcast(context, Notification.nextId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
+
+    private fun LocalDateTime.nextScheduledTime(recurrence: Recurrence): LocalDateTime =
+        when (recurrence) {
+            Recurrence.HOURLY -> this.plusHours(1)
+            Recurrence.DAILY -> this.plusDays(1)
+            Recurrence.WEEKLY -> this.plusWeeks(1)
+            Recurrence.MONTHLY -> this.plusMonths(1)
+            Recurrence.YEARLY -> this.plusYears(1)
+            Recurrence.NONE -> this
+        }
 
     /**
      *  Represents a preset Snooze option the user can pick from the notification.
