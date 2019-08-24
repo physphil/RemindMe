@@ -88,7 +88,7 @@ class ShowNotificationJob(
         text: String,
         recurrence: Recurrence
     ) {
-        val newTime = localDateTimeFromMillis(time).nextTime(recurrence).millis
+        val newTime = localDateTimeFromMillis(time).nextScheduledTime(recurrence).millis
         val newId = scheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
         repo.updateRecurringReminder(id, newId, newTime)
     }
@@ -105,7 +105,7 @@ class ShowNotificationJob(
         return PendingIntent.getBroadcast(context, Notification.nextId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private fun LocalDateTime.nextTime(recurrence: Recurrence): LocalDateTime =
+    private fun LocalDateTime.nextScheduledTime(recurrence: Recurrence): LocalDateTime =
         when (recurrence) {
             Recurrence.HOURLY -> this.plusHours(1)
             Recurrence.DAILY -> this.plusDays(1)
