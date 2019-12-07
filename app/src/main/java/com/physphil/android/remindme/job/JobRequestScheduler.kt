@@ -13,7 +13,7 @@ const val EXTRA_TITLE = "com.physphil.android.remindme.EXTRA_TITLE"
 const val EXTRA_TEXT = "com.physphil.android.remindme.EXTRA_TEXT"
 const val EXTRA_RECURRENCE = "com.physphil.android.remindme.EXTRA_RECURRENCE"
 const val EXTRA_TIME = "com.physphil.android.remindme.EXTRA_TIME"
-const val EXTRA_OFFSET = "com.physphil.android.remindme.EXTRA_OFFSET"
+const val EXTRA_SNOOZE_DURATION = "com.physphil.android.remindme.EXTRA_SNOOZE_DURATION"
 const val EXTRA_NOTIFICATION_ID = "com.physphil.android.remindme.EXTRA_NOTIFICATION_ID"
 
 /**

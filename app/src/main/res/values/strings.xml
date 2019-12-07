@@ -45,7 +45,7 @@
     <string name="dialog_title_delete_reminder">Delete Reminder?</string>
     <string name="dialog_message_delete_reminder">Are you sure you want to delete this reminder?</string>
 
-    <string name="snooze_20_min">Snooze 20 mins</string>
-    <string name="snooze_1_hour">1 hour</string>
+    <string name="snooze_1_hour">Snooze 1 hour</string>
     <string name="snooze_3_hours">3 hours</string>
+    <string name="snooze_tomorrow">Tomorrow</string>
 </resources>

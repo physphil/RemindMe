@@ -12,6 +12,7 @@ import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.SnoozeDuration
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.util.Notification
 import com.physphil.android.remindme.util.localDateTimeFromMillis
@@ -51,14 +52,14 @@ class ShowNotificationJob(
                     .setContentTitle(title)
                     .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     .addAction(R.drawable.ic_clock_purple_24dp,
-                            context.getString(R.string.snooze_20_min),
-                            getSnoozePendingIntent(SnoozeDuration.TWENTY_MIN, notificationId, title, text))
-                    .addAction(R.drawable.ic_clock_purple_24dp,
                             context.getString(R.string.snooze_1_hour),
-                            getSnoozePendingIntent(SnoozeDuration.ONE_HOUR, notificationId, title, text))
+                            getSnoozePendingIntent(SnoozeDuration.OneHour, notificationId, title, text))
                     .addAction(R.drawable.ic_clock_purple_24dp,
                             context.getString(R.string.snooze_3_hours),
-                            getSnoozePendingIntent(SnoozeDuration.THREE_HOURS, notificationId, title, text))
+                            getSnoozePendingIntent(SnoozeDuration.ThreeHours, notificationId, title, text))
+                    .addAction(R.drawable.ic_clock_purple_24dp,
+                            context.getString(R.string.snooze_tomorrow),
+                            getSnoozePendingIntent(SnoozeDuration.Tomorrow, notificationId, title, text))
 
             if (text.isNotEmpty()) {
                 builder.setContentText(text)
@@ -96,7 +97,7 @@ class ShowNotificationJob(
     private fun getSnoozePendingIntent(snooze: SnoozeDuration, notificationId: Int, title: String, text: String): PendingIntent {
         val intent = Intent(context, SnoozeBroadcastReceiver::class.java).apply {
             putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-            putExtra(EXTRA_OFFSET, snooze.offset)
+            putExtra(EXTRA_SNOOZE_DURATION, snooze)
             putExtra(EXTRA_TITLE, title)
             putExtra(EXTRA_TEXT, text)
         }
@@ -115,14 +116,14 @@ class ShowNotificationJob(
             Recurrence.NONE -> this
         }
 
-    /**
-     *  Represents a preset Snooze option the user can pick from the notification.
-     *
-     *  @param offset the number of seconds the notification should be snoozed.
-     */
-    private enum class SnoozeDuration(val offset: Long) {
-        TWENTY_MIN(60 * 20),
-        ONE_HOUR(60 * 60),
-        THREE_HOURS(60 * 60 * 3)
-    }
+//    /**
+//     *  Represents a preset Snooze option the user can pick from the notification.
+//     *
+//     *  @param offset the number of seconds the notification should be snoozed.
+//     */
+//    private enum class SnoozeDuration(val offset: Long) {
+//        TWENTY_MIN(60 * 20),
+//        ONE_HOUR(60 * 60),
+//        THREE_HOURS(60 * 60 * 3)
+//    }
 }
