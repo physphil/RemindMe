@@ -115,15 +115,4 @@ class ShowNotificationJob(
             Recurrence.YEARLY -> this.plusYears(1)
             Recurrence.NONE -> this
         }
-
-//    /**
-//     *  Represents a preset Snooze option the user can pick from the notification.
-//     *
-//     *  @param offset the number of seconds the notification should be snoozed.
-//     */
-//    private enum class SnoozeDuration(val offset: Long) {
-//        TWENTY_MIN(60 * 20),
-//        ONE_HOUR(60 * 60),
-//        THREE_HOURS(60 * 60 * 3)
-//    }
 }
