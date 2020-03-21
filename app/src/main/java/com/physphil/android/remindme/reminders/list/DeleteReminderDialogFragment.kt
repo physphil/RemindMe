@@ -37,7 +37,7 @@ class DeleteReminderDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val reminder = arguments!!.getParcelable<Reminder>(ARG_REMINDER)
+        val reminder = arguments!!.getParcelable<Reminder>(ARG_REMINDER)!!
         return AlertDialog.Builder(activity!!)
             .setTitle(R.string.dialog_title_delete_reminder)
             .setMessage(R.string.dialog_message_delete_reminder)

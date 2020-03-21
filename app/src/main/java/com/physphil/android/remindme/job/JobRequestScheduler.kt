@@ -26,7 +26,7 @@ private const val DEFAULT_OFFSET = 3000L
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-object JobRequestScheduler {
+class JobRequestScheduler {
     /**
      * Schedule a ShowNotificationJob to display a notification to the user at the specified time.
      * @param time the time (in ms) when the notification should be shown

@@ -12,7 +12,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.BaseActivity
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.inject.Injector
@@ -53,7 +53,7 @@ class ReminderActivity : BaseActivity(),
             id = id,
             presetTime = presetTime
         )
-        viewModel = ViewModelProviders.of(this, factory).get(ReminderViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(ReminderViewModel::class.java)
         viewModel.bind(this)
     }
 
