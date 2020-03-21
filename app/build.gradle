@@ -4,11 +4,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.physphil.android.remindme"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 9094
         versionName "0.9.94"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
