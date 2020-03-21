@@ -12,5 +12,5 @@ object Injector {
     fun provideReminderRepo(context: Context): ReminderRepo =
         ReminderRepo(AppDatabase.getInstance(context).reminderDao())
 
-    fun provideJobRequestScheduler(): JobRequestScheduler = JobRequestScheduler
+    fun provideJobRequestScheduler(): JobRequestScheduler = JobRequestScheduler()
 }
