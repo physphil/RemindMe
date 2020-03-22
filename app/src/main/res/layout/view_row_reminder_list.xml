@@ -11,15 +11,6 @@
     android:paddingStart="@dimen/global_margin_large"
     android:paddingTop="@dimen/global_margin_xlarge">
 
-    <Button
-        android:id="@+id/reminderItemDeleteView"
-        style="@style/Button.Small.Accent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reminder_list_delete_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/reminderItemDateView"
         style="@style/ReminderListTime"
@@ -27,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_large"
         android:drawableStart="@drawable/ic_date_range_24dp"
-        app:layout_constraintEnd_toStartOf="@id/reminderItemDeleteView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Tuesday January 16, 2018"/>
@@ -51,7 +42,7 @@
         android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_xlarge"
         android:drawableStart="@drawable/ic_repeat_24dp"
-        app:layout_constraintEnd_toStartOf="@id/reminderItemDeleteView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/reminderItemTimeView"
         app:layout_constraintTop_toTopOf="@id/reminderItemTimeView"
         tools:text="Yearly"/>

@@ -21,15 +21,13 @@ import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
-import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.ui.ReminderListDivider
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(),
     ReminderListAdapter.ReminderListAdapterClickListener,
-    DeleteAllDialogFragment.Listener,
-    DeleteReminderDialogFragment.Listener {
+    DeleteAllDialogFragment.Listener {
 
     private val adapter = ReminderListAdapter()
     private lateinit var viewModel: MainActivityViewModel
@@ -97,7 +95,6 @@ class MainActivity : BaseActivity(),
         }
     }
 
-    // region ReminderListAdapterClickListener implementation
     private val itemSwipeCallback = object : ItemTouchHelper.SimpleCallback(
         /* dragDirs */ 0,
         /* swipeDirs */ ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -115,25 +112,15 @@ class MainActivity : BaseActivity(),
         }
     }
 
+    // region ReminderListAdapterClickListener implementation
     override fun onReminderClicked(reminder: Reminder) {
         startActivity(ReminderActivity.intent(this, reminder.id))
-    }
-
-    override fun onDeleteReminder(reminder: Reminder) {
     }
     // endregion
 
     // region DeleteAllDialogFragment.Listener implementation
     override fun onDeleteAllReminders() {
         viewModel.deleteAllReminders()
-    }
-    // endregion
-
-    // region DeleteReminderDialogFragment.Listener implementation
-    override fun onConfirmDeleteReminder(reminder: Reminder) {
-    }
-
-    override fun onCancel() {
     }
     // endregion
 
