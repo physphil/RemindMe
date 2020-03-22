@@ -11,7 +11,7 @@ import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.physphil.android.remindme.inject.Injector
@@ -53,7 +53,7 @@ class MainActivity : BaseActivity(),
             repo = Injector.provideReminderRepo(this),
             scheduler = Injector.provideJobRequestScheduler()
         )
-        viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
         viewModel.bind(this)
     }
 
