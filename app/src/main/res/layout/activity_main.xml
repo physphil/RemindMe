@@ -25,8 +25,7 @@
             android:src="@drawable/ic_add_24dp"
             app:backgroundTint="@color/colorPrimary"
             app:layout_anchor="@id/reminderListRecyclerView"
-            app:layout_anchorGravity="bottom|end"
-            app:layout_behavior="com.physphil.android.remindme.ui.ScrollAwareFabBehaviour"/>
+            app:layout_anchorGravity="bottom|end"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
