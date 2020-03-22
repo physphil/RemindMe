@@ -7,6 +7,7 @@ import android.content.Intent
 import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.models.SnoozeDuration
+import com.physphil.android.remindme.models.schedule
 import com.physphil.android.remindme.util.tomorrowMorning
 import org.threeten.bp.LocalDateTime
 
@@ -31,8 +32,7 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
             body = text,
             time = LocalDateTime.now().snooze(snoozeDuration)
         )
-        val snoozedReminder = reminder.copy(externalId = scheduler.scheduleShowNotificationJob(reminder))
-        repo.insertReminder(snoozedReminder)
+        repo.insertReminder(reminder.schedule(scheduler))
 
         // Dismiss existing notification
         val nm: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

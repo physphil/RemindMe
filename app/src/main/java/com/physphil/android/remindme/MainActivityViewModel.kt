@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
+import com.physphil.android.remindme.models.schedule
 import com.physphil.android.remindme.util.SingleLiveEvent
 
 /**
@@ -62,7 +63,7 @@ class MainActivityViewModel(
     }
 
     fun undoDeleteReminder(reminder: Reminder) {
-        repo.insertReminder(reminder)
+        repo.insertReminder(reminder.schedule(scheduler))
     }
 
     sealed class Delete {
