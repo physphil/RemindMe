@@ -30,7 +30,6 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
 
     interface ReminderListAdapterClickListener {
         fun onReminderClicked(reminder: Reminder)
-        fun onDeleteReminder(reminder: Reminder)
     }
 
     private var listener: ReminderListAdapterClickListener? = null
@@ -49,10 +48,6 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
             with(holder.itemView) {
                 setOnClickListener {
                     listener?.onReminderClicked(reminder)
-                }
-
-                reminderItemDeleteView.setOnClickListener {
-                    listener?.onDeleteReminder(reminder)
                 }
 
                 reminderItemDateView.text = when (val date = reminder.displayDate) {
@@ -114,6 +109,13 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
             this.reminders.addAll(reminders.map { ListItem.Entry(it) })
         }
         notifyDataSetChanged()
+    }
+
+    operator fun get(position: Int): Reminder? {
+        return when (val reminder = reminders[position]) {
+            is ListItem.Entry -> reminder.reminder
+            else -> null
+        }
     }
 
     private fun randomHeader(context: Context): String {

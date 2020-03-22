@@ -8,29 +8,37 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
-import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.ui.ReminderListDivider
+import com.physphil.android.remindme.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(),
     ReminderListAdapter.ReminderListAdapterClickListener,
-    DeleteAllDialogFragment.Listener,
-    DeleteReminderDialogFragment.Listener {
+    DeleteAllDialogFragment.Listener {
 
     private val adapter = ReminderListAdapter()
     private lateinit var viewModel: MainActivityViewModel
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+
+    private val swipeToDeleteCallback = SwipeToDeleteCallback { position ->
+        adapter[position]?.let { reminder ->
+            viewModel.deleteReminder(reminder)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +61,7 @@ class MainActivity : BaseActivity(),
             repo = Injector.provideReminderRepo(this),
             scheduler = Injector.provideJobRequestScheduler()
         )
-        viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
         viewModel.bind(this)
     }
 
@@ -65,9 +73,11 @@ class MainActivity : BaseActivity(),
 
         // Setup list divider
         val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
-        val divider =
-            ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
+        val divider = ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
         reminderListRecyclerView.addItemDecoration(divider)
+
+        // Setup swipe callback
+        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(reminderListRecyclerView)
     }
 
     private fun bindViews() {
@@ -96,25 +106,11 @@ class MainActivity : BaseActivity(),
     override fun onReminderClicked(reminder: Reminder) {
         startActivity(ReminderActivity.intent(this, reminder.id))
     }
-
-    override fun onDeleteReminder(reminder: Reminder) {
-        viewModel.confirmDeleteReminder(reminder)
-    }
     // endregion
 
     // region DeleteAllDialogFragment.Listener implementation
     override fun onDeleteAllReminders() {
         viewModel.deleteAllReminders()
-    }
-    // endregion
-
-    // region DeleteReminderDialogFragment.Listener implementation
-    override fun onConfirmDeleteReminder(reminder: Reminder) {
-        viewModel.deleteReminder()
-    }
-
-    override fun onCancel() {
-        viewModel.cancelDeleteReminder()
     }
     // endregion
 
@@ -131,9 +127,14 @@ class MainActivity : BaseActivity(),
                 .show(supportFragmentManager, DeleteAllDialogFragment.TAG)
         })
 
-        showDeleteConfirmationEvent.observe(lifecycleOwner, Observer {
-            DeleteReminderDialogFragment.newInstance(it)
-                .show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
+        showDeleteConfirmationEvent.observe(lifecycleOwner, Observer { reminder ->
+            Snackbar.make(reminderListRecyclerViewContainer, R.string.snackbar_undo_text, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder(reminder) }
+                .setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.material_white))
+                .apply {
+                    view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.theme_dark_red))
+                }
+                .show()
         })
 
         spinnerVisibilityLiveData.observe(lifecycleOwner, Observer { visible ->
