@@ -127,15 +127,11 @@ class MainActivity : BaseActivity(),
                 .show(supportFragmentManager, DeleteAllDialogFragment.TAG)
         })
 
-        showDeleteConfirmationEvent.observe(lifecycleOwner, Observer {
+        showDeleteConfirmationEvent.observe(lifecycleOwner, Observer { reminder ->
             Snackbar.make(reminderListRecyclerViewContainer, R.string.snackbar_undo_text, Snackbar.LENGTH_LONG)
-                .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder() }
+                .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder(reminder) }
                 .setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.material_white))
-                .addCallback(object : Snackbar.Callback() {
-                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                        viewModel.clearDeletedReminder()
-                    }
-                }).apply {
+                .apply {
                     view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.theme_dark_red))
                 }
                 .show()
