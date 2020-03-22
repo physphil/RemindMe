@@ -116,6 +116,13 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
         notifyDataSetChanged()
     }
 
+    operator fun get(position: Int): Reminder? {
+        return when (val reminder = reminders[position]) {
+            is ListItem.Entry -> reminder.reminder
+            else -> null
+        }
+    }
+
     private fun randomHeader(context: Context): String {
         val headers = context.resources.getStringArray(R.array.reminder_list_headers)
         val index = (Math.random() * headers.size).toInt()

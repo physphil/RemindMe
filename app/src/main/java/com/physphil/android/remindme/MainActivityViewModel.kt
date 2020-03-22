@@ -34,7 +34,7 @@ class MainActivityViewModel(
     private val _emptyVisibilityLiveData = MutableLiveData<Boolean>()
     val emptyVisibilityLiveData: LiveData<Boolean> = _emptyVisibilityLiveData
 
-    private var reminderToDelete: Reminder? = null
+    private var deletedReminder: Reminder? = null
 
     init {
         _spinnerVisibilityLiveData.postValue(true)
@@ -56,22 +56,23 @@ class MainActivityViewModel(
         _clearNotificationEvent.postValue(Delete.All)
     }
 
-    fun confirmDeleteReminder(reminder: Reminder) {
-        reminderToDelete = reminder
+    fun deleteReminder(reminder: Reminder) {
+        scheduler.cancelJob(reminder.externalId)
+        repo.deleteReminder(reminder)
+        deletedReminder = reminder
+        _clearNotificationEvent.postValue(Delete.Single(reminder.notificationId))
         _showDeleteConfirmationEvent.postValue(reminder)
     }
 
-    fun deleteReminder() {
-        reminderToDelete?.let {
-            scheduler.cancelJob(it.externalId)
-            repo.deleteReminder(it)
-            _clearNotificationEvent.postValue(Delete.Single(it.notificationId))
-            reminderToDelete = null
+    fun undoDeleteReminder() {
+        deletedReminder?.let {
+            repo.insertReminder(it)
+            clearDeletedReminder()
         }
     }
 
-    fun cancelDeleteReminder() {
-        reminderToDelete = null
+    fun clearDeletedReminder() {
+        deletedReminder = null
     }
 
     sealed class Delete {

@@ -48,4 +48,7 @@
     <string name="snooze_1_hour">Snooze 1 hour</string>
     <string name="snooze_3_hours">3 hours</string>
     <string name="snooze_tomorrow">Tomorrow</string>
+
+    <string name="snackbar_undo_text">Reminder deleted</string>
+    <string name="snackbar_undo_action">Undo</string>
 </resources>

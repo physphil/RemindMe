@@ -13,7 +13,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.reminders.ReminderActivity
@@ -65,9 +68,11 @@ class MainActivity : BaseActivity(),
 
         // Setup list divider
         val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
-        val divider =
-            ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
+        val divider = ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
         reminderListRecyclerView.addItemDecoration(divider)
+
+        // Setup swipe callback
+        ItemTouchHelper(itemSwipeCallback).attachToRecyclerView(reminderListRecyclerView)
     }
 
     private fun bindViews() {
@@ -93,12 +98,28 @@ class MainActivity : BaseActivity(),
     }
 
     // region ReminderListAdapterClickListener implementation
+    private val itemSwipeCallback = object : ItemTouchHelper.SimpleCallback(
+        /* dragDirs */ 0,
+        /* swipeDirs */ ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean = true
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            adapter[viewHolder.adapterPosition]?.let { reminder ->
+                viewModel.deleteReminder(reminder)
+            }
+        }
+    }
+
     override fun onReminderClicked(reminder: Reminder) {
         startActivity(ReminderActivity.intent(this, reminder.id))
     }
 
     override fun onDeleteReminder(reminder: Reminder) {
-        viewModel.confirmDeleteReminder(reminder)
     }
     // endregion
 
@@ -110,11 +131,9 @@ class MainActivity : BaseActivity(),
 
     // region DeleteReminderDialogFragment.Listener implementation
     override fun onConfirmDeleteReminder(reminder: Reminder) {
-        viewModel.deleteReminder()
     }
 
     override fun onCancel() {
-        viewModel.cancelDeleteReminder()
     }
     // endregion
 
@@ -132,8 +151,14 @@ class MainActivity : BaseActivity(),
         })
 
         showDeleteConfirmationEvent.observe(lifecycleOwner, Observer {
-            DeleteReminderDialogFragment.newInstance(it)
-                .show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
+            Snackbar.make(reminderListRecyclerViewContainer, R.string.snackbar_undo_text, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder() }
+                .addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        viewModel.clearDeletedReminder()
+                    }
+                })
+                .show()
         })
 
         spinnerVisibilityLiveData.observe(lifecycleOwner, Observer { visible ->
