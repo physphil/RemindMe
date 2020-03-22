@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -15,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
@@ -23,6 +23,7 @@ import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.ui.ReminderListDivider
+import com.physphil.android.remindme.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(),
@@ -32,6 +33,12 @@ class MainActivity : BaseActivity(),
     private val adapter = ReminderListAdapter()
     private lateinit var viewModel: MainActivityViewModel
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+
+    private val swipeToDeleteCallback = SwipeToDeleteCallback { position ->
+        adapter[position]?.let { reminder ->
+            viewModel.deleteReminder(reminder)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +77,7 @@ class MainActivity : BaseActivity(),
         reminderListRecyclerView.addItemDecoration(divider)
 
         // Setup swipe callback
-        ItemTouchHelper(itemSwipeCallback).attachToRecyclerView(reminderListRecyclerView)
+        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(reminderListRecyclerView)
     }
 
     private fun bindViews() {
@@ -92,23 +99,6 @@ class MainActivity : BaseActivity(),
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private val itemSwipeCallback = object : ItemTouchHelper.SimpleCallback(
-        /* dragDirs */ 0,
-        /* swipeDirs */ ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-    ) {
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean = true
-
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            adapter[viewHolder.adapterPosition]?.let { reminder ->
-                viewModel.deleteReminder(reminder)
-            }
         }
     }
 
@@ -140,11 +130,14 @@ class MainActivity : BaseActivity(),
         showDeleteConfirmationEvent.observe(lifecycleOwner, Observer {
             Snackbar.make(reminderListRecyclerViewContainer, R.string.snackbar_undo_text, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder() }
+                .setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.material_white))
                 .addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                         viewModel.clearDeletedReminder()
                     }
-                })
+                }).apply {
+                    view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.theme_dark_red))
+                }
                 .show()
         })
 
