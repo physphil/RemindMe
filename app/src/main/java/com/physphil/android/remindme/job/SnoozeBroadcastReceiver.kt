@@ -7,7 +7,6 @@ import android.content.Intent
 import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.models.SnoozeDuration
-import com.physphil.android.remindme.models.schedule
 import com.physphil.android.remindme.util.tomorrowMorning
 import org.threeten.bp.LocalDateTime
 
@@ -19,7 +18,6 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val repo = Injector.provideReminderRepo(context)
-        val scheduler = Injector.provideJobRequestScheduler()
 
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0)
         val snoozeDuration: SnoozeDuration = intent.getSerializableExtra(EXTRA_SNOOZE_DURATION) as SnoozeDuration
@@ -32,7 +30,7 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
             body = text,
             time = LocalDateTime.now().snooze(snoozeDuration)
         )
-        repo.insertReminder(reminder.schedule(scheduler))
+        repo.insertReminder(reminder)
 
         // Dismiss existing notification
         val nm: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

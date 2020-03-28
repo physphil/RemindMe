@@ -10,7 +10,10 @@ import com.physphil.android.remindme.room.AppDatabase
  */
 object Injector {
     fun provideReminderRepo(context: Context): ReminderRepo =
-        ReminderRepo(AppDatabase.getInstance(context).reminderDao())
+        ReminderRepo(
+            dao = AppDatabase.getInstance(context).reminderDao(),
+            scheduler = JobRequestScheduler()
+        )
 
     fun provideJobRequestScheduler(): JobRequestScheduler = JobRequestScheduler()
 }

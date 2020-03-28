@@ -2,6 +2,7 @@ package com.physphil.android.remindme.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.room.ReminderDao
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +14,10 @@ import kotlinx.coroutines.launch
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderRepo(private val dao: ReminderDao) {
+class ReminderRepo(
+    private val dao: ReminderDao,
+    private val scheduler: JobRequestScheduler
+) {
 
     private val dbScope = CoroutineScope(Dispatchers.Default)
 
@@ -36,7 +40,11 @@ class ReminderRepo(private val dao: ReminderDao) {
         }
 
     fun insertReminder(reminder: Reminder) {
-        dbScope.launch { dao.insertReminder(reminder.toReminderEntity()) }
+        dbScope.launch {
+            dao.insertReminder(
+                reminder = reminder.schedule().toReminderEntity()
+            )
+        }
     }
 
     fun updateReminder(reminder: Reminder) {
@@ -65,4 +73,9 @@ class ReminderRepo(private val dao: ReminderDao) {
     fun deleteAllReminders() {
         dbScope.launch { dao.deleteAllReminders() }
     }
+
+    private fun Reminder.schedule(): Reminder =
+        this.copy(
+            externalId = scheduler.scheduleShowNotificationJob(this)
+        )
 }
