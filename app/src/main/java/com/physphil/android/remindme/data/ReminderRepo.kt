@@ -49,6 +49,7 @@ class ReminderRepo(
 
     fun updateReminder(reminder: Reminder) {
         dbScope.launch {
+            scheduler.cancelJob(reminder.externalId)
             dao.updateReminder(reminder.schedule().toReminderEntity())
         }
     }
