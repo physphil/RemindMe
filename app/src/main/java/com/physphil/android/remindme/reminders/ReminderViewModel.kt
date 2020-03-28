@@ -12,11 +12,11 @@ import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
+import com.physphil.android.remindme.models.schedule
 import com.physphil.android.remindme.util.SingleLiveEvent
 import com.physphil.android.remindme.util.ViewString
 import com.physphil.android.remindme.util.displayDate
 import com.physphil.android.remindme.util.displayTime
-import com.physphil.android.remindme.util.millis
 import org.threeten.bp.LocalDateTime
 
 /**
@@ -152,11 +152,10 @@ class ReminderViewModel(
         reminder = reminder.copy(time = newTime)
 
         if (isNewReminder) {
-            reminder = reminder.copy(externalId = scheduleNotification(reminder))
+            reminder = reminder.schedule(scheduler)
             repo.insertReminder(reminder)
         } else {
-            scheduler.cancelJob(reminder.externalId)
-            reminder = reminder.copy(externalId = scheduleNotification(reminder))
+            reminder = reminder.schedule(scheduler)
             repo.updateReminder(reminder)
         }
     }
@@ -175,20 +174,6 @@ class ReminderViewModel(
     fun prepareOptionsMenuItems(delete: MenuItem) {
         delete.isVisible = !isNewReminder
     }
-
-    /**
-     * Schedule a notification for the Reminder
-     * @param reminder the reminder to schedule a notification for
-     * @return the job id of the newly scheduled notification
-     */
-    private fun scheduleNotification(reminder: Reminder): Int =
-        scheduler.scheduleShowNotificationJob(
-            time = reminder.time.millis,
-            id = reminder.id,
-            title = reminder.title,
-            text = reminder.body,
-            recurrence = reminder.recurrence.id
-        )
 
     private fun Reminder.toViewState(): ViewState = ViewState(
         title = title,
