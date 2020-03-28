@@ -30,7 +30,7 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
             body = text,
             time = LocalDateTime.now().snooze(snoozeDuration)
         )
-        repo.insertReminder(reminder)
+        repo.addReminder(reminder)
 
         // Dismiss existing notification
         val nm: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

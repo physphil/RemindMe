@@ -153,7 +153,7 @@ class ReminderViewModel(
 
         if (isNewReminder) {
             reminder = reminder.schedule(scheduler)
-            repo.insertReminder(reminder)
+            repo.addReminder(reminder)
         } else {
             reminder = reminder.schedule(scheduler)
             repo.updateReminder(reminder)

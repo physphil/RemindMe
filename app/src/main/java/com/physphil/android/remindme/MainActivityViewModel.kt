@@ -5,18 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.data.ReminderRepo
-import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
-import com.physphil.android.remindme.models.schedule
 import com.physphil.android.remindme.util.SingleLiveEvent
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
-class MainActivityViewModel(
-    private val repo: ReminderRepo,
-    private val scheduler: JobRequestScheduler
-) : ViewModel() {
+class MainActivityViewModel(private val repo: ReminderRepo) : ViewModel() {
 
     val reminderList = repo.getActiveReminders()
 
@@ -50,20 +45,18 @@ class MainActivityViewModel(
     }
 
     fun deleteAllReminders() {
-        scheduler.cancelAllJobs()
         repo.deleteAllReminders()
         _clearNotificationEvent.postValue(Delete.All)
     }
 
     fun deleteReminder(reminder: Reminder) {
-        scheduler.cancelJob(reminder.externalId)
         repo.deleteReminder(reminder)
         _clearNotificationEvent.postValue(Delete.Single(reminder.notificationId))
         _showDeleteConfirmationEvent.postValue(reminder)
     }
 
     fun undoDeleteReminder(reminder: Reminder) {
-        repo.insertReminder(reminder.schedule(scheduler))
+        repo.addReminder(reminder)
     }
 
     sealed class Delete {
@@ -71,12 +64,11 @@ class MainActivityViewModel(
         data class Single(val id: Int) : Delete()
     }
 
-    class Factory(private val repo: ReminderRepo, private val scheduler: JobRequestScheduler) :
-        ViewModelProvider.Factory {
+    class Factory(private val repo: ReminderRepo) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
-                return MainActivityViewModel(repo, scheduler) as T
+                return MainActivityViewModel(repo) as T
             }
 
             throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")

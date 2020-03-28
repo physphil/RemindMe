@@ -39,7 +39,7 @@ class ReminderRepo(
             }
         }
 
-    fun insertReminder(reminder: Reminder) {
+    fun addReminder(reminder: Reminder) {
         dbScope.launch {
             dao.insertReminder(
                 reminder = reminder.schedule().toReminderEntity()
@@ -67,11 +67,17 @@ class ReminderRepo(
     }
 
     fun deleteReminder(reminder: Reminder) {
-        dbScope.launch { dao.deleteReminder(reminder.toReminderEntity()) }
+        dbScope.launch {
+            scheduler.cancelJob(reminder.externalId)
+            dao.deleteReminder(reminder.toReminderEntity())
+        }
     }
 
     fun deleteAllReminders() {
-        dbScope.launch { dao.deleteAllReminders() }
+        dbScope.launch {
+            scheduler.cancelAllJobs()
+            dao.deleteAllReminders()
+        }
     }
 
     private fun Reminder.schedule(): Reminder =

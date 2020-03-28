@@ -57,10 +57,7 @@ class MainActivity : BaseActivity(),
         }
 
         // Setup ViewModel
-        val factory = MainActivityViewModel.Factory(
-            repo = Injector.provideReminderRepo(this),
-            scheduler = Injector.provideJobRequestScheduler()
-        )
+        val factory = MainActivityViewModel.Factory(Injector.provideReminderRepo(this))
         viewModel = ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
         viewModel.bind(this)
     }
