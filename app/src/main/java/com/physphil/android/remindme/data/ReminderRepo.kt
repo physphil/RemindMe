@@ -2,8 +2,10 @@ package com.physphil.android.remindme.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.room.ReminderDao
+import com.physphil.android.remindme.util.millis
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +15,10 @@ import kotlinx.coroutines.launch
  *
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderRepo(private val dao: ReminderDao) {
+class ReminderRepo(
+    private val dao: ReminderDao,
+    private val scheduler: JobRequestScheduler
+) {
 
     private val dbScope = CoroutineScope(Dispatchers.Default)
 
@@ -35,20 +40,30 @@ class ReminderRepo(private val dao: ReminderDao) {
             }
         }
 
-    fun insertReminder(reminder: Reminder) {
-        dbScope.launch { dao.insertReminder(reminder.toReminderEntity()) }
+    fun addReminder(reminder: Reminder) {
+        dbScope.launch {
+            dao.insertReminder(
+                reminder = reminder.schedule().toReminderEntity()
+            )
+        }
     }
 
     fun updateReminder(reminder: Reminder) {
-        dbScope.launch { dao.updateReminder(reminder.toReminderEntity()) }
+        dbScope.launch {
+            scheduler.cancelJob(reminder.externalId)
+            dao.updateReminder(reminder.schedule().toReminderEntity())
+        }
     }
 
     /**
      * When the next event in a recurring [Reminder] is scheduled, call this method to update the Reminder's
      * externalId and time fields for the next scheduled notification
      */
-    fun updateRecurringReminder(id: String, newExternalId: Int, newTime: Long) {
-        dbScope.launch { dao.updateRecurringReminder(id, newExternalId, newTime) }
+    fun updateRecurringReminder(reminder: Reminder) {
+        dbScope.launch {
+            val updatedReminder = reminder.schedule()
+            dao.updateRecurringReminder(updatedReminder.id, updatedReminder.externalId, updatedReminder.time.millis)
+        }
     }
 
     /**
@@ -59,10 +74,21 @@ class ReminderRepo(private val dao: ReminderDao) {
     }
 
     fun deleteReminder(reminder: Reminder) {
-        dbScope.launch { dao.deleteReminder(reminder.toReminderEntity()) }
+        dbScope.launch {
+            scheduler.cancelJob(reminder.externalId)
+            dao.deleteReminder(reminder.toReminderEntity())
+        }
     }
 
     fun deleteAllReminders() {
-        dbScope.launch { dao.deleteAllReminders() }
+        dbScope.launch {
+            scheduler.cancelAllJobs()
+            dao.deleteAllReminders()
+        }
     }
+
+    private fun Reminder.schedule(): Reminder =
+        this.copy(
+            externalId = scheduler.scheduleShowNotificationJob(this)
+        )
 }

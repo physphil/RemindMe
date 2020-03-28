@@ -12,11 +12,11 @@ import com.physphil.android.remindme.CHANNEL_NOTIFICATIONS
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
 import com.physphil.android.remindme.models.Recurrence
+import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.models.SnoozeDuration
 import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.util.Notification
 import com.physphil.android.remindme.util.localDateTimeFromMillis
-import com.physphil.android.remindme.util.millis
 import org.threeten.bp.LocalDateTime
 
 /**
@@ -24,10 +24,7 @@ import org.threeten.bp.LocalDateTime
  *
  * Subclass of Job to display a notification to the user
  */
-class ShowNotificationJob(
-    private val repo: ReminderRepo,
-    private val scheduler: JobRequestScheduler
-) : Job() {
+class ShowNotificationJob(private val repo: ReminderRepo) : Job() {
 
     override fun onRunJob(params: Params): Result {
         // Only continue if the notification being shown has a valid id attached to it
@@ -73,25 +70,21 @@ class ShowNotificationJob(
             // Schedule the next event in the series if the Reminder has a recurrence
             val recurrence = Recurrence.fromId(params.extras.getInt(EXTRA_RECURRENCE, Recurrence.NONE.id))
             if (recurrence != Recurrence.NONE) {
-                scheduleNextNotification(params.extras.getLong(EXTRA_TIME, System.currentTimeMillis()), id, title, text, recurrence)
+                val millis = params.extras.getLong(EXTRA_TIME, System.currentTimeMillis())
+                val reminder = Reminder(
+                    id = id,
+                    title = title,
+                    body = text,
+                    recurrence = recurrence,
+                    time = localDateTimeFromMillis(millis).nextScheduledTime(recurrence)
+                )
+                repo.updateRecurringReminder(reminder)
             }
             return Result.SUCCESS
         }
         else {
             return Result.FAILURE
         }
-    }
-
-    private fun scheduleNextNotification(
-        time: Long,
-        id: String,
-        title: String,
-        text: String,
-        recurrence: Recurrence
-    ) {
-        val newTime = localDateTimeFromMillis(time).nextScheduledTime(recurrence).millis
-        val newId = scheduler.scheduleShowNotificationJob(newTime, id, title, text, recurrence.id)
-        repo.updateRecurringReminder(id, newId, newTime)
     }
 
     private fun getSnoozePendingIntent(snooze: SnoozeDuration, notificationId: Int, title: String, text: String): PendingIntent {

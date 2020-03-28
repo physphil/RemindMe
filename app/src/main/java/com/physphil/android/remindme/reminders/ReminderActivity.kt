@@ -49,7 +49,6 @@ class ReminderActivity : BaseActivity(),
         )
         val factory = ReminderViewModel.Factory(
             repo = Injector.provideReminderRepo(this),
-            scheduler = Injector.provideJobRequestScheduler(),
             id = id,
             presetTime = presetTime
         )

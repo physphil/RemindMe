@@ -10,13 +10,10 @@ import com.physphil.android.remindme.data.ReminderRepo
  *
  * Copyright (c) 2017 Phil Shadlyn
  */
-class GlobalJobCreator(
-    private val repo: ReminderRepo,
-    private val scheduler: JobRequestScheduler
-) : JobCreator {
+class GlobalJobCreator(private val repo: ReminderRepo) : JobCreator {
     override fun create(tag: String): Job? {
         return when (tag) {
-            TAG_SHOW_NOTIFICATION_JOB -> ShowNotificationJob(repo, scheduler)
+            TAG_SHOW_NOTIFICATION_JOB -> ShowNotificationJob(repo)
             else -> null
         }
     }

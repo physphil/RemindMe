@@ -1,7 +1,6 @@
 package com.physphil.android.remindme.models
 
 import android.os.Parcelable
-import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.room.entities.ReminderEntity
 import com.physphil.android.remindme.util.millis
 import kotlinx.android.parcel.Parcelize
@@ -59,8 +58,3 @@ data class Reminder(
         notificationId = notificationId
     )
 }
-
-fun Reminder.schedule(scheduler: JobRequestScheduler): Reminder =
-    this.copy(
-        externalId = scheduler.scheduleShowNotificationJob(this)
-    )

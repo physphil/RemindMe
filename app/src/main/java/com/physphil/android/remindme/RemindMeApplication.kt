@@ -15,10 +15,7 @@ open class RemindMeApplication : Application() {
         super.onCreate()
         AndroidThreeTen.init(this)
         JobManager.create(this).addJobCreator(
-            GlobalJobCreator(
-                repo = Injector.provideReminderRepo(this),
-                scheduler = Injector.provideJobRequestScheduler()
-            )
+            GlobalJobCreator(Injector.provideReminderRepo(this))
         )
     }
 }
