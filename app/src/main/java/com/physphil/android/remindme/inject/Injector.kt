@@ -14,6 +14,4 @@ object Injector {
             dao = AppDatabase.getInstance(context).reminderDao(),
             scheduler = JobRequestScheduler()
         )
-
-    fun provideJobRequestScheduler(): JobRequestScheduler = JobRequestScheduler()
 }

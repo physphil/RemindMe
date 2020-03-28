@@ -5,6 +5,7 @@ import androidx.lifecycle.Transformations
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.room.ReminderDao
+import com.physphil.android.remindme.util.millis
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,8 +59,11 @@ class ReminderRepo(
      * When the next event in a recurring [Reminder] is scheduled, call this method to update the Reminder's
      * externalId and time fields for the next scheduled notification
      */
-    fun updateRecurringReminder(id: String, newExternalId: Int, newTime: Long) {
-        dbScope.launch { dao.updateRecurringReminder(id, newExternalId, newTime) }
+    fun updateRecurringReminder(reminder: Reminder) {
+        dbScope.launch {
+            val updatedReminder = reminder.schedule()
+            dao.updateRecurringReminder(updatedReminder.id, updatedReminder.externalId, updatedReminder.time.millis)
+        }
     }
 
     /**
