@@ -12,7 +12,6 @@ import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
-import com.physphil.android.remindme.models.schedule
 import com.physphil.android.remindme.util.SingleLiveEvent
 import com.physphil.android.remindme.util.ViewString
 import com.physphil.android.remindme.util.displayDate
@@ -24,7 +23,6 @@ import org.threeten.bp.LocalDateTime
  */
 class ReminderViewModel(
     private val repo: ReminderRepo,
-    private val scheduler: JobRequestScheduler,
     id: String? = null,
     presetTime: PresetTime? = null
 ) : ViewModel() {
@@ -152,10 +150,8 @@ class ReminderViewModel(
         reminder = reminder.copy(time = newTime)
 
         if (isNewReminder) {
-            reminder = reminder.schedule(scheduler)
             repo.addReminder(reminder)
         } else {
-            reminder = reminder.schedule(scheduler)
             repo.updateReminder(reminder)
         }
     }
@@ -166,7 +162,6 @@ class ReminderViewModel(
 
     fun deleteReminder() {
         _clearNotificationEvent.postValue(reminder.notificationId)
-        scheduler.cancelJob(reminder.externalId)
         repo.deleteReminder(reminder)
         _closeActivityEvent.postValue(Unit)
     }
@@ -196,14 +191,13 @@ class ReminderViewModel(
 
     class Factory(
         private val repo: ReminderRepo,
-        private val scheduler: JobRequestScheduler,
         private val id: String?,
         private val presetTime: PresetTime?
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
-                return ReminderViewModel(repo, scheduler, id, presetTime) as T
+                return ReminderViewModel(repo, id, presetTime) as T
             }
 
             throw IllegalArgumentException("Cannot instantiate ViewModel class with those arguments")

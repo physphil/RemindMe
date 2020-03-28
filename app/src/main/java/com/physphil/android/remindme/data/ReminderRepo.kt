@@ -48,7 +48,9 @@ class ReminderRepo(
     }
 
     fun updateReminder(reminder: Reminder) {
-        dbScope.launch { dao.updateReminder(reminder.toReminderEntity()) }
+        dbScope.launch {
+            dao.updateReminder(reminder.schedule().toReminderEntity())
+        }
     }
 
     /**
