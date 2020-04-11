@@ -31,7 +31,14 @@ interface ReminderDao {
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_TIME > :time " +
             "ORDER BY $REMINDER_COLUMN_TIME ASC")
-    fun getAllReminders(time: Long = System.currentTimeMillis()): LiveData<List<ReminderEntity>>
+    fun getActiveReminders(time: Long = System.currentTimeMillis()): LiveData<List<ReminderEntity>>
+
+    @Query("SELECT COUNT(*) FROM $TABLE_REMINDERS " +
+        "WHERE $REMINDER_COLUMN_TIME < :time")
+    fun getOldReminderCount(time: Long = System.currentTimeMillis()): LiveData<Int>
+
+    @Query("SELECT MIN($REMINDER_COLUMN_TIME) FROM $TABLE_REMINDERS ")
+    fun getOldestReminderTime(): LiveData<Long>
 
     @Query("SELECT * FROM $TABLE_REMINDERS " +
             "WHERE $REMINDER_COLUMN_ID = :id")

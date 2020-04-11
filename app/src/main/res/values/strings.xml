@@ -23,6 +23,7 @@
     <string name="menu_save_reminder">Save</string>
     <string name="menu_delete_reminder">Delete</string>
     <string name="menu_delete_all">Delete All</string>
+    <string name="menu_stats">Stats</string>
 
     <string name="recurrence_none">Once</string>
     <string name="recurrence_hourly">Hourly</string>
@@ -50,4 +51,8 @@
 
     <string name="snackbar_undo_text">Reminder deleted</string>
     <string name="snackbar_undo_action">Undo</string>
+
+    <string name="stats_warning">WARNING: Under heavy construction, use at your own risk.</string>
+    <string name="stats_total_label">Reminders triggered:</string>
+    <string name="stats_oldest_label">User Since:</string>
 </resources>

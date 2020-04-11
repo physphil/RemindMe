@@ -8,4 +8,10 @@
         android:title="@string/menu_delete_all"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/menu_stats"
+        android:icon="@drawable/ic_stats_24dp"
+        android:title="@string/menu_stats"
+        app:showAsAction="never"/>
+
 </menu>

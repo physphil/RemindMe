@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/global_margin_large"
+    tools:context="com.physphil.android.remindme.stats.StatsActivity">
+
+    <TextView
+        android:id="@+id/statsHeaderView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_warning"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/statsTotalLabelView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/global_margin_xlarge"
+        android:text="@string/stats_total_label"
+        app:layout_constraintStart_toStartOf="@+id/statsHeaderView"
+        app:layout_constraintTop_toBottomOf="@+id/statsHeaderView" />
+
+    <TextView
+        android:id="@+id/statsTotalView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/global_margin_typical"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/statsTotalLabelView"
+        app:layout_constraintTop_toTopOf="@+id/statsTotalLabelView"
+        tools:text="1,542" />
+
+    <TextView
+        android:id="@+id/statsOldestLabelView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/global_margin_typical"
+        android:text="@string/stats_oldest_label"
+        app:layout_constraintStart_toStartOf="@+id/statsTotalLabelView"
+        app:layout_constraintTop_toBottomOf="@+id/statsTotalLabelView" />
+
+    <TextView
+        android:id="@+id/statsOldestView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/global_margin_typical"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/statsOldestLabelView"
+        app:layout_constraintTop_toTopOf="@+id/statsOldestLabelView"
+        tools:text="Mar 8, 1982" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
