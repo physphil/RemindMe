@@ -54,7 +54,7 @@ class ReminderDaoTest {
 
     @Test
     fun testGetEmptyReminderList() = runBlocking {
-        val reminders = dao.getAllReminders()
+        val reminders = dao.getActiveReminders()
         assertTrue(reminders.value!!.isEmpty())
     }
 
@@ -64,7 +64,7 @@ class ReminderDaoTest {
         time.timeInMillis = System.currentTimeMillis() + 60000 * 5  // set each reminder 5 minutes in future
         dao.insertReminder(ReminderEntity(time = time))
         dao.insertReminder(ReminderEntity(time = time))
-        val reminders = dao.getAllReminders()
+        val reminders = dao.getActiveReminders()
         assertTrue(reminders.value!!.size == 2)
     }
 
@@ -99,11 +99,11 @@ class ReminderDaoTest {
         dao.insertReminder(ReminderEntity(time = time))
         dao.insertReminder(ReminderEntity(time = time))
 
-        val firstList = dao.getAllReminders()
+        val firstList = dao.getActiveReminders()
         assertTrue(firstList.value!!.size == 3)
 
         dao.deleteAllReminders()
-        val secondList = dao.getAllReminders()
+        val secondList = dao.getActiveReminders()
         assertTrue(secondList.value!!.isEmpty())
     }
 

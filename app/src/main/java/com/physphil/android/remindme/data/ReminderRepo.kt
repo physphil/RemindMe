@@ -34,11 +34,14 @@ class ReminderRepo(
         }
 
     fun getActiveReminders(): LiveData<List<Reminder>> =
-        Transformations.map(dao.getAllReminders()) { entities ->
+        Transformations.map(dao.getActiveReminders()) { entities ->
             entities.map {
                 it.toReminderModel()
             }
         }
+
+    fun getOldReminderCount(): LiveData<Int> = dao.getOldReminderCount()
+
 
     fun addReminder(reminder: Reminder) {
         dbScope.launch {
