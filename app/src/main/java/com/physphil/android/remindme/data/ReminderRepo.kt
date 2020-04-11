@@ -5,10 +5,12 @@ import androidx.lifecycle.Transformations
 import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.Reminder
 import com.physphil.android.remindme.room.ReminderDao
+import com.physphil.android.remindme.util.localDateTimeFromMillis
 import com.physphil.android.remindme.util.millis
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDateTime
 
 /**
  * Repository to handle fetching and saving Reminder data
@@ -42,6 +44,10 @@ class ReminderRepo(
 
     fun getOldReminderCount(): LiveData<Int> = dao.getOldReminderCount()
 
+    fun getOldestReminderDate(): LiveData<LocalDateTime> =
+        Transformations.map(dao.getOldestReminderTime()) { millis ->
+            localDateTimeFromMillis(millis)
+        }
 
     fun addReminder(reminder: Reminder) {
         dbScope.launch {

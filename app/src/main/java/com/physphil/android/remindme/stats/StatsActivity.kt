@@ -27,5 +27,9 @@ class StatsActivity : AppCompatActivity() {
         reminderCountLiveData.observe(lifecycleOwner, Observer {
             statsTotalView.text = it.toString()
         })
+
+        oldestReminderDateLiveData.observe(lifecycleOwner, Observer {
+            statsOldestView.text = it
+        })
     }
 }
