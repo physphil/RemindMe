@@ -12,7 +12,7 @@ class StatsViewModel(private val repo: ReminderRepo) : ViewModel() {
 
     val reminderCountLiveData: LiveData<String> =
         Transformations.map(repo.getOldReminderCount()) {
-            DecimalFormat.getIntegerInstance().format(68948)
+            DecimalFormat.getIntegerInstance().format(it)
         }
 
     val oldestReminderDateLiveData: LiveData<String> =
