@@ -21,8 +21,8 @@ class SnoozeBroadcastReceiver : BroadcastReceiver() {
 
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0)
         val snoozeDuration: SnoozeDuration = intent.getSerializableExtra(EXTRA_SNOOZE_DURATION) as SnoozeDuration
-        val title = intent.getStringExtra(EXTRA_TITLE)
-        val text = intent.getStringExtra(EXTRA_TEXT)
+        val title = intent.getStringExtra(EXTRA_TITLE) ?: ""
+        val text = intent.getStringExtra(EXTRA_TEXT) ?: ""
 
         // Add a new reminder for the snoozed notification
         val reminder = Reminder(
