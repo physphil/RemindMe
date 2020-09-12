@@ -31,7 +31,7 @@ class SwipeToDeleteCallback(private val callback: OnSwipeCallback) :
     ) {
         with(viewHolder.itemView) {
             val topPadding = context.resources.getDimensionPixelSize(R.dimen.global_single)
-            val background = ColorDrawable(ContextCompat.getColor(context, R.color.theme_dark_red))
+            val background = ColorDrawable(ContextCompat.getColor(context, R.color.theme_red))
             when {
                 // swipe right
                 dX > 0 -> background.setBounds(

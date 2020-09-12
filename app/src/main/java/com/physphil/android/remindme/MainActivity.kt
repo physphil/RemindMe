@@ -135,7 +135,7 @@ class MainActivity : BaseActivity(),
                 .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder(reminder) }
                 .setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.material_white))
                 .apply {
-                    view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.theme_dark_red))
+                    view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.theme_red))
                 }
                 .show()
         })
