@@ -133,9 +133,9 @@ class MainActivity : BaseActivity(),
         showDeleteConfirmationEvent.observe(lifecycleOwner, Observer { reminder ->
             Snackbar.make(reminderListRecyclerViewContainer, R.string.snackbar_undo_text, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_undo_action) { viewModel.undoDeleteReminder(reminder) }
-                .setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.material_white))
+                .setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorBodyText))
                 .apply {
-                    view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.theme_red))
+                    view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorCriticalRed))
                 }
                 .show()
         })

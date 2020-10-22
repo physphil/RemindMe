@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/global_margin_large"
         android:textAllCaps="true"
-        android:textColor="@color/material_white"
+        android:textColor="@color/colorBodyText"
         android:textSize="@dimen/text_size_reminder_list_header"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

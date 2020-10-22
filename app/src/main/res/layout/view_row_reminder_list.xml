@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:paddingBottom="@dimen/global_margin_xlarge"
-    android:paddingEnd="@dimen/global_margin_large"
     android:paddingStart="@dimen/global_margin_large"
-    android:paddingTop="@dimen/global_margin_xlarge">
+    android:paddingTop="@dimen/global_margin_xlarge"
+    android:paddingEnd="@dimen/global_margin_large"
+    android:paddingBottom="@dimen/global_margin_xlarge">
 
     <TextView
         android:id="@+id/reminderItemDateView"
@@ -18,10 +17,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_large"
         android:drawableStart="@drawable/ic_date_range_24dp"
+        android:textColor="@color/colorHeaderText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Tuesday January 16, 2018"/>
+        tools:text="Tuesday January 16, 2018" />
 
     <TextView
         android:id="@+id/reminderItemTimeView"
@@ -29,39 +29,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_typical"
+        android:textColor="@color/colorHeaderText"
         android:drawableStart="@drawable/ic_time_24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reminderItemDateView"
-        tools:text="9:30 AM"/>
+        tools:text="9:30 AM" />
 
     <TextView
         android:id="@+id/reminderItemRecurrenceView"
         style="@style/ReminderListTime"
         android:layout_width="0dp"
+        android:textColor="@color/colorHeaderText"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/global_margin_large"
         android:layout_marginStart="@dimen/global_margin_xlarge"
+        android:layout_marginEnd="@dimen/global_margin_large"
         android:drawableStart="@drawable/ic_repeat_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/reminderItemTimeView"
         app:layout_constraintTop_toTopOf="@id/reminderItemTimeView"
-        tools:text="Yearly"/>
+        tools:text="Yearly" />
 
     <TextView
         android:id="@+id/reminderItemTitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_large"
-        android:textColor="@color/material_white"
+        android:textColor="@color/colorBodyText"
         android:textSize="@dimen/text_size_reminder_list_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reminderItemTimeView"
-        tools:text="Remind me to do this!!"/>
+        tools:text="Remind me to do this!!" />
 
     <TextView
         android:id="@+id/reminderItemBodyView"
         android:layout_width="0dp"
+        android:textColor="@color/colorHeaderText"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_typical"
         android:ellipsize="end"
@@ -70,6 +73,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reminderItemTitleView"
-        tools:text="blah blah asl;dkfj eihf ojfk fuiew fs asdlj eijf iejfk jhfuehfhf"/>
+        tools:text="blah blah asl;dkfj eihf ojfk fuiew fs asdlj eijf iejfk jhfuehfhf" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
