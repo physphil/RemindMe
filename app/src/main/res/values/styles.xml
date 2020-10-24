@@ -27,7 +27,7 @@
     </style>
 
     <style name="Pickers" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccentDark</item>
     </style>
 
     <style name="Button">
