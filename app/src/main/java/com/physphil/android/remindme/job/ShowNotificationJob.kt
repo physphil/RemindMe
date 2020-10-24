@@ -47,14 +47,14 @@ class ShowNotificationJob(private val repo: ReminderRepo) : Job() {
                     .setSmallIcon(R.drawable.ic_notification)
                     .setContentIntent(pi)
                     .setContentTitle(title)
-                    .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                    .addAction(R.drawable.ic_clock_purple_24dp,
+                    .setColor(ContextCompat.getColor(context, R.color.colorAccent))
+                    .addAction(R.drawable.ic_clock_silver_blue_24dp,
                             context.getString(R.string.snooze_1_hour),
                             getSnoozePendingIntent(SnoozeDuration.OneHour, notificationId, title, text))
-                    .addAction(R.drawable.ic_clock_purple_24dp,
+                    .addAction(R.drawable.ic_clock_silver_blue_24dp,
                             context.getString(R.string.snooze_3_hours),
                             getSnoozePendingIntent(SnoozeDuration.ThreeHours, notificationId, title, text))
-                    .addAction(R.drawable.ic_clock_purple_24dp,
+                    .addAction(R.drawable.ic_clock_silver_blue_24dp,
                             context.getString(R.string.snooze_tomorrow),
                             getSnoozePendingIntent(SnoozeDuration.Tomorrow, notificationId, title, text))
 

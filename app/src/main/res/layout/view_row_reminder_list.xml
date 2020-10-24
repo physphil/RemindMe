@@ -18,9 +18,10 @@
         android:layout_marginEnd="@dimen/global_margin_xxxlarge"
         android:drawableStart="@drawable/ic_date_range_16dp"
         android:textColor="@color/colorHeaderText"
+        app:layout_constraintBottom_toBottomOf="@id/reminderItemTimeView"
         app:layout_constraintEnd_toStartOf="@id/reminderItemTimeView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/reminderItemTimeView"
         tools:text="Wed. Oct. 28, 2020" />
 
     <TextView
@@ -28,8 +29,13 @@
         style="@style/ReminderListTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_time_16dp"
-        android:textColor="@color/colorHeaderText"
+        android:background="@drawable/bg_rounded_time"
+        android:drawableEnd="@drawable/ic_row_time"
+        android:paddingStart="@dimen/global_margin_typical"
+        android:paddingTop="@dimen/global_margin_small"
+        android:paddingEnd="@dimen/global_margin_typical"
+        android:paddingBottom="@dimen/global_margin_small"
+        android:textColor="@color/theme_ice_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="9:30 AM" />
@@ -37,12 +43,17 @@
     <TextView
         android:id="@+id/reminderItemRecurrenceView"
         style="@style/ReminderListTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/global_margin_xlarge"
         android:layout_marginTop="@dimen/global_margin_typical"
-        android:drawableEnd="@drawable/ic_repeat_16dp"
-        android:textColor="@color/colorHeaderText"
+        android:background="@drawable/bg_rounded_recurrence"
+        android:drawableEnd="@drawable/ic_row_recurrence"
+        android:paddingStart="@dimen/global_margin_typical"
+        android:paddingTop="@dimen/global_margin_small"
+        android:paddingEnd="@dimen/global_margin_typical"
+        android:paddingBottom="@dimen/global_margin_small"
+        android:textColor="@color/theme_key_lime_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/reminderItemTimeView"
         tools:text="Yearly" />

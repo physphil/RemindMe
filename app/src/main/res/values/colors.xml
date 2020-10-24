@@ -22,12 +22,14 @@
     <color name="theme_red">#F44336</color>
 
     <color name="theme_ice_blue">#38A5FF</color>
+    <color name="theme_ice_blue_very_dark">#0E2940</color>
     <color name="theme_silver_blue">#2E72D2</color>
     <color name="theme_silver_blue_dark">#2864B8</color>
     <color name="theme_charcoal">#202122</color>
     <color name="theme_charcoal_light">#303133</color>
     <color name="theme_key_lime_green">#21AF85</color>
     <color name="theme_key_lime_green_dark">#1D9672</color>
+    <color name="theme_key_lime_green_very_dark">#013011</color>
     <color name="theme_forest_green">#003D2C</color>
     <color name="theme_forest_green_dark">#003325</color>
     <color name="theme_text_critical">#FC766D</color>
