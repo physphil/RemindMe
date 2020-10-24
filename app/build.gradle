@@ -9,9 +9,8 @@ android {
         applicationId "com.physphil.android.remindme"
         minSdkVersion 21
         targetSdkVersion 30
-        // merged new colours to 'develop', just need to release new version
-        versionCode 9101
-        versionName "0.9.101"
+        versionCode 9102
+        versionName "0.9.102"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
