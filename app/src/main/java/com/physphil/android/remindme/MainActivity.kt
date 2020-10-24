@@ -70,11 +70,6 @@ class MainActivity : BaseActivity(),
         reminderListRecyclerView.layoutManager = LinearLayoutManager(this)
         reminderListRecyclerView.itemAnimator = DefaultItemAnimator()
 
-        // Setup list divider
-        val inset = resources.getDimensionPixelSize(R.dimen.reminder_divider_margin)
-        val divider = ReminderListDivider(InsetDrawable(getDrawable(R.drawable.divider), inset, 0, inset, 0))
-        reminderListRecyclerView.addItemDecoration(divider)
-
         // Setup swipe callback
         ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(reminderListRecyclerView)
     }

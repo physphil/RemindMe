@@ -5,6 +5,7 @@
     <dimen name="global_margin_small">4dp</dimen>
     <dimen name="global_margin_typical">8dp</dimen>
     <dimen name="global_margin_large">16dp</dimen>
+    <dimen name="global_margin_larger">20dp</dimen>
     <dimen name="global_margin_xlarge">24dp</dimen>
     <dimen name="global_margin_xxlarge">32dp</dimen>
     <dimen name="global_margin_xxxlarge">40dp</dimen>
