@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/royal_purple_dark</color>
-    <color name="colorPrimaryDark">@color/royal_purple_very_dark</color>
-    <color name="colorAccent">@color/theme_key_lime_green</color>
-    <color name="colorAccentDark">@color/theme_key_lime_green_dark</color>
-    <color name="colorBackground">@color/theme_charcoal</color>
+    <color name="colorPrimary">@color/theme_charcoal_light</color>
+    <color name="colorPrimaryDark">@color/theme_charcoal</color>
+    <color name="colorAccent">@color/theme_silver_blue</color>
+    <color name="colorAccentDark">@color/theme_silver_blue_dark</color>
+    <color name="colorBackground">@color/theme_background_dark</color>
     <color name="colorBodyText">@color/theme_paper_white</color>
     <color name="colorHeaderText">@color/theme_ash_grey</color>
     <color name="colorCriticalRed">@color/theme_text_critical</color>
@@ -25,6 +25,7 @@
     <color name="theme_silver_blue">#2E72D2</color>
     <color name="theme_silver_blue_dark">#2864B8</color>
     <color name="theme_charcoal">#202122</color>
+    <color name="theme_charcoal_light">#303133</color>
     <color name="theme_key_lime_green">#21AF85</color>
     <color name="theme_key_lime_green_dark">#1D9672</color>
     <color name="theme_forest_green">#003D2C</color>

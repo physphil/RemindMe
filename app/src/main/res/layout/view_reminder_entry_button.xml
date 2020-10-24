@@ -17,7 +17,7 @@
 
     <Button
         android:id="@+id/reminderEntryButtonView"
-        style="@style/Button.Large.Primary"
+        style="@style/Button.Large.Accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/global_margin_xlarge"

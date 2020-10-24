@@ -16,59 +16,58 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_large"
-        android:drawableStart="@drawable/ic_date_range_24dp"
+        android:drawableStart="@drawable/ic_date_range_16dp"
         android:textColor="@color/colorHeaderText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Tuesday January 16, 2018" />
+        tools:text="Wed. Oct. 28, 2020" />
 
     <TextView
         android:id="@+id/reminderItemTimeView"
         style="@style/ReminderListTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/global_margin_typical"
+        android:drawableEnd="@drawable/ic_time_16dp"
         android:textColor="@color/colorHeaderText"
-        android:drawableStart="@drawable/ic_time_24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminderItemDateView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="9:30 AM" />
 
     <TextView
         android:id="@+id/reminderItemRecurrenceView"
         style="@style/ReminderListTime"
         android:layout_width="0dp"
-        android:textColor="@color/colorHeaderText"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/global_margin_xlarge"
-        android:layout_marginEnd="@dimen/global_margin_large"
-        android:drawableStart="@drawable/ic_repeat_24dp"
+        android:layout_marginTop="@dimen/global_margin_typical"
+        android:drawableEnd="@drawable/ic_repeat_16dp"
+        android:textColor="@color/colorHeaderText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/reminderItemTimeView"
-        app:layout_constraintTop_toTopOf="@id/reminderItemTimeView"
+        app:layout_constraintTop_toBottomOf="@id/reminderItemTimeView"
         tools:text="Yearly" />
 
     <TextView
         android:id="@+id/reminderItemTitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/global_margin_large"
+        android:layout_marginTop="@dimen/global_margin_typical"
+        android:layout_marginEnd="@dimen/global_margin_xxxlarge"
         android:textColor="@color/colorBodyText"
         android:textSize="@dimen/text_size_reminder_list_title"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/reminderItemRecurrenceView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reminderItemTimeView"
-        tools:text="Remind me to do this!!" />
+        tools:text="Remind me to do this!!  This is a really long title to see how it looks like" />
 
     <TextView
         android:id="@+id/reminderItemBodyView"
         android:layout_width="0dp"
-        android:textColor="@color/colorHeaderText"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_margin_typical"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/colorHeaderText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
