@@ -10,8 +10,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         // merged new colours to 'develop', just need to release new version
-        versionCode 9100
-        versionName "0.9.100"
+        versionCode 9101
+        versionName "0.9.101"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
