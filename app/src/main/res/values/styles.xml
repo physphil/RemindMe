@@ -49,10 +49,11 @@
 
     <style name="Button.Small">
         <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
         <item name="android:paddingTop">@dimen/global_margin_small</item>
         <item name="android:paddingBottom">@dimen/global_margin_small</item>
-        <item name="android:paddingStart">@dimen/global_margin_typical</item>
-        <item name="android:paddingEnd">@dimen/global_margin_typical</item>
+        <item name="android:paddingStart">@dimen/global_margin_large</item>
+        <item name="android:paddingEnd">@dimen/global_margin_large</item>
     </style>
 
     <style name="Button.Small.Primary">

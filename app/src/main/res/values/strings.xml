@@ -32,6 +32,9 @@
     <string name="recurrence_monthly">Monthly</string>
     <string name="recurrence_yearly">Yearly</string>
 
+    <string name="time_preset_morning">AM</string>
+    <string name="time_preset_evening">PM</string>
+
     <string name="spinner_loading_generic">Loading…</string>
     <string name="spinner_loading_reminders">Grabbing Your Reminders…</string>
 
