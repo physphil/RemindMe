@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,14 +15,14 @@
             android:id="@+id/reminderTitleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/global_margin_xlarge"
             android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_xlarge"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
             app:field_icon="@drawable/ic_notifications_24dp"
             app:field_title="@string/reminder_title_title"
             app:layout_constraintTop_toTopOf="parent">
 
-            <requestFocus/>
+            <requestFocus />
 
         </com.physphil.android.remindme.ui.ReminderEntryField>
 
@@ -31,41 +30,72 @@
             android:id="@+id/reminderBodyView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/global_margin_xlarge"
             android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_xlarge"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:layout_marginBottom="@dimen/global_margin_larger"
             app:field_icon="@drawable/ic_view_headline_24dp"
-            app:field_title="@string/reminder_body_title"/>
+            app:field_title="@string/reminder_body_title" />
 
-        <com.physphil.android.remindme.ui.ReminderEntryButton
-            android:id="@+id/reminderTimeView"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/global_margin_large"
-            android:layout_marginStart="@dimen/global_margin_large"
-            android:layout_marginTop="@dimen/global_margin_xxxlarge"
-            app:button_icon="@drawable/ic_time_24dp"/>
+            android:layout_marginTop="@dimen/global_margin_larger"
+            android:layout_marginBottom="@dimen/global_margin_larger">
+
+            <com.physphil.android.remindme.ui.ReminderEntryButton
+                android:id="@+id/reminderTimeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/global_margin_large"
+                android:layout_marginEnd="@dimen/global_margin_large"
+                app:button_icon="@drawable/ic_time_24dp" />
+
+            <Button
+                android:id="@+id/reminderTimePresetMorningView"
+                style="@style/Button.Small.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/global_margin_typical"
+                android:layout_marginEnd="@dimen/global_margin_large"
+                android:layout_toEndOf="@id/reminderTimeView"
+                android:text="@string/time_preset_morning" />
+
+            <Button
+                android:id="@+id/reminderTimePresetEveningView"
+                style="@style/Button.Small.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/global_margin_typical"
+                android:layout_toEndOf="@id/reminderTimePresetMorningView"
+                android:text="@string/time_preset_evening" />
+
+        </RelativeLayout>
 
         <com.physphil.android.remindme.ui.ReminderEntryButton
             android:id="@+id/reminderDateView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/global_margin_large"
             android:layout_marginStart="@dimen/global_margin_large"
-            android:layout_marginTop="@dimen/global_margin_xxxlarge"
+            android:layout_marginTop="@dimen/global_margin_larger"
+            android:layout_marginEnd="@dimen/global_margin_large"
+            android:layout_marginBottom="@dimen/global_margin_larger"
             app:button_icon="@drawable/ic_date_range_24dp"
-            tools:button_text="Jan 26, 2018"/>
+            tools:button_text="Jan 26, 2018" />
 
         <com.physphil.android.remindme.ui.ReminderEntryButton
             android:id="@+id/reminderRecurrenceView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/global_margin_xlarge"
-            android:layout_marginEnd="@dimen/global_margin_xlarge"
             android:layout_marginStart="@dimen/global_margin_large"
-            android:layout_marginTop="@dimen/global_margin_xxxlarge"
+            android:layout_marginTop="@dimen/global_margin_larger"
+            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:layout_marginBottom="@dimen/global_margin_xlarge"
+            android:paddingBottom="@dimen/global_margin_larger"
             app:button_icon="@drawable/ic_repeat_24dp"
-            tools:button_text="Hourly"/>
+            tools:button_text="Hourly" />
 
     </LinearLayout>
 

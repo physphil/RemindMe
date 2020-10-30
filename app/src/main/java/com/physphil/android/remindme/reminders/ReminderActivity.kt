@@ -76,6 +76,14 @@ class ReminderActivity : BaseActivity(),
         reminderRecurrenceView.setOnClickListener {
             viewModel.openRecurrencePicker()
         }
+
+        reminderTimePresetMorningView.setOnClickListener {
+            viewModel.updateTime(7, 0)
+        }
+
+        reminderTimePresetEveningView.setOnClickListener {
+            viewModel.updateTime(19, 30)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
