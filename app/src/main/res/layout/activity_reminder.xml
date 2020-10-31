@@ -11,6 +11,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/reminderToolbarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/reminderToolbarTitleView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@style/ToolbarTextAppearance"
+                tools:text="@string/title_add_reminder" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
         <com.physphil.android.remindme.ui.ReminderEntryField
             android:id="@+id/reminderTitleView"
             android:layout_width="match_parent"

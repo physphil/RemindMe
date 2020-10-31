@@ -39,7 +39,7 @@ class ReminderActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
-        setHomeArrowBackNavigation()
+        setupViews()
         bindViews()
 
         // Setup ViewModel
@@ -54,6 +54,12 @@ class ReminderActivity : BaseActivity(),
         )
         viewModel = ViewModelProvider(this, factory).get(ReminderViewModel::class.java)
         viewModel.bind(this)
+    }
+
+    private fun setupViews() {
+        setSupportActionBar(reminderToolbarView)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        setHomeArrowBackNavigation()
     }
 
     private fun bindViews() {
@@ -176,7 +182,7 @@ class ReminderActivity : BaseActivity(),
         })
 
         toolbarTitleLiveData.observe(lifecycleOwner, Observer { title ->
-            setToolbarTitle(title)
+            reminderToolbarTitleView.setText(title)
         })
 
         clearNotificationEvent.observe(lifecycleOwner, Observer { id ->

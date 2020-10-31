@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/theme_charcoal_light</color>
-    <color name="colorPrimaryDark">@color/theme_charcoal</color>
+    <color name="colorPrimaryDark">@color/theme_background_dark</color>
     <color name="colorAccent">@color/theme_silver_blue</color>
     <color name="colorAccentDark">@color/theme_silver_blue_dark</color>
     <color name="colorBackground">@color/theme_background_dark</color>
