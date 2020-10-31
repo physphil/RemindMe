@@ -166,10 +166,6 @@ class ReminderViewModel(
         _closeActivityEvent.postValue(Unit)
     }
 
-    fun prepareOptionsMenuItems(delete: MenuItem) {
-        delete.isVisible = !isNewReminder
-    }
-
     private fun Reminder.toViewState(): ViewState = ViewState(
         title = title,
         body = body,

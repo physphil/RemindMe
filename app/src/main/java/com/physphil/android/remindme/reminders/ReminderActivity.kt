@@ -39,7 +39,7 @@ class ReminderActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
-        setHomeArrowBackNavigation()
+        setupViews()
         bindViews()
 
         // Setup ViewModel
@@ -54,6 +54,12 @@ class ReminderActivity : BaseActivity(),
         )
         viewModel = ViewModelProvider(this, factory).get(ReminderViewModel::class.java)
         viewModel.bind(this)
+    }
+
+    private fun setupViews() {
+        setSupportActionBar(reminderToolbarView)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        setHomeArrowBackNavigation()
     }
 
     private fun bindViews() {
@@ -92,22 +98,11 @@ class ReminderActivity : BaseActivity(),
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
-        val delete = menu.findItem(R.id.menu_delete)
-        delete?.let { viewModel.prepareOptionsMenuItems(delete) }
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_save -> {
                 viewModel.saveReminder()
                 finish()
-                true
-            }
-            R.id.menu_delete -> {
-                viewModel.confirmDeleteReminder()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -176,7 +171,7 @@ class ReminderActivity : BaseActivity(),
         })
 
         toolbarTitleLiveData.observe(lifecycleOwner, Observer { title ->
-            setToolbarTitle(title)
+            reminderToolbarTitleView.setText(title)
         })
 
         clearNotificationEvent.observe(lifecycleOwner, Observer { id ->

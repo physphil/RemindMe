@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -24,7 +23,6 @@ import com.physphil.android.remindme.reminders.ReminderActivity
 import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.stats.StatsActivity
-import com.physphil.android.remindme.ui.ReminderListDivider
 import com.physphil.android.remindme.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -43,7 +41,7 @@ class MainActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupRecyclerview()
+        setupViews()
         bindViews()
 
         // Create required notification channel on Android 8.0+
@@ -62,7 +60,10 @@ class MainActivity : BaseActivity(),
         viewModel.bind(this)
     }
 
-    private fun setupRecyclerview() {
+    private fun setupViews() {
+        setSupportActionBar(reminderListToolbarView)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         adapter.setOnClickListener(this)
         reminderListRecyclerView.adapter = adapter
         reminderListRecyclerView.layoutManager = LinearLayoutManager(this)

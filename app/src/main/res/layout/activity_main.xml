@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.physphil.android.remindme.MainActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/reminderListToolbarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/app_name"
+            android:textAppearance="@style/ToolbarTextAppearance" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/reminderListRecyclerViewContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reminderListToolbarView">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reminderListRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/reminderListFabView"
@@ -24,7 +40,7 @@
             android:layout_margin="@dimen/global_margin_large"
             android:src="@drawable/ic_add_24dp"
             app:layout_anchor="@id/reminderListRecyclerView"
-            app:layout_anchorGravity="bottom|end"/>
+            app:layout_anchorGravity="bottom|end" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -34,15 +50,15 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         app:spinner_message="@string/spinner_loading_reminders"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/reminderListEmptyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/global_margin_xlarge"
-        android:drawablePadding="@dimen/global_margin_large"
         android:drawableTop="@drawable/ic_alarm_clock"
+        android:drawablePadding="@dimen/global_margin_large"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/line_spacing_large"
         android:text="@string/reminder_list_empty"
@@ -53,6 +69,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

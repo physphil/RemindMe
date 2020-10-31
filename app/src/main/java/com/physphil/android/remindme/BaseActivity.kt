@@ -9,10 +9,6 @@ import android.view.MenuItem
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    fun setToolbarTitle(@StringRes title: Int) {
-        supportActionBar?.setTitle(title)
-    }
-
     fun setHomeArrowBackNavigation() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
