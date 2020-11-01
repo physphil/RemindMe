@@ -82,12 +82,12 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     }
 
     fun setReminderList(reminders: List<Reminder>) {
-        DiffUtil.calculateDiff(
-            ReminderDiffUtilCallback(
-                oldList = this.reminders,
-                newList = reminders
-            )
-        ).dispatchUpdatesTo(this)
+        ReminderDiffUtilCallback(
+            oldList = this.reminders,
+            newList = reminders
+        ).run {
+            DiffUtil.calculateDiff(this).dispatchUpdatesTo(this@ReminderListAdapter)
+        }
 
         this.reminders.clear()
         this.reminders.addAll(reminders)
