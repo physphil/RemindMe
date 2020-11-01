@@ -3,6 +3,7 @@ package com.physphil.android.remindme.reminders.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.models.Recurrence
@@ -81,12 +82,36 @@ class ReminderListAdapter : RecyclerView.Adapter<ReminderListAdapter.ViewHolder>
     }
 
     fun setReminderList(reminders: List<Reminder>) {
+        DiffUtil.calculateDiff(
+            ReminderDiffUtilCallback(
+                oldList = this.reminders,
+                newList = reminders
+            )
+        ).dispatchUpdatesTo(this)
+
         this.reminders.clear()
         this.reminders.addAll(reminders)
-        notifyDataSetChanged()
     }
 
     operator fun get(position: Int): Reminder = reminders[position]
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    private class ReminderDiffUtilCallback(
+        private val oldList: List<Reminder>,
+        private val newList: List<Reminder>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
 }
