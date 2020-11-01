@@ -7,10 +7,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:fontFamily">@font/open_sans_regular</item>
+        <item name="android:actionMenuTextAppearance">@style/ToolbarMenuTextAppearance</item>
     </style>
 
     <style name="ToolbarTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+    </style>
+
+    <style name="ToolbarMenuTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/open_sans_bold</item>
     </style>
 
     <style name="Reminder"/>
@@ -20,14 +27,24 @@
         <item name="android:paddingEnd">@dimen/global_margin_small</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/open_sans_bold</item>
     </style>
 
-    <style name="ReminderListTime">
+    <style name="ReminderList">
         <item name="android:gravity">center_vertical</item>
         <item name="android:drawablePadding">@dimen/global_margin_typical</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ReminderList.Time">
         <item name="android:textSize">@dimen/text_size_reminder_list_time</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+    </style>
+
+    <style name="ReminderList.Date">
+        <item name="android:textSize">@dimen/text_size_reminder_list_date</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/open_sans_bold</item>
     </style>
 
     <style name="Pickers" parent="Theme.AppCompat.Light.Dialog">
@@ -41,6 +58,7 @@
 
     <style name="Button.Large">
         <item name="android:textSize">@dimen/text_size_button_primary</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
     </style>
 
     <style name="Button.Large.Primary">
@@ -58,6 +76,7 @@
         <item name="android:paddingBottom">@dimen/global_margin_small</item>
         <item name="android:paddingStart">@dimen/global_margin_large</item>
         <item name="android:paddingEnd">@dimen/global_margin_large</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
     </style>
 
     <style name="Button.Small.Primary">
