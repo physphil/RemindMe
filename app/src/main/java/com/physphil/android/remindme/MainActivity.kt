@@ -24,7 +24,12 @@ import com.physphil.android.remindme.reminders.list.DeleteAllDialogFragment
 import com.physphil.android.remindme.reminders.list.ReminderListAdapter
 import com.physphil.android.remindme.stats.StatsActivity
 import com.physphil.android.remindme.ui.SwipeToDeleteCallback
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.reminderListEmptyView
+import kotlinx.android.synthetic.main.activity_main.reminderListFabView
+import kotlinx.android.synthetic.main.activity_main.reminderListRecyclerView
+import kotlinx.android.synthetic.main.activity_main.reminderListRecyclerViewContainer
+import kotlinx.android.synthetic.main.activity_main.reminderListSpinnerView
+import kotlinx.android.synthetic.main.activity_main.reminderListToolbarView
 
 class MainActivity : BaseActivity(),
     ReminderListAdapter.ReminderListAdapterClickListener,
@@ -34,8 +39,12 @@ class MainActivity : BaseActivity(),
     private lateinit var viewModel: MainActivityViewModel
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-    private val swipeToDeleteCallback = SwipeToDeleteCallback { position ->
-        viewModel.deleteReminder(adapter[position])
+    private val swipeToDeleteCallback = SwipeToDeleteCallback(
+        unswipeableViewHolders = listOf(ReminderListAdapter.ReminderListViewHolder.Date::class)
+    ) { position ->
+        adapter[position]?.let { reminder ->
+            viewModel.deleteReminder(reminder)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

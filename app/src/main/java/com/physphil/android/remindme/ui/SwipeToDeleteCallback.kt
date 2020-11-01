@@ -6,15 +6,28 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.physphil.android.remindme.R
+import kotlin.reflect.KClass
 
-class SwipeToDeleteCallback(private val callback: OnSwipeCallback) :
-    ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-    
+class SwipeToDeleteCallback(
+    private val unswipeableViewHolders: List<KClass<out RecyclerView.ViewHolder>> = emptyList(),
+    private val callback: OnSwipeCallback
+) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean = true
+
+    override fun getSwipeDirs(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        return when (unswipeableViewHolders.contains(viewHolder::class)) {
+            true -> 0
+            else -> super.getSwipeDirs(recyclerView, viewHolder)
+        }
+    }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         callback(viewHolder.adapterPosition)
