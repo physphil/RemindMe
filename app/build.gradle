@@ -9,8 +9,8 @@ android {
         applicationId "com.physphil.android.remindme"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9104
-        versionName "0.9.104"
+        versionCode 9105
+        versionName "0.9.105"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
