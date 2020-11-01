@@ -17,6 +17,7 @@
     <dimen name="text_size_button_primary">@dimen/text_size_large</dimen>
     <dimen name="text_size_progress_message">@dimen/text_size_large</dimen>
     <dimen name="text_size_reminder_list_time">12sp</dimen>
+    <dimen name="text_size_reminder_list_date">13sp</dimen>
     <dimen name="text_size_reminder_list_title">@dimen/text_size_large</dimen>
     <dimen name="text_size_reminder_list_header">16sp</dimen>
 

@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/reminderItemDateView"
-        style="@style/ReminderListTime"
+        style="@style/ReminderList.Date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/global_margin_xxxlarge"
@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/reminderItemTimeView"
-        style="@style/ReminderListTime"
+        style="@style/ReminderList.Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_time"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/reminderItemRecurrenceView"
-        style="@style/ReminderListTime"
+        style="@style/ReminderList.Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/global_margin_xlarge"
