@@ -39,9 +39,6 @@ class MainActivity : BaseActivity(),
     private lateinit var viewModel: MainActivityViewModel
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-    private val swipeToDeleteCallback = SwipeToDeleteCallback { position ->
-        viewModel.deleteReminder(adapter[position])
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +72,11 @@ class MainActivity : BaseActivity(),
         reminderListRecyclerView.itemAnimator = DefaultItemAnimator()
 
         // Setup swipe callback
-        ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(reminderListRecyclerView)
+        SwipeToDeleteCallback(this) { position ->
+            viewModel.deleteReminder(adapter[position])
+        }.let { callback ->
+            ItemTouchHelper(callback).attachToRecyclerView(reminderListRecyclerView)
+        }
     }
 
     private fun bindViews() {
