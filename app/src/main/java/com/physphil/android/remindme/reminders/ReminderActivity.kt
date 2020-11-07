@@ -19,9 +19,16 @@ import com.physphil.android.remindme.inject.Injector
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
-import com.physphil.android.remindme.reminders.list.DeleteReminderDialogFragment
 import com.physphil.android.remindme.util.ViewString
-import kotlinx.android.synthetic.main.activity_reminder.*
+import kotlinx.android.synthetic.main.activity_reminder.reminderBodyView
+import kotlinx.android.synthetic.main.activity_reminder.reminderDateView
+import kotlinx.android.synthetic.main.activity_reminder.reminderRecurrenceView
+import kotlinx.android.synthetic.main.activity_reminder.reminderTimePresetEveningView
+import kotlinx.android.synthetic.main.activity_reminder.reminderTimePresetMorningView
+import kotlinx.android.synthetic.main.activity_reminder.reminderTimeView
+import kotlinx.android.synthetic.main.activity_reminder.reminderTitleView
+import kotlinx.android.synthetic.main.activity_reminder.reminderToolbarTitleView
+import kotlinx.android.synthetic.main.activity_reminder.reminderToolbarView
 
 /**
  * Create a new [Reminder] or edit an existing one.
@@ -31,8 +38,7 @@ import kotlinx.android.synthetic.main.activity_reminder.*
 class ReminderActivity : BaseActivity(),
     TimePickerDialog.OnTimeSetListener,
     DatePickerDialog.OnDateSetListener,
-    RecurrencePickerDialog.OnRecurrenceSetListener,
-    DeleteReminderDialogFragment.Listener {
+    RecurrencePickerDialog.OnRecurrenceSetListener {
 
     private lateinit var viewModel: ReminderViewModel
 
@@ -127,16 +133,6 @@ class ReminderActivity : BaseActivity(),
     }
     // endregion
 
-    // region DeleteReminderDialogFragment.Listener implementation
-    override fun onConfirmDeleteReminder(reminder: Reminder) {
-        viewModel.deleteReminder()
-    }
-
-    override fun onCancel() {
-        // do nothing
-    }
-    // endregion
-
     private fun ReminderViewModel.bind(lifecycleOwner: LifecycleOwner) {
         reminderLiveData.observe(lifecycleOwner, Observer { state ->
             reminderTitleView.setText(state.title, true)
@@ -178,15 +174,6 @@ class ReminderActivity : BaseActivity(),
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 cancel(id)
             }
-        })
-
-        confirmDeleteEvent.observe(lifecycleOwner, Observer { reminder ->
-            DeleteReminderDialogFragment.newInstance(reminder)
-                .show(supportFragmentManager, DeleteReminderDialogFragment.TAG)
-        })
-
-        closeActivityEvent.observe(lifecycleOwner, Observer {
-            finish()
         })
 
         openTimePickerEvent.observe(lifecycleOwner, Observer { time ->

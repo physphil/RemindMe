@@ -1,6 +1,5 @@
 package com.physphil.android.remindme.reminders
 
-import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -8,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.data.ReminderRepo
-import com.physphil.android.remindme.job.JobRequestScheduler
 import com.physphil.android.remindme.models.PresetTime
 import com.physphil.android.remindme.models.Recurrence
 import com.physphil.android.remindme.models.Reminder
@@ -37,12 +35,6 @@ class ReminderViewModel(
 
     private val _clearNotificationEvent = SingleLiveEvent<Int>()
     val clearNotificationEvent: LiveData<Int> = _clearNotificationEvent
-
-    private val _confirmDeleteEvent = SingleLiveEvent<Reminder>()
-    val confirmDeleteEvent: LiveData<Reminder> = _confirmDeleteEvent
-
-    private val _closeActivityEvent = SingleLiveEvent<Unit>()
-    val closeActivityEvent: LiveData<Unit> = _closeActivityEvent
 
     private val _openTimePickerEvent = SingleLiveEvent<Time>()
     val openTimePickerEvent: LiveData<Time> = _openTimePickerEvent
@@ -154,16 +146,6 @@ class ReminderViewModel(
         } else {
             repo.updateReminder(reminder)
         }
-    }
-
-    fun confirmDeleteReminder() {
-        _confirmDeleteEvent.postValue(reminder)
-    }
-
-    fun deleteReminder() {
-        _clearNotificationEvent.postValue(reminder.notificationId)
-        repo.deleteReminder(reminder)
-        _closeActivityEvent.postValue(Unit)
     }
 
     private fun Reminder.toViewState(): ViewState = ViewState(
