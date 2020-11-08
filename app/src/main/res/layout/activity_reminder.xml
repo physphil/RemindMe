@@ -19,10 +19,10 @@
 
             <TextView
                 android:id="@+id/reminderToolbarTitleView"
+                style="@style/ToolbarText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textAppearance="@style/ToolbarTextAppearance"
                 tools:text="@string/title_add_reminder" />
 
         </com.google.android.material.appbar.MaterialToolbar>

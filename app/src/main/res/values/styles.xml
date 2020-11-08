@@ -11,8 +11,10 @@
         <item name="android:actionMenuTextAppearance">@style/ToolbarMenuTextAppearance</item>
     </style>
 
-    <style name="ToolbarTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="ToolbarText">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">@dimen/text_size_toolbar_title</item>
+        <item name="android:textColor">@color/colorBodyText</item>
     </style>
 
     <style name="ToolbarMenuTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
