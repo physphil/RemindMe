@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_xlarge"
-            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:layout_marginEnd="@dimen/global_margin_large"
             app:field_icon="@drawable/ic_notifications_24dp"
             app:field_title="@string/reminder_title_title"
             app:layout_constraintTop_toTopOf="parent">
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_xlarge"
-            android:layout_marginEnd="@dimen/global_margin_xlarge"
+            android:layout_marginEnd="@dimen/global_margin_large"
             android:layout_marginBottom="@dimen/global_margin_larger"
             app:field_icon="@drawable/ic_view_headline_24dp"
             app:field_title="@string/reminder_body_title" />
@@ -69,7 +69,7 @@
 
             <Button
                 android:id="@+id/reminderTimePresetMorningView"
-                style="@style/Button.Small.Accent"
+                style="@style/Button.Small.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -80,7 +80,7 @@
 
             <Button
                 android:id="@+id/reminderTimePresetEveningView"
-                style="@style/Button.Small.Accent"
+                style="@style/Button.Small.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

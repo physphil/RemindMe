@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:fontFamily">@font/open_sans_regular</item>
         <item name="android:actionMenuTextAppearance">@style/ToolbarMenuTextAppearance</item>
@@ -22,15 +23,9 @@
         <item name="android:fontFamily">@font/open_sans_bold</item>
     </style>
 
-    <style name="Reminder"/>
+    <style name="Reminder" />
 
-    <style name="Reminder.Title">
-        <item name="android:paddingStart">@dimen/global_margin_small</item>
-        <item name="android:paddingEnd">@dimen/global_margin_small</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-    </style>
+    <style name="Reminder.Title" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
 
     <style name="ReminderList">
         <item name="android:gravity">center_vertical</item>

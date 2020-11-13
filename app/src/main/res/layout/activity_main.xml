@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/global_margin_large"
             android:src="@drawable/ic_add_24dp"
+            app:backgroundTint="@color/colorPrimary"
             app:layout_anchor="@id/reminderListRecyclerView"
             app:layout_anchorGravity="bottom|end" />
 

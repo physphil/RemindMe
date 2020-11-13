@@ -1,22 +1,25 @@
 package com.physphil.android.remindme.ui
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.addTextChangedListener
 import com.physphil.android.remindme.R
 import com.physphil.android.remindme.util.setTextMoveCursorToEnd
-import kotlinx.android.synthetic.main.view_reminder_entry.view.*
+import kotlinx.android.synthetic.main.view_reminder_entry.view.reminderEntryTextContainerView
+import kotlinx.android.synthetic.main.view_reminder_entry.view.reminderEntryTextView
 
 /**
  * Copyright (c) 2018 Phil Shadlyn
  */
-class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class ReminderEntryField @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var textChangedListener: ((String) -> Unit)? = null
 
@@ -39,30 +42,24 @@ class ReminderEntryField @JvmOverloads constructor(context: Context, attrs: Attr
             ta.recycle()
         }
 
-        view.reminderEntryContentView.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(text: Editable?) {
-                textChangedListener?.invoke(text.toString())
-            }
-
-            override fun beforeTextChanged(text: CharSequence?, s: Int, c: Int, a: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        view.reminderEntryTextView.addTextChangedListener { text ->
+            textChangedListener?.invoke(text.toString())
+        }
     }
 
     fun setTitle(@StringRes title: Int) {
-        reminderEntryTitleView.setText(title)
+        reminderEntryTextContainerView.hint = context.getString(title)
     }
 
     fun setText(text: String, moveCursorToEnd: Boolean = false) {
-        when(moveCursorToEnd) {
-            true -> reminderEntryContentView.setTextMoveCursorToEnd(text)
-            false -> reminderEntryContentView.setText(text)
+        when (moveCursorToEnd) {
+            true -> reminderEntryTextView.setTextMoveCursorToEnd(text)
+            false -> reminderEntryTextView.setText(text)
         }
     }
 
     fun setIcon(@DrawableRes icon: Int) {
-        reminderEntryIconView.setImageResource(icon)
+        reminderEntryTextContainerView.setStartIconDrawable(icon)
     }
 
     fun setOnTextChangedListener(listener: (String) -> Unit) {

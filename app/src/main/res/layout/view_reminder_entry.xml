@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/reminderEntryTitleView"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reminderEntryTextContainerView"
         style="@style/Reminder.Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/global_margin_large"
-        android:layout_marginStart="@dimen/reminder_input_margin_start"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/reminder_title_title"/>
+        app:startIconDrawable="@drawable/ic_notifications_24dp"
+        tools:hint="Title">
 
-    <EditText
-        android:id="@+id/reminderEntryContentView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine|textCapSentences"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/reminderEntryTitleView"
-        app:layout_constraintTop_toBottomOf="@id/reminderEntryTitleView"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reminderEntryTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences" />
 
-    <ImageView
-        android:id="@+id/reminderEntryIconView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/reminderEntryTitleView"
-        tools:srcCompat="@drawable/ic_notifications_24dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
