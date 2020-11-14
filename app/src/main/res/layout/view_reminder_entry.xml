@@ -13,13 +13,14 @@
         android:layout_marginBottom="@dimen/global_margin_large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/ic_notifications_24dp"
         tools:hint="Title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/reminderEntryTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_reminder_detail_title"
+            android:drawablePadding="@dimen/global_margin_large"
             android:inputType="textMultiLine|textCapSentences" />
 
     </com.google.android.material.textfield.TextInputLayout>

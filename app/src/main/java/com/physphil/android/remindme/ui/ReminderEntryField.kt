@@ -59,7 +59,8 @@ class ReminderEntryField @JvmOverloads constructor(
     }
 
     fun setIcon(@DrawableRes icon: Int) {
-        reminderEntryTextContainerView.setStartIconDrawable(icon)
+        val drawable = resources.getDrawable(icon, null)
+        reminderEntryTextView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
     }
 
     fun setOnTextChangedListener(listener: (String) -> Unit) {
