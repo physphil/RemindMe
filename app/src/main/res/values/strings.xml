@@ -5,8 +5,8 @@
 
     <string name="channel_notifications">Notifications</string>
 
-    <string name="reminder_title_title">Title</string>
-    <string name="reminder_body_title">Content</string>
+    <string name="reminder_title_title">Reminder</string>
+    <string name="reminder_body_title">More Details</string>
     <string name="reminder_time_title">Time</string>
     <string name="reminder_time_now">Now</string>
     <string name="reminder_date_title">Date</string>
