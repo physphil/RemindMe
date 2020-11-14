@@ -59,13 +59,16 @@
             android:layout_marginTop="@dimen/global_margin_larger"
             android:layout_marginBottom="@dimen/global_margin_larger">
 
-            <com.physphil.android.remindme.ui.ReminderEntryButton
+            <Button
                 android:id="@+id/reminderTimeView"
+                style="@style/Button.Large.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/global_margin_large"
                 android:layout_marginEnd="@dimen/global_margin_large"
-                app:button_icon="@drawable/ic_reminder_detail_time" />
+                android:drawableStart="@drawable/ic_reminder_detail_time"
+                android:drawablePadding="@dimen/global_margin_large"
+                tools:text="12:09pm" />
 
             <Button
                 android:id="@+id/reminderTimePresetMorningView"
@@ -90,28 +93,31 @@
 
         </RelativeLayout>
 
-        <com.physphil.android.remindme.ui.ReminderEntryButton
+        <Button
             android:id="@+id/reminderDateView"
+            style="@style/Button.Large.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_larger"
             android:layout_marginEnd="@dimen/global_margin_large"
             android:layout_marginBottom="@dimen/global_margin_larger"
-            app:button_icon="@drawable/ic_reminder_detail_date"
-            tools:button_text="Jan 26, 2018" />
+            android:drawableStart="@drawable/ic_reminder_detail_date"
+            android:drawablePadding="@dimen/global_margin_large"
+            tools:text="Jan 26, 2018" />
 
-        <com.physphil.android.remindme.ui.ReminderEntryButton
+        <Button
             android:id="@+id/reminderRecurrenceView"
+            style="@style/Button.Large.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/global_margin_large"
             android:layout_marginTop="@dimen/global_margin_larger"
             android:layout_marginEnd="@dimen/global_margin_xlarge"
             android:layout_marginBottom="@dimen/global_margin_xlarge"
-            android:paddingBottom="@dimen/global_margin_larger"
-            app:button_icon="@drawable/ic_reminder_detail_recurrence"
-            tools:button_text="Hourly" />
+            android:drawableStart="@drawable/ic_reminder_detail_recurrence"
+            android:drawablePadding="@dimen/global_margin_large"
+            tools:text="Hourly" />
 
     </LinearLayout>
 

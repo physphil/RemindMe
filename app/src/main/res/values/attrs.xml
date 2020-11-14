@@ -9,8 +9,4 @@
         <attr name="field_icon" format="reference"/>
     </declare-styleable>
 
-    <declare-styleable name="ReminderEntryButton">
-        <attr name="button_icon" format="reference"/>
-        <attr name="button_text" format="string"/>
-    </declare-styleable>
 </resources>

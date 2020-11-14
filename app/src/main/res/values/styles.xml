@@ -49,7 +49,7 @@
     </style>
 
     <style name="Button">
-        <item name="android:paddingStart">@dimen/global_margin_xxlarge</item>
+        <item name="android:paddingStart">@dimen/global_margin_large</item>
         <item name="android:paddingEnd">@dimen/global_margin_xxlarge</item>
     </style>
 
