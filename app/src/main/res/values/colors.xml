@@ -9,6 +9,7 @@
     <color name="colorHeaderText">@color/theme_ash_grey</color>
     <color name="colorCriticalRed">@color/theme_text_critical</color>
     <color name="colorIconFill">@color/theme_ash_grey</color>
+    <color name="colorNotifications">@color/theme_silver_blue</color>
 
     <color name="theme_purple">#3f51b5</color>
     <color name="theme_purple_dark">#324090</color>
